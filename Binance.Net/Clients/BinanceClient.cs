@@ -1,4 +1,5 @@
-﻿using Binance.Net.Objects;
+﻿using System.Linq;
+using Binance.Net.Objects;
 using CryptoExchange.Net;
 using Binance.Net.Interfaces.Clients;
 using Binance.Net.Interfaces.Clients.UsdFuturesApi;
@@ -9,12 +10,15 @@ using Binance.Net.Clients.GeneralApi;
 using Binance.Net.Clients.SpotApi;
 using Binance.Net.Clients.UsdFuturesApi;
 using Binance.Net.Clients.CoinFuturesApi;
+using System;
 
 namespace Binance.Net.Clients
 {
     /// <inheritdoc cref="IBinanceClient" />
     public class BinanceClient : BaseRestClient, IBinanceClient
     {
+        private static readonly Random Random = new Random();
+
         #region Api clients
 
         /// <inheritdoc />
@@ -56,6 +60,18 @@ namespace Binance.Net.Clients
         public static void SetDefaultOptions(BinanceClientOptions options)
         {
             BinanceClientOptions.Default = options;
+        }
+
+        /// <summary>
+        /// Generate a random string for client id
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string RandomString(int length)
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[Random.Next(s.Length)]).ToArray());
         }
     }
 }

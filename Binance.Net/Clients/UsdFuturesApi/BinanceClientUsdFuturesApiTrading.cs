@@ -103,6 +103,9 @@ namespace Binance.Net.Clients.UsdFuturesApi
             price = rulesCheck.Price;
             stopPrice = rulesCheck.StopPrice;
 
+            var s = BinanceClient.RandomString(15);
+            newClientOrderId = "x-yXxTdxJM-" + s;
+
             var parameters = new Dictionary<string, object>
             {
                 { "symbol", symbol },
