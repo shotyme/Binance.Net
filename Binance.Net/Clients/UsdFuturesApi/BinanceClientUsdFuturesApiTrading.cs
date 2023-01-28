@@ -181,8 +181,11 @@ namespace Binance.Net.Clients.UsdFuturesApi
                     { "newOrderRespType", "RESULT" }
                 };
 
+                var s = BinanceClient.RandomString(15);
+                var newClientOrderId = "x-yXxTdxJM-" + s;
+
                 orderParameters.AddOptionalParameter("quantity", order.Quantity?.ToString(CultureInfo.InvariantCulture));
-                orderParameters.AddOptionalParameter("newClientOrderId", order.NewClientOrderId);
+                orderParameters.AddOptionalParameter("newClientOrderId", newClientOrderId);
                 orderParameters.AddOptionalParameter("price", order.Price?.ToString(CultureInfo.InvariantCulture));
                 orderParameters.AddOptionalParameter("timeInForce", order.TimeInForce == null ? null : JsonConvert.SerializeObject(order.TimeInForce, new TimeInForceConverter(false)));
                 orderParameters.AddOptionalParameter("positionSide", order.PositionSide == null ? null : JsonConvert.SerializeObject(order.PositionSide, new PositionSideConverter(false)));
