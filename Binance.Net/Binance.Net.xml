@@ -104,6 +104,13 @@
             </summary>
             <param name="options">Options to use as default</param>
         </member>
+        <member name="M:Binance.Net.Clients.BinanceClient.RandomString(System.Int32)">
+            <summary>
+            Generate a random string for client id
+            </summary>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
         <member name="T:Binance.Net.Clients.BinanceSocketClient">
             <inheritdoc cref="T:Binance.Net.Interfaces.Clients.IBinanceSocketClient" />
         </member>
