@@ -117,7 +117,7 @@ namespace Binance.Net.Clients.SpotApi
             quoteQuantity = rulesCheck.QuoteQuantity;
 
             var s = BinanceClient.RandomString(15);
-            newClientOrderId = "x-yXxTdxJM-" + s;
+            newClientOrderId = "x-MHU2UUW8-" + s;
 
             var parameters = new Dictionary<string, object>
             {
