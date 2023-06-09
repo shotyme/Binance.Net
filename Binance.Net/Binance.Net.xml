@@ -612,6 +612,15 @@
         <member name="M:Binance.Net.Clients.GeneralApi.BinanceClientGeneralApiBrokerage.GetBrokerFuturesCommissionRebatesHistoryAsync(Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData.BinanceBrokerageFuturesType,System.DateTime,System.DateTime,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:Binance.Net.Clients.GeneralApi.BinanceClientGeneralApiBrokerage.GetCommissionRebateStatusForSpotAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Binance.Net.Clients.GeneralApi.BinanceClientGeneralApiBrokerage.GetCommissionRebateStatusForFuturesAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Binance.Net.Clients.GeneralApi.BinanceClientGeneralApiBrokerage.GetCommissionRebateStatusAsync(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:Binance.Net.Clients.GeneralApi.BinanceClientGeneralApiFutures">
             <inheritdoc />
         </member>
@@ -5642,6 +5651,40 @@
             <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
             <param name="ct">Cancellation token</param>
             <returns>Asset info</returns>
+        </member>
+        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceClientGeneralApiBrokerage.GetCommissionRebateStatusForSpotAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Checks if the broker receives a commission rebate from the current user for spot trading.
+            </summary>
+            <param name="brokerId">The broker spot ID</param>
+            <param name="userKey">The user api key</param>
+            <param name="userSecret">The user api secret</param>
+            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Commission rebate info</returns>
+        </member>
+        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceClientGeneralApiBrokerage.GetCommissionRebateStatusForFuturesAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Checks if the broker receives a commission rebate from the current user for futures trading.
+            </summary>
+            <param name="brokerId">The broker futures ID</param>
+            <param name="userKey">The user api key</param>
+            <param name="userSecret">The user api secret</param>
+            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Commission rebate info</returns>
+        </member>
+        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceClientGeneralApiBrokerage.GetCommissionRebateStatusAsync(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <summary>
+            Get the commission rebate status for spot and futures trading.
+            </summary>
+            <param name="brokerSpotId">The broker spot ID</param>
+            <param name="brokerFuturesId">The broker futures ID</param>
+            <param name="userKey">The user api key</param>
+            <param name="userSecret">The user api secret</param>
+            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+            <param name="ct">Cancellation token</param>
+            <returns>Commission rebate info</returns>
         </member>
         <member name="T:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceClientGeneralApiFutures">
             <summary>
@@ -17430,6 +17473,46 @@
         <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtUserLimit.UserDailyTotalRedeemLimit">
             <summary>
             Daily redeem limit
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.Brokerage.BinanceBrokerageReferralRebateResponse.BrokerId">
+            <summary>
+            The broker ID for futures
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.Brokerage.BinanceBrokerageReferralRebateResponse.ApiAgentCode">
+            <summary>
+            The broker ID for spot
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.Brokerage.BinanceBrokerageReferralRebateResponse.IfNewUser">
+            <summary>
+            If "ifNewUser" is true, this user is a new user, which means that he signed up Binance after the date you have the Link ID.
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.Brokerage.BinanceBrokerageReferralRebateResponse.RebateWorking">
+            <summary>
+            If "rebateWorking" is true, this user is qualified for API rebate, which means that this user doesn’t have a referral code or his VIP level is under VIP5.
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.Brokerage.BinanceBrokerageReferralRebateStatus.ReceiveSpotRebate">
+            <summary>
+            Indicates if the broker receives a spot rebate for the user
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.Brokerage.BinanceBrokerageReferralRebateStatus.ReceiveFuturesRebate">
+            <summary>
+            Indicates if the broker receives a futures rebate for the user
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.Brokerage.BinanceBrokerageReferralRebateStatus.SpotError">
+            <summary>
+            Error message for spot
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.Brokerage.BinanceBrokerageReferralRebateStatus.FuturesError">
+            <summary>
+            Error message for futures
             </summary>
         </member>
         <member name="T:Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData.BinanceBrokerageAccountInfo">

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Binance.Net.Enums;
+using Binance.Net.Objects.Models.Spot.Brokerage;
 using Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData;
 using CryptoExchange.Net.Objects;
 
@@ -489,5 +490,43 @@ namespace Binance.Net.Interfaces.Clients.GeneralApi
         /// <returns>Asset info</returns>
         Task<WebCallResult<BinanceBrokerageFuturesAssetInfo>> GetSubAccountFuturesAssetInfoAsync(BinanceBrokerageFuturesType futuresType,
             string? subAccountId = null, int? page = null, int? size = null, int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Checks if the broker receives a commission rebate from the current user for spot trading.
+        /// </summary>
+        /// <param name="brokerId">The broker spot ID</param>
+        /// <param name="userKey">The user api key</param>
+        /// <param name="userSecret">The user api secret</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Commission rebate info</returns>
+        Task<WebCallResult<BinanceBrokerageReferralRebateResponse>> GetCommissionRebateStatusForSpotAsync(string brokerId,
+            string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Checks if the broker receives a commission rebate from the current user for futures trading.
+        /// </summary>
+        /// <param name="brokerId">The broker futures ID</param>
+        /// <param name="userKey">The user api key</param>
+        /// <param name="userSecret">The user api secret</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Commission rebate info</returns>
+        Task<WebCallResult<BinanceBrokerageReferralRebateResponse>> GetCommissionRebateStatusForFuturesAsync(string brokerId,
+            string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get the commission rebate status for spot and futures trading.
+        /// </summary>
+        /// <param name="brokerSpotId">The broker spot ID</param>
+        /// <param name="brokerFuturesId">The broker futures ID</param>
+        /// <param name="userKey">The user api key</param>
+        /// <param name="userSecret">The user api secret</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Commission rebate info</returns>
+        Task<BinanceBrokerageReferralRebateStatus> GetCommissionRebateStatusAsync(string brokerSpotId,
+            string brokerFuturesId, string userKey, string userSecret, int? receiveWindow = null,
+            CancellationToken ct = default);
     }
 }

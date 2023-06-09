@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 using Binance.Net.Converters;
 using Binance.Net.Enums;
 using Binance.Net.Interfaces.Clients.GeneralApi;
+using Binance.Net.Objects.Models.Spot.Brokerage;
 using Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData;
 using CryptoExchange.Net;
+using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Objects;
 using Newtonsoft.Json;
@@ -46,6 +48,7 @@ namespace Binance.Net.Clients.GeneralApi
         private const string marginSummaryEndpoint = "broker/subAccount/marginSummary";
         private const string futuresSummaryEndpoint = "broker/subAccount/futuresSummary";
         private const string depositHistoryEndpoint = "broker/subAccount/depositHist";
+        private const string commissionRebateEndpoint = "apiReferral/ifNewUser";
 
         private readonly BinanceClientGeneralApi _baseClient;
 
@@ -664,5 +667,64 @@ namespace Binance.Net.Clients.GeneralApi
         }
 
         #endregion
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<BinanceBrokerageReferralRebateResponse>> GetCommissionRebateStatusForSpotAsync(string brokerId, string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"apiAgentCode", brokerId}
+            };
+
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.Options.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+            _baseClient.SetApiCredentials(new ApiCredentials(userKey, userSecret));
+
+            var spotUri = _baseClient.GetUrl(commissionRebateEndpoint, brokerageApi, brokerageVersion);
+            return await _baseClient.SendRequestInternal<BinanceBrokerageReferralRebateResponse>(spotUri, HttpMethod.Get, ct, parameters, true, null, null, 100).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<BinanceBrokerageReferralRebateResponse>> GetCommissionRebateStatusForFuturesAsync(string brokerId, string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                {"brokerId", brokerId}
+            };
+
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.Options.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+            _baseClient.SetApiCredentials(new ApiCredentials(userKey, userSecret));
+
+            var futuresUri = new Uri("https://fapi.binance.com/fapi/v1/apiReferral/ifNewUser");
+            return await _baseClient.SendRequestInternal<BinanceBrokerageReferralRebateResponse>(futuresUri, HttpMethod.Get, ct, parameters, true, null, null, 100).ConfigureAwait(false);
+        }
+
+        /// <inheritdoc />
+        public async Task<BinanceBrokerageReferralRebateStatus> GetCommissionRebateStatusAsync(string brokerSpotId, string brokerFuturesId, string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default)
+        {
+            var res = new BinanceBrokerageReferralRebateStatus();
+
+            var spotResult = await GetCommissionRebateStatusForSpotAsync(brokerSpotId, userKey, userSecret, receiveWindow, ct).ConfigureAwait(false);
+            if (spotResult.Success)
+            {
+                res.ReceiveSpotRebate = spotResult.Data.IfNewUser && spotResult.Data.RebateWorking;
+            }
+            else
+            {
+                res.SpotError = $"{spotResult.Error?.Message} Code: {spotResult.Error?.Code}";
+            }
+
+
+            var futuresResult = await GetCommissionRebateStatusForFuturesAsync(brokerFuturesId, userKey, userSecret, receiveWindow, ct).ConfigureAwait(false);
+            if (futuresResult.Success)
+            {
+                res.ReceiveFuturesRebate = futuresResult.Data.IfNewUser && futuresResult.Data.RebateWorking;
+            }
+            else
+            {
+                res.FuturesError = $"{futuresResult.Error?.Message} Code: {futuresResult.Error?.Code}";
+            }
+            
+            return res;
+        }
     }
 }
