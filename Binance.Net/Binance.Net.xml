@@ -4,6 +4,23 @@
         <name>Binance.Net</name>
     </assembly>
     <members>
+        <member name="M:Binance.Net.BinanceFactory.CreateClient(System.Boolean,System.String,System.String)">
+            <summary>
+            Creates a new instance of BinanceClient using the default or the testnet options
+            </summary>
+            <param name="isTestNet">Use testnet endpoints</param>
+            <param name="key">The API key</param>
+            <param name="secret">The API secret</param>
+            <returns></returns>
+        </member>
+        <member name="M:Binance.Net.BinanceFactory.CreateClient(System.Boolean,CryptoExchange.Net.Authentication.ApiCredentials)">
+            <summary>
+            Creates a new instance of BinanceClient using the default or the testnet options
+            </summary>
+            <param name="isTestNet">Use testnet endpoints</param>
+            <param name="credentials">The API key credentials</param>
+            <returns></returns>
+        </member>
         <member name="T:Binance.Net.BinanceHelpers">
             <summary>
             Helper methods for the Binance API
