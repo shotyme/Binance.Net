@@ -676,7 +676,7 @@ namespace Binance.Net.Clients.GeneralApi
                 {"apiAgentCode", brokerId}
             };
 
-            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.Options.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
             _baseClient.SetApiCredentials(new ApiCredentials(userKey, userSecret));
 
             var spotUri = _baseClient.GetUrl(commissionRebateEndpoint, brokerageApi, brokerageVersion);
@@ -691,7 +691,7 @@ namespace Binance.Net.Clients.GeneralApi
                 {"brokerId", brokerId}
             };
 
-            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.Options.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
             _baseClient.SetApiCredentials(new ApiCredentials(userKey, userSecret));
 
             var futuresUri = new Uri("https://fapi.binance.com/fapi/v1/apiReferral/ifNewUser");

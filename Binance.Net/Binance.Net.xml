@@ -208,7 +208,7 @@
         <member name="M:Binance.Net.Clients.BinanceRestClient.SetApiCredentials(CryptoExchange.Net.Authentication.ApiCredentials)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.BinanceClient.RandomString(System.Int32)">
+        <member name="M:Binance.Net.Clients.BinanceRestClient.RandomString(System.Int32)">
             <summary>
             Generate a random string for client id
             </summary>
@@ -751,17 +751,16 @@
         <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiBrokerage.GetBrokerFuturesCommissionRebatesHistoryAsync(Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData.BinanceBrokerageFuturesType,System.DateTime,System.DateTime,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusForSpotAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusForFuturesAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusAsync(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiFutures">
-        <member name="M:Binance.Net.Clients.GeneralApi.BinanceClientGeneralApiBrokerage.GetCommissionRebateStatusForSpotAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Binance.Net.Clients.GeneralApi.BinanceClientGeneralApiBrokerage.GetCommissionRebateStatusForFuturesAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Binance.Net.Clients.GeneralApi.BinanceClientGeneralApiBrokerage.GetCommissionRebateStatusAsync(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="T:Binance.Net.Clients.GeneralApi.BinanceClientGeneralApiFutures">
             <inheritdoc />
         </member>
         <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiFutures.TransferFuturesAccountAsync(System.String,System.Decimal,Binance.Net.Enums.FuturesTransferType,System.Nullable{System.Int64},System.Threading.CancellationToken)">
@@ -6124,7 +6123,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Asset info</returns>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceClientGeneralApiBrokerage.GetCommissionRebateStatusForSpotAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusForSpotAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Checks if the broker receives a commission rebate from the current user for spot trading.
             </summary>
@@ -6135,7 +6134,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Commission rebate info</returns>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceClientGeneralApiBrokerage.GetCommissionRebateStatusForFuturesAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusForFuturesAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Checks if the broker receives a commission rebate from the current user for futures trading.
             </summary>
@@ -6146,7 +6145,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Commission rebate info</returns>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceClientGeneralApiBrokerage.GetCommissionRebateStatusAsync(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusAsync(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Get the commission rebate status for spot and futures trading.
             </summary>
@@ -6158,7 +6157,6 @@
             <param name="ct">Cancellation token</param>
             <returns>Commission rebate info</returns>
         </member>
-        <member name="T:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceClientGeneralApiFutures">
         <member name="T:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceRestClientGeneralApiFutures">
             <summary>
             Binance futures interaction endpoints

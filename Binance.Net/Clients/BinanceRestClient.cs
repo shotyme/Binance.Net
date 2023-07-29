@@ -14,12 +14,15 @@ using System.Net.Http;
 using System;
 using Binance.Net.Objects.Options;
 using CryptoExchange.Net.Authentication;
+using System.Linq;
 
 namespace Binance.Net.Clients
 {
     /// <inheritdoc cref="IBinanceRestClient" />
     public class BinanceRestClient : BaseRestClient, IBinanceRestClient
     {
+        private static readonly Random Random = new Random();
+
         #region Api clients
 
         /// <inheritdoc />
@@ -89,6 +92,18 @@ namespace Binance.Net.Clients
             SpotApi.SetApiCredentials(credentials);
             UsdFuturesApi.SetApiCredentials(credentials);
             CoinFuturesApi.SetApiCredentials(credentials);
+        }
+
+        /// <summary>
+        /// Generate a random string for client id
+        /// </summary>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public static string RandomString(int length)
+        {
+            const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[Random.Next(s.Length)]).ToArray());
         }
     }
 }

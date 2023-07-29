@@ -102,7 +102,7 @@ namespace Binance.Net.Clients.UsdFuturesApi
             price = rulesCheck.Price;
             stopPrice = rulesCheck.StopPrice;
 
-            var s = BinanceClient.RandomString(15);
+            var s = BinanceRestClient.RandomString(15);
             newClientOrderId = "x-yXxTdxJM-" + s;
 
             var parameters = new Dictionary<string, object>
@@ -180,7 +180,7 @@ namespace Binance.Net.Clients.UsdFuturesApi
                     { "newOrderRespType", "RESULT" }
                 };
 
-                var s = BinanceClient.RandomString(15);
+                var s = BinanceRestClient.RandomString(15);
                 var newClientOrderId = "x-yXxTdxJM-" + s;
 
                 orderParameters.AddOptionalParameter("quantity", order.Quantity?.ToString(CultureInfo.InvariantCulture));

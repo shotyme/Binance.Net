@@ -121,7 +121,7 @@ namespace Binance.Net.Clients.SpotApi
             stopPrice = rulesCheck.StopPrice;
             quoteQuantity = rulesCheck.QuoteQuantity;
 
-            var s = BinanceClient.RandomString(15);
+            var s = BinanceRestClient.RandomString(15);
             newClientOrderId = "x-MHU2UUW8-" + s;
 
             var parameters = new Dictionary<string, object>
