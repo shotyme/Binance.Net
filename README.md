@@ -1,5 +1,5 @@
 # Binance.Net
-[![.NET](https://github.com/JKorf/Binance.Net/actions/workflows/dotnet.yml/badge.svg)](https://github.com/JKorf/Binance.Net/actions/workflows/dotnet.yml) ![Nuget version](https://img.shields.io/nuget/v/binance.net.svg)  ![Nuget downloads](https://img.shields.io/nuget/dt/Binance.Net.svg)
+[![.NET](https://github.com/JKorf/Binance.Net/actions/workflows/dotnet.yml/badge.svg)](https://github.com/JKorf/Binance.Net/actions/workflows/dotnet.yml) [![Nuget version](https://img.shields.io/nuget/v/binance.net.svg)](https://www.nuget.org/packages/Binance.Net)  [![Nuget downloads](https://img.shields.io/nuget/dt/Binance.Net.svg)](https://www.nuget.org/packages/Binance.Net)
 
 Binance.Net is a wrapper around the Binance API as described on [Binance](https://binance-docs.github.io/apidocs/spot/en/#change-log), including all features the API provides using clear and readable objects. The library support the spot, (isolated) margin and futures API's, both the REST and websocket API's.
 
@@ -17,9 +17,8 @@ Sign up using the following referral link to pay a small percentage of the tradi
 ### Donate
 Make a one time donation in a crypto currency of your choice. If you prefer to donate a currency not listed here please contact me.
 
-**Btc**:  12KwZk3r2Y3JZ2uMULcjqqBvXmpDwjhhQS  
-**Eth**:  0x069176ca1a4b1d6e0b7901a6bc0dbf3bb0bf5cc2  
-**Nano**: xrb_1ocs3hbp561ef76eoctjwg85w5ugr8wgimkj8mfhoyqbx4s1pbc74zggw7gs  
+**Btc**:  bc1qz0jv0my7fc60rxeupr23e75x95qmlq6489n8gh  
+**Eth**:  0x8E21C4d955975cB645589745ac0c46ECA8FAE504  
 
 ### Sponsor
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
@@ -28,6 +27,80 @@ Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/s
 A Discord server is available [here](https://discord.gg/MSpeEtSY8t). For discussion and/or questions around the CryptoExchange.Net and implementation libraries, feel free to join.
 
 ## Release notes
+* Version 9.0.4 - 11 Jul 2023
+    * Fixed GetUniversalTransferHistoryAsync deserialization
+
+* Version 9.0.3 - 11 Jul 2023
+    * Fixed GetUniversalTransferHistoryAsync deserialization
+
+* Version 9.0.2 - 06 Jul 2023
+    * Fixed socket client options copying
+
+* Version 9.0.1 - 25 Jun 2023
+    * Fix for invalid build
+
+* Version 9.0.0 - 25 Jun 2023
+    * Updated CryptoExchange.Net to version 6.0.0
+    * Renamed BinanceClient to BinanceRestClient
+    * Renamed UsdFuturesStreams and CoinFuturesStreams to UsdFuturesApi and CoinFuturesApi on the BinanceSocketClient
+    * Updated endpoints to consistently use a base url without any path as basis to make switching environments/base urls clearer
+    * Removed BinanceApiCredentials as the base ApiCredentials now supports RSA signing
+    * Added IBinanceOrderBookFactory and implementation for creating order books
+    * Updated dependency injection register method (AddBinance)
+
+* Version 8.6.3 - 19 Jun 2023
+    * Fixed trading rules check not actually applying to the parameters send when placing an order with the socket client
+
+* Version 8.6.2 - 22 May 2023
+    * Added orderId filter to futures GetUserTradesAsync endpoints
+    * Fixed missing writers for BinanceSymbolFilter serialization
+
+* Version 8.6.1 - 14 May 2023
+    * Added TradeRules validation to websocket PlaceOrder endpoint
+    * Corrected futures all book tickers stream response model
+    * Added futures contractInfo streams
+
+* Version 8.6.0 - 06 May 2023
+    * Added Websocket API implementation
+
+* Version 8.5.1 - 20 Apr 2023
+    * Fixed deserialization error on trade update
+
+* Version 8.5.0 - 17 Apr 2023
+    * Added futures individual trade streams
+    * Added coin futures all mark prices stream
+    * Added Spot AutoConvertStableCoin endpoints
+    * Added GetCrossMarginCollateralRatio endpoint
+    * Added missing parameters to spot place order parameters
+    * Added self trade prevention support
+    * Fixed and updated various models
+
+* Version 8.4.4 - 12 Apr 2023
+    * Fixed deserialization issue SpotApi.GetExchangeInfoAsync()
+    * Updated CryptoExchange.Net
+
+* Version 8.4.3 - 18 Mar 2023
+    * Fixed order deserialization when trailing delta timestamp is present
+    * Updated subaccount ip restriction endpoints
+    * Updated CryptoExchange.Net
+	
+* Version 8.4.2 - 16 Feb 2023
+    * Fixed rate limiting issue with high UID weight requests
+
+* Version 8.4.1 - 14 Feb 2023
+    * Updated CryptoExchange.Net
+    * Fixed Http Method on SpotApi.Trading.GetConvertTransferHistoryAsync request
+    * Fixed request weight on SpotApi.Account.GetFiatDepositWithdrawHistoryAsync
+
+* Version 8.4.0 - 09 Feb 2023
+    * Added support for RSA request authentication
+
+* Version 8.3.1 - 05 Feb 2023
+    * Removed all book ticker stream subscription as it has been deprecated
+    * Added Strategy and Grid update events to user stream subscription
+    * Fixed missing IndexPrice on UsdFutures.SubscribeToAllMarkPriceUpdatesAsync
+    * Updated AccountConfigUpdate event model
+
 * Version 8.3.0 - 17 Nov 2022
     * Updated CryptoExchange.Net
     * Fixed BinanceConvertTransferRecord DeductedQuantity property
