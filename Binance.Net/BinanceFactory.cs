@@ -21,7 +21,6 @@ namespace Binance.Net
                 binanceClient = new BinanceRestClient(options =>
                 {
                     options.Environment = isTestNet ? BinanceEnvironment.Testnet : BinanceEnvironment.Live;
-                    options.ApiCredentials = new ApiCredentials(key, secret);
                     options.AutoTimestamp = true;
                 });
                 
@@ -31,6 +30,7 @@ namespace Binance.Net
             binanceClient = new BinanceRestClient(options =>
             {
                 options.Environment = isTestNet ? BinanceEnvironment.Testnet : BinanceEnvironment.Live;
+                options.ApiCredentials = new ApiCredentials(key, secret);
                 options.AutoTimestamp = true;
             });
 
