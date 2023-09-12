@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Binance.Net.Enums;
 using Binance.Net.Objects.Models;
+using Binance.Net.Objects.Models.Futures.AlgoOrders;
 using Binance.Net.Objects.Models.Spot;
 using Binance.Net.Objects.Models.Spot.Blvt;
 using Binance.Net.Objects.Models.Spot.BSwap;
@@ -107,10 +108,11 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="orderId">The order id of the order</param>
         /// <param name="origClientOrderId">The client order id of the order</param>
         /// <param name="newClientOrderId">Unique identifier for this cancel</param>
+        /// <param name="cancelRestriction">Restrict cancellation based on order state</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Id's for canceled order</returns>
-        Task<WebCallResult<BinanceOrderBase>> CancelOrderAsync(string symbol, long? orderId = null, string? origClientOrderId = null, string? newClientOrderId = null, long? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<BinanceOrderBase>> CancelOrderAsync(string symbol, long? orderId = null, string? origClientOrderId = null, string? newClientOrderId = null, CancelRestriction? cancelRestriction = null, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Cancels all open orders on a symbol
@@ -143,6 +145,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="trailingDelta">Trailing delta value for order in BIPS. A value of 1 means 0.01% trailing delta.</param>
         /// <param name="strategyId">Strategy id</param>
         /// <param name="strategyType">Strategy type</param>
+        /// <param name="cancelRestriction">Restrict cancellation based on order state</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -164,6 +167,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
             int? trailingDelta = null,
             int? strategyId = null,
             int? strategyType = null,
+            CancelRestriction? cancelRestriction = null,
             int? receiveWindow = null,
             CancellationToken ct = default);
 
@@ -688,6 +692,38 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         Task<WebCallResult<IEnumerable<BinanceBSwapPoolLiquidity>>> GetLiquidityPoolInfoAsync(int? poolId = null, int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
+        /// Get unclaimed rewards 
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-unclaimed-rewards-record-user_data" /></para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceBSwapUnclaimedRewards>> GetUnclaimedLiquidityPoolsRewardsAsync(int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Claim liquidity pool rewards
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#claim-rewards-trade" /></para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceBSwapClaimResult>> ClaimLiquidityPoolsRewardsAsync(int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get claimed rewards history
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-claimed-history-user_data" /></para>
+        /// </summary>
+        /// <param name="poolId">Filter by pool id</param>
+        /// <param name="asset">Filter by asset</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
+        /// <param name="limit">Max number of results</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<IEnumerable<BinanceBSwapRewardHistory>>> GetLiquidityPoolsClaimHistoryAsync(long? poolId = null, string? asset = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
         /// Get Customer to Customer trade history
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-c2c-trade-history-user_data" /></para>
         /// </summary>
@@ -724,62 +760,6 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<BinanceListResult<BinanceConvertTrade>>> GetConvertTradeHistoryAsync(DateTime startTime, DateTime endTime, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Purchase a staking product
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#purchase-staking-product-user_data" /></para>
-        /// </summary>
-        /// <param name="product">Product type</param>
-        /// <param name="productId">Product id</param>
-        /// <param name="quantity">Quantity to purchase</param>
-        /// <param name="renewable">Renewable</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceStakingPositionResult>> PurchaseStakingProductAsync(StakingProductType product, string productId, decimal quantity, bool? renewable = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Redeem a staking product
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#redeem-staking-product-user_data" /></para>
-        /// </summary>
-        /// <param name="product">Product type</param>
-        /// <param name="productId">Product id</param>
-        /// <param name="quantity">Quantity to purchase</param>
-        /// <param name="renewable">Renewable</param>
-        /// <param name="positionId">Position id, required for Staking or LockedDefi types</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceStakingResult>> RedeemStakingProductAsync(StakingProductType product, string productId, string? positionId = null, decimal? quantity = null, bool? renewable = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get staking positions
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-staking-product-position-user_data" /></para>
-        /// </summary>
-        /// <param name="product">Product type</param>
-        /// <param name="productId">Product id</param>
-        /// <param name="page">Page</param>
-        /// <param name="limit">Max results</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceStakingPosition>>> GetStakingPositionsAsync(StakingProductType product, string? productId = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get staking history
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-staking-history-user_data" /></para>
-        /// </summary>
-        /// <param name="product">Product type</param>
-        /// <param name="transactionType">Transaction type</param>
-        /// <param name="asset">Filter by asset</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="page">Page</param>
-        /// <param name="limit">Max results</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceStakingHistory>>> GetStakingHistoryAsync(StakingProductType product, StakingTransactionType transactionType, string? asset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Convert between BUSD and stablecoins
@@ -820,5 +800,74 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<IEnumerable<BinancePreventedTrade>>> GetPreventedTradesAsync(string symbol, long? preventedMatchId = null, long? orderId = null, long? fromPreventedMatchId = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Place a new spot time weighted average price order
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#time-weighted-average-price-twap-new-order-trade-2" /></para>
+        /// </summary>
+        /// <param name="symbol">The symbol</param>
+        /// <param name="side">Order side</param>
+        /// <param name="quantity">Order quantity</param>
+        /// <param name="duration">Duration in seconds. 300 - 86400</param>
+        /// <param name="clientOrderId">Client order id</param>
+        /// <param name="limitPrice">Limit price of the order. If null will use market price</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceAlgoOrderResult>> PlaceTimeWeightedAveragePriceOrderAsync(
+            string symbol,
+            OrderSide side,
+            decimal quantity,
+            int duration,
+            string? clientOrderId = null,
+            decimal? limitPrice = null,
+            long? receiveWindow = null,
+            CancellationToken ct = default);
+
+        /// <summary>
+        /// Cancel a spot algo order
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#cancel-algo-order-trade-2" /></para>
+        /// </summary>
+        /// <param name="algoOrderId">Algo order id to cancel</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceAlgoResult>> CancelAlgoOrderAsync(long algoOrderId, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get all open spot algo orders
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-current-algo-open-orders-user_data-2" /></para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceAlgoOrders>> GetOpenAlgoOrdersAsync(long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get list of closed algo orders
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-historical-algo-orders-user_data-2" /></para>
+        /// </summary>
+        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="side">Filter by side</param>
+        /// <param name="startTime">Fitler by start time</param>
+        /// <param name="endTime">Filter by end time</param>
+        /// <param name="page">Page</param>
+        /// <param name="limit">Max results</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceAlgoOrders>> GetClosedAlgoOrdersAsync(string? symbol = null, OrderSide? side = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get algo sub orders overview
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-historical-algo-orders-user_data-2" /></para>
+        /// </summary>
+        /// <param name="algoId">Algo id</param>
+        /// <param name="page">Page</param>
+        /// <param name="limit">Max results</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceAlgoSubOrderList>> GetAlgoSubOrdersAsync(long algoId, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
     }
 }

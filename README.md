@@ -7,6 +7,9 @@ Binance.Net is a wrapper around the Binance API as described on [Binance](https:
 
 [Documentation](https://jkorf.github.io/Binance.Net/)
 
+## Installation
+`dotnet add package Binance.Net`
+
 ## Support the project
 I develop and maintain this package on my own for free in my spare time, any support is greatly appreciated.
 
@@ -27,6 +30,50 @@ Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/s
 A Discord server is available [here](https://discord.gg/MSpeEtSY8t). For discussion and/or questions around the CryptoExchange.Net and implementation libraries, feel free to join.
 
 ## Release notes
+* Version 9.1.2 - 06 Sep 2023
+    * Added GoodTillDate TimeInForce enum value, fixing UsdFutures.ExchangeData.GetExchangeInfoAsync endpoint deserialization error
+
+* Version 9.1.1 - 02 Sep 2023
+    * Added missing account permissions
+
+* Version 9.1.0 - 25 Aug 2023
+    * Removed deprecated endpoints
+    * Updated models
+	* Added support for rate limiting on the socket client
+	* Updated the weights and rate limits for the websocket API
+    * Added restClient.GeneralApi.Futures.GetAdjustCrossCollateralLoanToValueHistoryAsync
+    * Added restClient.GeneralApi.Futures.GetCrossCollateralLiquidationHistoryAsync
+    * Added restClient.GeneralApi.Futures.GetCrossCollateralInterestHistoryAsync
+    * Added restClient.GeneralApi.CryptoLoans.GetLoanableAssetsAsync
+    * Added restClient.GeneralApi.CryptoLoans.GetCollateralAssetsAsync
+    * Added restClient.GeneralApi.CryptoLoans.GetCollateralRepayRateAsync
+    * Added restClient.GeneralApi.CryptoLoans.CustomizeMarginCallAsync
+    * Added restClient.GeneralApi.Mining.GetMiningAccountEarningsAsync
+    * Added restClient.SpotApi.Account.CrossMarginAdjustMaxLeverageAsync
+    * Added restClient.SpotApi.Account.ConvertBusdAsync
+    * Added restClient.SpotApi.Account.GetBusdConvertHistoryAsync
+    * Added restClient.SpotApi.Account.GetCloudMiningHistoryAsync
+    * Added restClient.SpotApi.Account.GetIsolatedMarginFeeDataAsync
+    * Added restClient.SpotApi.Account.GetMarginAssetsBnbConvertableAsync
+    * Added restClient.SpotApi.Account.MarginDustTransferAsync
+    * Added restClient.SpotApi.Account.GetCrossMarginSmallLiabilityExchangeAssetsAsync
+    * Added restClient.SpotApi.Account.CrossMarginSmallLiabilityExchangeAsync
+    * Added restClient.SpotApi.Account.GetCrossMarginSmallLiabilityExchangeHistoryAsync
+    * Added restClient.SpotApi.ExchangeData.GetFutureHourlyInterestRateAsync
+    * Added restClient.SpotApi.ExchangeData.GetMarginDelistScheduleAsync
+    * Added restClient.SpotApi.Trading.GetUnclaimedLiquidityPoolsRewardsAsync
+    * Added restClient.SpotApi.Trading.ClaimLiquidityPoolsRewardsAsync
+    * Added restClient.SpotApi.Trading.GetLiquidityPoolsClaimHistoryAsync
+    * Added restClient.SpotApi.Trading.PlaceSpotTimeWeightedAveragePriceOrderAsync
+    * Added restClient.SpotApi.Trading.CancelSpotAlgoOrderAsync
+    * Added restClient.SpotApi.Trading.GetSpotOpenAlgoOrdersAsync
+    * Added restClient.SpotApi.Trading.GetSpotClosedAlgoOrdersAsync
+    * Added restClient.SpotApi.Trading.GetSpotAlgoSubOrdersAsync
+
+* Version 9.0.5 - 06 Aug 2023
+    * Added Usd Futures EditOrder endpoint
+    * Added cancelRestriction parameter to spot CancelOrder and ReplaceOrder endpoints
+
 * Version 9.0.4 - 11 Jul 2023
     * Fixed GetUniversalTransferHistoryAsync deserialization
 

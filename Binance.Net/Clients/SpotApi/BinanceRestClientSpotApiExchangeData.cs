@@ -65,9 +65,6 @@ namespace Binance.Net.Clients.SpotApi
         private const string bSwapPoolsEndpoint = "bswap/pools";
         private const string bSwapPoolsConfigureEndpoint = "bswap/poolConfigure";
 
-        // Staking
-        private const string stakingProductListEndpoint = "staking/productList";
-
         private const string api = "api";
         private const string publicVersion = "3";
 
@@ -671,25 +668,6 @@ namespace Binance.Net.Clients.SpotApi
 
         #endregion
 
-        #region Staking
-
-        /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<BinanceStakingProduct>>> GetStakingProductsAsync(StakingProductType product, string? asset = null, int? page = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default)
-        {
-            var parameters = new Dictionary<string, object>()
-            {
-                { "product", EnumConverter.GetString(product) }
-            };
-            parameters.AddOptionalParameter("asset", asset);
-            parameters.AddOptionalParameter("current", page);
-            parameters.AddOptionalParameter("size", limit);
-            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
-
-            return await _baseClient.SendRequestInternal<IEnumerable<BinanceStakingProduct>>(_baseClient.GetUrl(stakingProductListEndpoint, "sapi", "1"), HttpMethod.Get, ct, parameters, true).ConfigureAwait(false);
-        }
-
-        #endregion
-
         #region Get Cross Margin Colleteral Ratio
 
         /// <inheritdoc />
@@ -699,6 +677,36 @@ namespace Binance.Net.Clients.SpotApi
             parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
 
             return await _baseClient.SendRequestInternal<IEnumerable<BinanceCrossMarginCollateralRatio>>(_baseClient.GetUrl("margin/crossMarginCollateralRatio", "sapi", "1"), HttpMethod.Get, ct, parameters, true, weight: 100).ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region Get Future Hourly Interest Rate
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BinanceFuturesInterestRate>>> GetFutureHourlyInterestRateAsync(IEnumerable<string> assets, bool isolated, int? receiveWindow = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>()
+            {
+                { "assets", string.Join(",", assets) },
+                { "isIsolated", isolated.ToString().ToUpper() }
+            };
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+
+            return await _baseClient.SendRequestInternal<IEnumerable<BinanceFuturesInterestRate>>(_baseClient.GetUrl("margin/next-hourly-interest-rate", "sapi", "1"), HttpMethod.Get, ct, parameters, true, weight: 100).ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region Get Margin Delist Schedule
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BinanceMarginDelistSchedule>>> GetMarginDelistScheduleAsync(int? receiveWindow = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+
+            return await _baseClient.SendRequestInternal<IEnumerable<BinanceMarginDelistSchedule>>(_baseClient.GetUrl("margin/delist-schedule", "sapi", "1"), HttpMethod.Get, ct, parameters, true, weight: 100).ConfigureAwait(false);
         }
 
         #endregion

@@ -8,12 +8,12 @@ using Binance.Net.Converters;
 using Binance.Net.Enums;
 using Binance.Net.Interfaces.Clients.SpotApi;
 using Binance.Net.Objects.Models;
+using Binance.Net.Objects.Models.Futures.AlgoOrders;
 using Binance.Net.Objects.Models.Spot;
 using Binance.Net.Objects.Models.Spot.Blvt;
 using Binance.Net.Objects.Models.Spot.BSwap;
 using Binance.Net.Objects.Models.Spot.ConvertTransfer;
 using Binance.Net.Objects.Models.Spot.Margin;
-using Binance.Net.Objects.Models.Spot.Staking;
 using CryptoExchange.Net;
 using CryptoExchange.Net.CommonObjects;
 using CryptoExchange.Net.Converters;
@@ -83,11 +83,11 @@ namespace Binance.Net.Clients.SpotApi
         private const string bSwapAddLiquidityEndpoint = "bswap/liquidityAdd";
         private const string bSwapRemoveLiquidityEndpoint = "bswap/liquidityRemove";
         private const string bSwapLiquidityOperationsEndpoint = "bswap/liquidityOps";
-        private const string bSwapQuoteEndpoint = "bswap/quote ";
-        private const string bSwapSwapEndpoint = "bswap/swap ";
-        private const string bSwapSwapRecordsEndpoint = "bswap/swap ";
-        private const string bSwapAddLiquidityPreviewEndpoint = "bswap/addLiquidityPreview ";
-        private const string bSwapRemoveLiquidityPreviewEndpoint = "bswap/removeLiquidityPreview ";
+        private const string bSwapQuoteEndpoint = "bswap/quote";
+        private const string bSwapSwapEndpoint = "bswap/swap";
+        private const string bSwapSwapRecordsEndpoint = "bswap/swap";
+        private const string bSwapAddLiquidityPreviewEndpoint = "bswap/addLiquidityPreview";
+        private const string bSwapRemoveLiquidityPreviewEndpoint = "bswap/removeLiquidityPreview";
 
         // C2C
         private const string c2cTradeHistoryEndpoint = "c2c/orderMatch/listUserOrderHistory";
@@ -97,12 +97,6 @@ namespace Binance.Net.Clients.SpotApi
 
         // Convert
         private const string convertTradeHistoryEndpoint = "convert/tradeFlow";
-
-        // Staking
-        private const string stakingPurchaseEndpoint = "staking/purchase";
-        private const string stakingRedeemEndpoint = "staking/redeem";
-        private const string stakingPositionEndpoint = "staking/position";
-        private const string stakingHistoryEndpoint = "staking/stakingRecord";
 
         // Convert transfer
         private const string convertTransferEndpoint = "asset/convert-transfer";
@@ -215,7 +209,7 @@ namespace Binance.Net.Clients.SpotApi
         #region Cancel Order
 
         /// <inheritdoc />
-        public async Task<WebCallResult<BinanceOrderBase>> CancelOrderAsync(string symbol, long? orderId = null, string? origClientOrderId = null, string? newClientOrderId = null, long? receiveWindow = null, CancellationToken ct = default)
+        public async Task<WebCallResult<BinanceOrderBase>> CancelOrderAsync(string symbol, long? orderId = null, string? origClientOrderId = null, string? newClientOrderId = null, CancelRestriction? cancelRestriction = null, long? receiveWindow = null, CancellationToken ct = default)
         {
             symbol.ValidateBinanceSymbol();
             if (!orderId.HasValue && string.IsNullOrEmpty(origClientOrderId))
@@ -228,6 +222,7 @@ namespace Binance.Net.Clients.SpotApi
             parameters.AddOptionalParameter("orderId", orderId?.ToString(CultureInfo.InvariantCulture));
             parameters.AddOptionalParameter("origClientOrderId", origClientOrderId);
             parameters.AddOptionalParameter("newClientOrderId", newClientOrderId);
+            parameters.AddOptionalParameter("cancelRestrictions", EnumConverter.GetString(cancelRestriction));
             parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
 
             var result = await _baseClient.SendRequestInternal<BinanceOrderBase>(_baseClient.GetUrl(cancelOrderEndpoint, api, signedVersion), HttpMethod.Delete, ct, parameters, true).ConfigureAwait(false);
@@ -275,6 +270,7 @@ namespace Binance.Net.Clients.SpotApi
             int? trailingDelta = null,
             int? strategyId = null, 
             int? strategyType = null,
+            CancelRestriction? cancelRestriction = null,
             int? receiveWindow = null,
             CancellationToken ct = default)
         {
@@ -322,6 +318,7 @@ namespace Binance.Net.Clients.SpotApi
             parameters.AddOptionalParameter("icebergQty", icebergQty?.ToString(CultureInfo.InvariantCulture));
             parameters.AddOptionalParameter("newOrderRespType", orderResponseType == null ? null : JsonConvert.SerializeObject(orderResponseType, new OrderResponseTypeConverter(false)));
             parameters.AddOptionalParameter("trailingDelta", trailingDelta);
+            parameters.AddOptionalParameter("cancelRestrictions", EnumConverter.GetString(cancelRestriction));
             parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
 
             var result = await _baseClient.SendRequestInternal<BinanceReplaceOrderResult>(_baseClient.GetUrl(cancelReplaceOrderEndpoint, api, signedVersion), HttpMethod.Post, ct, parameters, true, weight: 1).ConfigureAwait(false);
@@ -1148,6 +1145,50 @@ namespace Binance.Net.Clients.SpotApi
 
         #endregion
 
+        #region Get Unclaimed Liquidity Pools Rewards
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<BinanceBSwapUnclaimedRewards>> GetUnclaimedLiquidityPoolsRewardsAsync(int? receiveWindow = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+
+            return await _baseClient.SendRequestInternal<BinanceBSwapUnclaimedRewards>(_baseClient.GetUrl("bswap/unclaimedRewards", bSwapApi, bSwapVersion), HttpMethod.Get, ct, parameters, true, weight: 1000).ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region Claim Liquidity Pools Rewards
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<BinanceBSwapClaimResult>> ClaimLiquidityPoolsRewardsAsync(int? receiveWindow = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+
+            return await _baseClient.SendRequestInternal<BinanceBSwapClaimResult>(_baseClient.GetUrl("bswap/claimRewards", bSwapApi, bSwapVersion), HttpMethod.Post, ct, parameters, true, weight: 1000).ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region Get Claim History
+
+        /// <inheritdoc />
+        public async Task<WebCallResult<IEnumerable<BinanceBSwapRewardHistory>>> GetLiquidityPoolsClaimHistoryAsync(long? poolId = null, string? asset = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("poolId", poolId);
+            parameters.AddOptionalParameter("assetRewards", asset);
+            parameters.AddOptionalParameter("startTime", DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("endTime", DateTimeConverter.ConvertToMilliseconds(endTime));
+            parameters.AddOptionalParameter("limit", limit);
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+
+            return await _baseClient.SendRequestInternal<IEnumerable<BinanceBSwapRewardHistory>>(_baseClient.GetUrl("bswap/claimedHistory", bSwapApi, bSwapVersion), HttpMethod.Get, ct, parameters, true, weight: 1000).ConfigureAwait(false);
+        }
+
+        #endregion
+
         #endregion
 
         #region C2C
@@ -1214,73 +1255,6 @@ namespace Binance.Net.Clients.SpotApi
 
         #endregion
 
-        #region Staking
-        /// <inheritdoc />
-        public async Task<WebCallResult<BinanceStakingPositionResult>> PurchaseStakingProductAsync(StakingProductType product, string productId, decimal quantity, bool? renewable = null, long? receiveWindow = null, CancellationToken ct = default)
-        {
-            var parameters = new Dictionary<string, object>()
-            {
-                { "product", EnumConverter.GetString(product) },
-                { "productId", productId },
-                { "amount", quantity.ToString(CultureInfo.InvariantCulture) },
-            };
-            parameters.AddOptionalParameter("renewable", renewable);
-            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
-
-            return await _baseClient.SendRequestInternal<BinanceStakingPositionResult>(_baseClient.GetUrl(stakingPurchaseEndpoint, marginApi, marginVersion), HttpMethod.Post, ct, parameters, true, weight: 1).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<WebCallResult<BinanceStakingResult>> RedeemStakingProductAsync(StakingProductType product, string productId, string? positionId = null, decimal? quantity = null, bool? renewable = null, long? receiveWindow = null, CancellationToken ct = default)
-        {
-            var parameters = new Dictionary<string, object>()
-            {
-                { "product", EnumConverter.GetString(product) },
-                { "productId", productId },
-            };
-            parameters.AddOptionalParameter("positionId", positionId);
-            parameters.AddOptionalParameter("amount", quantity?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("renewable", renewable);
-            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
-
-            return await _baseClient.SendRequestInternal<BinanceStakingResult>(_baseClient.GetUrl(stakingRedeemEndpoint, marginApi, marginVersion), HttpMethod.Post, ct, parameters, true, weight: 1).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<BinanceStakingPosition>>> GetStakingPositionsAsync(StakingProductType product, string? productId = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default)
-        {
-            var parameters = new Dictionary<string, object>()
-            {
-                { "product", EnumConverter.GetString(product) }
-            };
-            parameters.AddOptionalParameter("productId", productId);
-            parameters.AddOptionalParameter("current", page);
-            parameters.AddOptionalParameter("size", limit);
-            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
-
-            return await _baseClient.SendRequestInternal<IEnumerable<BinanceStakingPosition>>(_baseClient.GetUrl(stakingPositionEndpoint, marginApi, marginVersion), HttpMethod.Get, ct, parameters, true, weight: 1).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<BinanceStakingHistory>>> GetStakingHistoryAsync(StakingProductType product, StakingTransactionType transactionType, string? asset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default)
-        {
-            var parameters = new Dictionary<string, object>()
-            {
-                { "product", EnumConverter.GetString(product) },
-                { "txnType", EnumConverter.GetString(transactionType) }
-            };
-            parameters.AddOptionalParameter("asset", asset);
-            parameters.AddOptionalParameter("startTime", DateTimeConverter.ConvertToMilliseconds(startTime));
-            parameters.AddOptionalParameter("endTime", DateTimeConverter.ConvertToMilliseconds(endTime));
-            parameters.AddOptionalParameter("current", page);
-            parameters.AddOptionalParameter("size", limit);
-            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
-
-            return await _baseClient.SendRequestInternal<IEnumerable<BinanceStakingHistory>>(_baseClient.GetUrl(stakingHistoryEndpoint, marginApi, marginVersion), HttpMethod.Get, ct, parameters, true, weight: 1).ConfigureAwait(false);
-        }
-
-        #endregion
-
         #region Convert Transfer
         /// <inheritdoc />
         public async Task<WebCallResult<BinanceConvertTransferResult>> ConvertTransferAsync(string clientTransferId, string asset, decimal quantity, string targetAsset, long? receiveWindow = null, CancellationToken ct = default)
@@ -1330,6 +1304,94 @@ namespace Binance.Net.Clients.SpotApi
 
             return await _baseClient.SendRequestInternal<IEnumerable<BinancePreventedTrade>>(_baseClient.GetUrl("myPreventedMatches", "api", "3"), HttpMethod.Get, ct, parameters, true, weight: 5).ConfigureAwait(false);
         }
-#endregion
+        #endregion
+
+        #region Spot Algo
+
+        #region Place TWAP
+        /// <inheritdoc />
+        public async Task<WebCallResult<BinanceAlgoOrderResult>> PlaceTimeWeightedAveragePriceOrderAsync(
+            string symbol,
+            OrderSide side,
+            decimal quantity,
+            int duration,
+            string? clientOrderId = null,
+            decimal? limitPrice = null,
+            long? receiveWindow = null,
+            CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>()
+            {
+                { "symbol", symbol },
+                { "side", JsonConvert.SerializeObject(side, new OrderSideConverter(false)) },
+                { "quantity", quantity.ToString(CultureInfo.InvariantCulture) },
+                { "duration", duration },
+            };
+            parameters.AddOptionalParameter("clientAlgoId", clientOrderId);
+            parameters.AddOptionalParameter("limitPrice", limitPrice);
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+
+            return await _baseClient.SendRequestInternal<BinanceAlgoOrderResult>(_baseClient.GetUrl("algo/spot/newOrderTwap", "sapi", "1"), HttpMethod.Post, ct, parameters, true, weight: 3000).ConfigureAwait(false);
+        }
+        #endregion
+
+        #region Cancel algo order
+        /// <inheritdoc />
+        public async Task<WebCallResult<BinanceAlgoResult>> CancelAlgoOrderAsync(long algoOrderId, long? receiveWindow = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>()
+            {
+                { "algoId", algoOrderId },
+            };
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+
+            return await _baseClient.SendRequestInternal<BinanceAlgoResult>(_baseClient.GetUrl("algo/spot/order", "sapi", "1"), HttpMethod.Delete, ct, parameters, true, weight: 1).ConfigureAwait(false);
+        }
+        #endregion
+
+        #region Get Open Algo Orders
+        /// <inheritdoc />
+        public async Task<WebCallResult<BinanceAlgoOrders>> GetOpenAlgoOrdersAsync(long? receiveWindow = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+
+            return await _baseClient.SendRequestInternal<BinanceAlgoOrders>(_baseClient.GetUrl("algo/spot/openOrders", "sapi", "1"), HttpMethod.Get, ct, parameters, true, weight: 1).ConfigureAwait(false);
+        }
+        #endregion
+
+        #region Get historical Algo Orders
+        /// <inheritdoc />
+        public async Task<WebCallResult<BinanceAlgoOrders>> GetClosedAlgoOrdersAsync(string? symbol = null, OrderSide? side = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.AddOptionalParameter("symbol", symbol);
+            parameters.AddOptionalParameter("side", side == null ? null : JsonConvert.SerializeObject(side, new OrderSideConverter(false)));
+            parameters.AddOptionalParameter("startTime", DateTimeConverter.ConvertToMilliseconds(startTime));
+            parameters.AddOptionalParameter("endTime", DateTimeConverter.ConvertToMilliseconds(endTime));
+            parameters.AddOptionalParameter("page", page);
+            parameters.AddOptionalParameter("pageSize", limit);
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+
+            return await _baseClient.SendRequestInternal<BinanceAlgoOrders>(_baseClient.GetUrl("algo/spot/historicalOrders", "sapi", "1"), HttpMethod.Get, ct, parameters, true, weight: 1).ConfigureAwait(false);
+        }
+        #endregion
+
+        #region Get Algo sub Orders
+        /// <inheritdoc />
+        public async Task<WebCallResult<BinanceAlgoSubOrderList>> GetAlgoSubOrdersAsync(long algoId, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default)
+        {
+            var parameters = new Dictionary<string, object>()
+            {
+                { "algoId", algoId }
+            };
+            parameters.AddOptionalParameter("page", page);
+            parameters.AddOptionalParameter("pageSize", limit);
+            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
+
+            return await _baseClient.SendRequestInternal<BinanceAlgoSubOrderList>(_baseClient.GetUrl("algo/spot/subOrders", "sapi", "1"), HttpMethod.Get, ct, parameters, true, weight: 1).ConfigureAwait(false);
+        }
+        #endregion
+        #endregion
     }
 }
