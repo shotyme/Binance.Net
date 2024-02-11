@@ -157,6 +157,7 @@ namespace Binance.Net.Clients.SpotApi
                 strategyId,
                 strategyType,
                 selfTradePreventionMode,
+                null,
                 receiveWindow,
                 1,
                 ct).ConfigureAwait(false);
@@ -203,6 +204,7 @@ namespace Binance.Net.Clients.SpotApi
                 strategyId,
                 strategyType,
                 selfTradePreventionMode,
+                null,
                 receiveWindow,
                 1,
                 ct).ConfigureAwait(false);
@@ -584,7 +586,7 @@ namespace Binance.Net.Clients.SpotApi
 
         /// <inheritdoc />
         public async Task<WebCallResult<BinancePlacedOrder>> PlaceMarginOrderAsync(string symbol,
-            Enums.OrderSide side,
+            OrderSide side,
             SpotOrderType type,
             decimal? quantity = null,
             decimal? quoteQuantity = null,
@@ -596,6 +598,8 @@ namespace Binance.Net.Clients.SpotApi
             SideEffectType? sideEffectType = null,
             bool? isIsolated = null,
             OrderResponseType? orderResponseType = null,
+            SelfTradePreventionMode? selfTradePreventionMode = null,
+            bool? autoRepayAtCancel = null,
             int? receiveWindow = null,
             CancellationToken ct = default)
         {
@@ -616,7 +620,8 @@ namespace Binance.Net.Clients.SpotApi
                 null,
                 null,
                 null,
-                null,
+                selfTradePreventionMode,
+                autoRepayAtCancel,
                 receiveWindow,
                 weight: 6,
                 ct).ConfigureAwait(false);
@@ -782,6 +787,8 @@ namespace Binance.Net.Clients.SpotApi
             string? limitClientOrderId = null,
             string? stopClientOrderId = null,
             OrderResponseType? orderResponseType = null,
+            SelfTradePreventionMode? selfTradePreventionMode = null,
+            bool? autoRepayAtCancel = null,
             int? receiveWindow = null,
             CancellationToken ct = default)
         {
@@ -815,6 +822,8 @@ namespace Binance.Net.Clients.SpotApi
             parameters.AddOptionalParameter("newOrderRespType", orderResponseType == null ? null : JsonConvert.SerializeObject(orderResponseType, new OrderResponseTypeConverter(false)));
             parameters.AddOptionalParameter("stopIcebergQty", stopIcebergQuantity?.ToString(CultureInfo.InvariantCulture));
             parameters.AddOptionalParameter("stopLimitTimeInForce", stopLimitTimeInForce == null ? null : JsonConvert.SerializeObject(stopLimitTimeInForce, new TimeInForceConverter(false)));
+            parameters.AddOptionalParameter("autoRepayAtCancel", autoRepayAtCancel);
+            parameters.AddOptionalParameter("selfTradePreventionMode", EnumConverter.GetString(selfTradePreventionMode));
             parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
 
             return await _baseClient.SendRequestInternal<BinanceMarginOrderOcoList>(_baseClient.GetUrl(newMarginOCOOrderEndpoint, marginApi, marginVersion), HttpMethod.Post, ct, parameters, true, weight: 6).ConfigureAwait(false);
@@ -1307,7 +1316,7 @@ namespace Binance.Net.Clients.SpotApi
         #region Get Convert Trade History
 
         /// <inheritdoc />
-        public async Task<WebCallResult<BinanceListResult<BinanceConvertTrade>>> GetConvertTradeHistoryAsync(DateTime startTime, DateTime endTime, int? limit = null, long? receiveWindow = null, CancellationToken ct = default)
+        public async Task<WebCallResult<BinanceListResult<Objects.Models.Spot.Convert.BinanceConvertTrade>>> GetConvertTradeHistoryAsync(DateTime startTime, DateTime endTime, int? limit = null, long? receiveWindow = null, CancellationToken ct = default)
         {
             var parameters = new Dictionary<string, object>();
             parameters.AddParameter("startTime", DateTimeConverter.ConvertToMilliseconds(startTime));
@@ -1315,7 +1324,7 @@ namespace Binance.Net.Clients.SpotApi
             parameters.AddOptionalParameter("limit", limit);
             parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
 
-            return await _baseClient.SendRequestInternal<BinanceListResult<BinanceConvertTrade>>(_baseClient.GetUrl(convertTradeHistoryEndpoint, convertApi, convertVersion), HttpMethod.Get, ct, parameters, true, weight: 3000).ConfigureAwait(false);
+            return await _baseClient.SendRequestInternal<BinanceListResult<Objects.Models.Spot.Convert.BinanceConvertTrade>>(_baseClient.GetUrl(convertTradeHistoryEndpoint, convertApi, convertVersion), HttpMethod.Get, ct, parameters, true, weight: 3000).ConfigureAwait(false);
         }
 
         #endregion
