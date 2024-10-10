@@ -10,3 +10,9 @@
 ## Broker
 Spot: MHU2UUW8
 Futures: yXxTdxJM
+
+BinanceRestClientUsdFuturesApi ctor
+BinanceRestClientSpotApi ctor
+Spot: PlaceOrderInternal() -> newClientOrderId
+USD: PlaceOrderAsync() -> newClientOrderId
+COIN: PlaceOrderAsync() -> newClientOrderId
