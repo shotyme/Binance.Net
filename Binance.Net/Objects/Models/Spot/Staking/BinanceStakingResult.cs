@@ -3,22 +3,12 @@
     /// <summary>
     /// Staking result
     /// </summary>
-    public class BinanceStakingResult 
+    public record BinanceStakingResult 
     {
         /// <summary>
         /// Successful
         /// </summary>
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
-    }
-
-    /// <summary>
-    /// Staking result
-    /// </summary>
-    public class BinanceStakingPositionResult: BinanceStakingResult
-    {
-        /// <summary>
-        /// Id of the position
-        /// </summary>
-        public string? PositionId { get; set; }
     }
 }

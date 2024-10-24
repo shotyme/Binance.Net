@@ -1,20 +1,20 @@
-﻿using Binance.Net.Enums;
-using CryptoExchange.Net.Converters;
-namespace Binance.Net.Objects.Models.Spot.PortfolioMargin
+﻿namespace Binance.Net.Objects.Models.Spot.PortfolioMargin
 {
     /// <summary>
     /// Portfolio margin collateral rate info
     /// </summary>
-    public class BinancePortfolioMarginCollateralRate
+    public record BinancePortfolioMarginCollateralRate
     {
         /// <summary>
         /// Asset
         /// </summary>
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
 
         /// <summary>
         /// Collateral rate
         /// </summary>
+        [JsonPropertyName("collateralRate")]
         public decimal CollateralRate { get; set; }
     }
 }

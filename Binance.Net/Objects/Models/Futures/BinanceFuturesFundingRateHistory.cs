@@ -1,31 +1,30 @@
-using System;
-using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
-
 namespace Binance.Net.Objects.Models.Futures
 {
     /// <summary>
     /// Funding rate information for Futures trading
     /// </summary>
-    public class BinanceFuturesFundingRateHistory
+    public record BinanceFuturesFundingRateHistory
     {
         /// <summary>
         /// The symbol the information is about
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// The finding rate for the given symbol and time
         /// </summary>
+        [JsonPropertyName("fundingRate")]
         public decimal FundingRate { get; set; }
         /// <summary>
         /// The time the funding rate is applied
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("fundingTime")]
         public DateTime FundingTime { get; set; }
         /// <summary>
         /// The mark price
         /// </summary>
-        [JsonProperty("markPrice")]
-        public decimal MarkPrice { get; set; }
+        [JsonPropertyName("markPrice")]
+        public decimal? MarkPrice { get; set; }
     }
 }

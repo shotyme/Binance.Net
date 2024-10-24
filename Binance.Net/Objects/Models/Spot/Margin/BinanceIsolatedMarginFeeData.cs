@@ -1,56 +1,51 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Binance.Net.Objects.Models.Spot.Margin
+﻿namespace Binance.Net.Objects.Models.Spot.Margin
 {
     /// <summary>
     /// Fee data
     /// </summary>
-    public class BinanceIsolatedMarginFeeData
+    public record BinanceIsolatedMarginFeeData
     {
         /// <summary>
         /// Vip level
         /// </summary>
-        [JsonProperty("vipLevel")]
+        [JsonPropertyName("vipLevel")]
         public int VipLevel { get; set; }
         /// <summary>
         /// Symbol
         /// </summary>
-        [JsonProperty("symbol")]
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// Leverage
         /// </summary>
-        [JsonProperty("leverage")]
+        [JsonPropertyName("leverage")]
         public int Leverage { get; set; }
         /// <summary>
         /// Data
         /// </summary>
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public IEnumerable<BinanceIsolatedMarginFeeInfo> FeeInfo { get; set; } = Array.Empty<BinanceIsolatedMarginFeeInfo>();
     }
 
     /// <summary>
     /// Fee info
     /// </summary>
-    public class BinanceIsolatedMarginFeeInfo
+    public record BinanceIsolatedMarginFeeInfo
     {
         /// <summary>
         /// Asset
         /// </summary>
-        [JsonProperty("coin")]
+        [JsonPropertyName("coin")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// Daily interest
         /// </summary>
-        [JsonProperty("dailyInterest")]
+        [JsonPropertyName("dailyInterest")]
         public decimal DailyInterest { get; set; }
         /// <summary>
         /// Borrow limit
         /// </summary>
-        [JsonProperty("borrowLimit")]
+        [JsonPropertyName("borrowLimit")]
         public decimal BorrowLimit { get; set; }
     }
 }

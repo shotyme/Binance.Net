@@ -1,5 +1,4 @@
 ﻿using Binance.Net.Objects;
-using CryptoExchange.Net.Objects;
 
 namespace Binance.Net
 {
@@ -39,6 +38,11 @@ namespace Binance.Net
         public string? UsdFuturesSocketAddress { get; }
 
         /// <summary>
+        /// Usd futures Socket address for the request API
+        /// </summary>
+        public string? UsdFuturesSocketApiAddress { get; }
+
+        /// <summary>
         /// Coin futures Rest address
         /// </summary>
         public string? CoinFuturesRestAddress { get; }
@@ -56,6 +60,7 @@ namespace Binance.Net
             string? blvtSocketAddress, 
             string? usdFuturesRestAddress, 
             string? usdFuturesSocketAddress,
+            string? usdFuturesSocketApiAddress,
             string? coinFuturesRestAddress,
             string? coinFuturesSocketAddress) :
             base(name)
@@ -66,6 +71,7 @@ namespace Binance.Net
             BlvtSocketAddress = blvtSocketAddress;
             UsdFuturesRestAddress = usdFuturesRestAddress;
             UsdFuturesSocketAddress = usdFuturesSocketAddress;
+            UsdFuturesSocketApiAddress = usdFuturesSocketApiAddress;
             CoinFuturesRestAddress = coinFuturesRestAddress;
             CoinFuturesSocketAddress = coinFuturesSocketAddress;
         }
@@ -81,6 +87,7 @@ namespace Binance.Net
                                      BinanceApiAddresses.Default.BlvtSocketClientAddress,
                                      BinanceApiAddresses.Default.UsdFuturesRestClientAddress,
                                      BinanceApiAddresses.Default.UsdFuturesSocketClientAddress,
+                                     BinanceApiAddresses.Default.UsdFuturesSocketApiClientAddress,
                                      BinanceApiAddresses.Default.CoinFuturesRestClientAddress,
                                      BinanceApiAddresses.Default.CoinFuturesSocketClientAddress);
 
@@ -95,6 +102,7 @@ namespace Binance.Net
                                      BinanceApiAddresses.TestNet.BlvtSocketClientAddress,
                                      BinanceApiAddresses.TestNet.UsdFuturesRestClientAddress,
                                      BinanceApiAddresses.TestNet.UsdFuturesSocketClientAddress,
+                                     BinanceApiAddresses.TestNet.UsdFuturesSocketApiClientAddress,
                                      BinanceApiAddresses.TestNet.CoinFuturesRestClientAddress,
                                      BinanceApiAddresses.TestNet.CoinFuturesSocketClientAddress);
 
@@ -110,21 +118,12 @@ namespace Binance.Net
                                      null,
                                      null,
                                      null,
+                                     null,
                                      null);
 
         /// <summary>
         /// Create a custom environment
         /// </summary>
-        /// <param name="name"></param>
-        /// <param name="spotRestAddress"></param>
-        /// <param name="spotSocketStreamsAddress"></param>
-        /// <param name="spotSocketApiAddress"></param>
-        /// <param name="blvtSocketAddress"></param>
-        /// <param name="usdFuturesRestAddress"></param>
-        /// <param name="usdFuturesSocketAddress"></param>
-        /// <param name="coinFuturesRestAddress"></param>
-        /// <param name="coinFuturesSocketAddress"></param>
-        /// <returns></returns>
         public static BinanceEnvironment CreateCustom(
                         string name,
                         string spotRestAddress,
@@ -133,8 +132,9 @@ namespace Binance.Net
                         string? blvtSocketAddress,
                         string? usdFuturesRestAddress,
                         string? usdFuturesSocketAddress,
+                        string? usdFuturesSocketApiAddress,
                         string? coinFuturesRestAddress,
                         string? coinFuturesSocketAddress)
-            => new BinanceEnvironment(name, spotRestAddress, spotSocketStreamsAddress, spotSocketApiAddress, blvtSocketAddress, usdFuturesRestAddress, usdFuturesSocketAddress, coinFuturesRestAddress, coinFuturesSocketAddress);
+            => new BinanceEnvironment(name, spotRestAddress, spotSocketStreamsAddress, spotSocketApiAddress, blvtSocketAddress, usdFuturesRestAddress, usdFuturesSocketAddress, usdFuturesSocketApiAddress, coinFuturesRestAddress, coinFuturesSocketAddress);
     }
 }

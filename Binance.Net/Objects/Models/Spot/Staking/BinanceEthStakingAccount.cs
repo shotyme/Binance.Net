@@ -1,23 +1,19 @@
-﻿using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
-using System;
-
-namespace Binance.Net.Objects.Models.Spot.Staking
+﻿namespace Binance.Net.Objects.Models.Spot.Staking
 {
     /// <summary>
     /// Eth staking account
     /// </summary>
-    public class BinanceEthStakingAccount
+    public record BinanceEthStakingAccount
     {
         /// <summary>
         /// Total profit in Beth
         /// </summary>
-        [JsonProperty("cumulativeProfitInBETH")]
+        [JsonPropertyName("cumulativeProfitInBETH")]
         public decimal TotalProfitInBeth { get; set; }
         /// <summary>
         /// Last day profit in Beth
         /// </summary>
-        [JsonProperty("lastDayProfitInBETH")]
+        [JsonPropertyName("lastDayProfitInBETH")]
         public decimal LastDayProfitInBeth { get; set; }
     }
 }

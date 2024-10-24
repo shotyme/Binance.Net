@@ -1,54 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Spot
+﻿namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Dust log response details
     /// </summary>
-    public class BinanceDustLogList
+    public record BinanceDustLogList
     {
         /// <summary>
         /// Total counts of exchange
         /// </summary>
+        [JsonPropertyName("total")]
         public int Total { get; set; }
         /// <summary>
         /// Rows
         /// </summary>
+        [JsonPropertyName("userAssetDribblets")]
         public IEnumerable<BinanceDustLog> UserAssetDribblets { get; set; } = Array.Empty<BinanceDustLog>();
     }
 
     /// <summary>
     /// Dust log details
     /// </summary>
-    public class BinanceDustLog
+    public record BinanceDustLog
     {
         /// <summary>
         /// Total transferred
         /// </summary>
-        [JsonProperty("totalTransferedAmount")]
+        [JsonPropertyName("totalTransferedAmount")]
         public decimal TransferredTotal { get; set; }
         /// <summary>
         /// Total service charge
         /// </summary>
-        [JsonProperty("totalServiceChargeAmount")]
+        [JsonPropertyName("totalServiceChargeAmount")]
         public decimal ServiceChargeTotal { get; set; }
         /// <summary>
         /// Transaction id
         /// </summary>
-        [JsonProperty("transId")]
+        [JsonPropertyName("transId")]
         public long TransactionId { get; set; }
         /// <summary>
         /// Detail logs
         /// </summary>
-        [JsonProperty("userAssetDribbletDetails")]
+        [JsonPropertyName("userAssetDribbletDetails")]
         public IEnumerable<BinanceDustLogDetails> Logs { get; set; } = Array.Empty<BinanceDustLogDetails>();
         /// <summary>
         /// Timestamp
         /// </summary>
-        [JsonProperty("operateTime")]
+        [JsonPropertyName("operateTime")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime OperateTime { get; set; }
     }
@@ -56,38 +53,38 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Dust log entry details
     /// </summary>
-    public class BinanceDustLogDetails
+    public record BinanceDustLogDetails
     {
         /// <summary>
         /// Transaction id
         /// </summary>
-        [JsonProperty("transId")]
+        [JsonPropertyName("transId")]
         public long TransactionId { get; set; }
         /// <summary>
         /// Service charge
         /// </summary>
-        [JsonProperty("serviceChargeAmount")]
+        [JsonPropertyName("serviceChargeAmount")]
         public decimal ServiceChargeQuantity { get; set; }
         /// <summary>
         /// Quantity
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
         /// Timestamp
         /// </summary>
-        [JsonProperty("operateTime")]
+        [JsonPropertyName("operateTime")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime OperateTime { get; set; }
         /// <summary>
         /// Transferred quantity
         /// </summary>
-        [JsonProperty("transferedAmount")]
+        [JsonPropertyName("transferedAmount")]
         public decimal TransferredQuantity { get; set; }
         /// <summary>
         /// Asset
         /// </summary>
-        [JsonProperty("fromAsset")]
+        [JsonPropertyName("fromAsset")]
         public string FromAsset { get; set; } = string.Empty;
     }
 }

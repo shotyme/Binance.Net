@@ -3,15 +3,17 @@
     /// <summary>
     /// Algo order result
     /// </summary>
-    public class BinanceAlgoResult: BinanceResult
+    public record BinanceAlgoResult: BinanceResult
     {
         /// <summary>
         /// Algo order id
         /// </summary>
+        [JsonPropertyName("algoId")]
         public long AlgoId { get; set; }
         /// <summary>
         /// Successful
         /// </summary>
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
     }
 }

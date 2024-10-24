@@ -1,21 +1,19 @@
-﻿using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Spot
+﻿namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Convert result
     /// </summary>
-    public class BinanceBusdConvertResult
+    public record BinanceBusdConvertResult
     {
         /// <summary>
         /// Transaction id
         /// </summary>
-        [JsonProperty("tranId")]
+        [JsonPropertyName("tranId")]
         public long TransactionId { get; set; }
         /// <summary>
         /// Status
         /// </summary>
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
     }
 }

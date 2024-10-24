@@ -1,20 +1,19 @@
-﻿using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models
+﻿namespace Binance.Net.Objects.Models
 {
     /// <summary>
     /// Query result
     /// </summary>
-    public class BinanceResult
+    public record BinanceResult
     {
         /// <summary>
         /// Result code
         /// </summary>
+        [JsonPropertyName("code")]
         public int Code { get; set; }
         /// <summary>
         /// Message
         /// </summary>
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string Message { get; set; } = string.Empty;
     }
 
@@ -22,11 +21,12 @@ namespace Binance.Net.Objects.Models
     /// Query result
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    internal class BinanceResult<T>: BinanceResult
+    internal record BinanceResult<T>: BinanceResult
     {
         /// <summary>
         /// The data
         /// </summary>
+        [JsonPropertyName("data")]
         public T Data { get; set; } = default!;
     }
 }

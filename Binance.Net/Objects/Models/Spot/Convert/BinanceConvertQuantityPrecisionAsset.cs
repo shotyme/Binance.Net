@@ -1,21 +1,19 @@
-﻿using System;
-using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Spot.Convert
+﻿namespace Binance.Net.Objects.Models.Spot.Convert
 {
     /// <summary>
     /// Precision per asset
     /// </summary>
-    public class BinanceConvertQuantityPrecisionAsset
+    public record BinanceConvertQuantityPrecisionAsset
     {
         /// <summary>
         /// Asset
         /// </summary>
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// Fraction
         /// </summary>
+        [JsonPropertyName("fraction")]
         public int Fraction { get; set; }
     }
 }

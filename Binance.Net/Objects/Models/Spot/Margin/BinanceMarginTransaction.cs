@@ -1,16 +1,14 @@
-﻿using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Spot.Margin
+﻿namespace Binance.Net.Objects.Models.Spot.Margin
 {
     /// <summary>
     /// The result of transferring
     /// </summary>
-    public class BinanceTransaction
+    public record BinanceTransaction
     {
         /// <summary>
         /// The Transaction id as assigned by Binance
         /// </summary>
-        [JsonProperty("tranId")]
+        [JsonPropertyName("tranId")]
         public long TransactionId { get; set; }
     }
 }

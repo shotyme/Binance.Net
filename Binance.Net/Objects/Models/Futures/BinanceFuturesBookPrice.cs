@@ -5,11 +5,12 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Book price
     /// </summary>
-    public class BinanceFuturesBookPrice: BinanceBookPrice
+    public record BinanceFuturesBookPrice: BinanceBookPrice
     {
         /// <summary>
         /// Pair
         /// </summary>
+        [JsonPropertyName("pair")]
         public string Pair { get; set; } = string.Empty;
     }
 }

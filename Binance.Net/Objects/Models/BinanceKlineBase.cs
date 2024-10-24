@@ -1,14 +1,12 @@
-﻿using System;
-using Binance.Net.Interfaces;
+﻿using Binance.Net.Interfaces;
 using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
 
 namespace Binance.Net.Objects.Models
 {
     /// <summary>
     /// Candlestick information for symbol
     /// </summary>
-    public abstract class BinanceKlineBase : IBinanceKline
+    public abstract record BinanceKlineBase : IBinanceKline
     {
         /// <summary>
         /// The time this candlestick opened

@@ -1,32 +1,26 @@
-﻿using System;
-using Binance.Net.Converters;
-using Binance.Net.Enums;
-using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Futures.Socket
+﻿namespace Binance.Net.Objects.Models.Futures.Socket
 {
     /// <summary>
     /// Information about leverage of symbol changed
     /// </summary>
-    public class BinanceFuturesStreamConfigUpdate : BinanceStreamEvent
+    public record BinanceFuturesStreamConfigUpdate : BinanceStreamEvent
     {
         /// <summary>
         /// Leverage Update data
         /// </summary>
-        [JsonProperty("ac")]
-        public BinanceFuturesStreamLeverageUpdateData LeverageUpdateData { get; set; } = new BinanceFuturesStreamLeverageUpdateData();
+        [JsonPropertyName("ac")]
+        public BinanceFuturesStreamLeverageUpdateData? LeverageUpdateData { get; set; }
 
         /// <summary>
         /// Position mode Update data
         /// </summary>
-        [JsonProperty("ai")]
-        public BinanceFuturesStreamConfigUpdateData ConfigUpdateData { get; set; } = new BinanceFuturesStreamConfigUpdateData();
+        [JsonPropertyName("ai")]
+        public BinanceFuturesStreamConfigUpdateData? ConfigUpdateData { get; set; }
 
         /// <summary>
         /// Transaction time
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime TransactionTime { get; set; }
         /// <summary>
         /// The listen key the update was for
@@ -37,30 +31,30 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     /// <summary>
     /// Config update data
     /// </summary>
-    public class BinanceFuturesStreamLeverageUpdateData
+    public record BinanceFuturesStreamLeverageUpdateData
     {
         /// <summary>
         /// The symbol this balance is for
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string? Symbol { get; set; }
 
         /// <summary>
         /// The symbol this leverage is for
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public int Leverage { get; set; }
     }
 
     /// <summary>
     /// Position mode update data
     /// </summary>
-    public class BinanceFuturesStreamConfigUpdateData
+    public record BinanceFuturesStreamConfigUpdateData
     {
         /// <summary>
         /// Multi-Assets Mode
         /// </summary>
-        [JsonProperty("j")]
+        [JsonPropertyName("j")]
         public bool MultiAssetMode { get; set; }
     }
 }

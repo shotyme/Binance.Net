@@ -1,18 +1,10 @@
-﻿using CryptoExchange.Net.Authentication;
-using CryptoExchange.Net.Interfaces;
-
-namespace Binance.Net.Interfaces.Clients.SpotApi
+﻿namespace Binance.Net.Interfaces.Clients.SpotApi
 {
     /// <summary>
     /// Spot API socket subscriptions and requests
     /// </summary>
-    public interface IBinanceSocketClientSpotApi
+    public interface IBinanceSocketClientSpotApi : ISocketApiClient
     {
-        /// <summary>
-        /// Factory for websockets
-        /// </summary>
-        IWebsocketFactory SocketFactory { get; set; }
-
         /// <summary>
         /// Account streams and queries
         /// </summary>
@@ -25,11 +17,10 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Trading data and queries
         /// </summary>
         IBinanceSocketClientSpotApiTrading Trading { get; }
+
         /// <summary>
-        /// Set the API credentials for this API
+        /// Get the shared socket subscription client. This interface is shared with other exhanges to allow for a common implementation for different exchanges.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="credentials"></param>
-        void SetApiCredentials<T>(T credentials) where T : ApiCredentials;
+        IBinanceSocketClientSpotApiShared SharedClient { get; }
     }
 }

@@ -1,44 +1,40 @@
-﻿using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
-using System;
-
-namespace Binance.Net.Objects.Models.Spot.Staking
+﻿namespace Binance.Net.Objects.Models.Spot.Staking
 {
     /// <summary>
     /// Rewards history
     /// </summary>
-    public class BinanceEthRewardsHistory
+    public record BinanceEthRewardsHistory
     {
         /// <summary>
         /// Asset
         /// </summary>
-        [JsonProperty("asset")]
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// Amount
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
         /// Status
         /// </summary>
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
         /// <summary>
         /// Timestamp
         /// </summary>
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
         /// BETH holding balance
         /// </summary>
-        [JsonProperty("holding")]
+        [JsonPropertyName("holding")]
         public decimal Holding { get; set; }
         /// <summary>
         /// Annual percentage rate
         /// </summary>
-        [JsonProperty("annualPercentageRate")]
+        [JsonPropertyName("annualPercentageRate")]
         public decimal AnnualPercentageRate { get; set; }
     }
 }

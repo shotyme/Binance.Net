@@ -1,21 +1,19 @@
-﻿using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Spot.Margin
+﻿namespace Binance.Net.Objects.Models.Spot.Margin
 {
     /// <summary>
     /// Future hourly interest rate
     /// </summary>
-    public class BinanceFuturesInterestRate
+    public record BinanceFuturesInterestRate
     {
         /// <summary>
         /// Asset
         /// </summary>
-        [JsonProperty("asset")]
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// Next interest rate
         /// </summary>
-        [JsonProperty("nextHourlyInterestRate")]
+        [JsonPropertyName("nextHourlyInterestRate")]
         public decimal NextHourlyInterestRate { get; set; }
     }
 }

@@ -1,50 +1,46 @@
-﻿using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
-using System;
-
-namespace Binance.Net.Objects.Models.Spot.Staking
+﻿namespace Binance.Net.Objects.Models.Spot.Staking
 {
     /// <summary>
     /// Wrap history
     /// </summary>
-    public class BinanceBethWrapHistory
+    public record BinanceBethWrapHistory
     {
         /// <summary>
         /// Exchange rate
         /// </summary>
-        [JsonProperty("exchangeRate")]
+        [JsonPropertyName("exchangeRate")]
         public decimal ExchangeRate { get; set; }
         /// <summary>
         /// Output quantity
         /// </summary>
-        [JsonProperty("toAmount")]
+        [JsonPropertyName("toAmount")]
         public decimal ToQuantity { get; set; }
         /// <summary>
         /// Input quantity
         /// </summary>
-        [JsonProperty("fromAmount")]
+        [JsonPropertyName("fromAmount")]
         public decimal FromQuantity { get; set; }
         /// <summary>
         /// Timestamp
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
         /// From asset
         /// </summary>
-        [JsonProperty("fromAsset")]
+        [JsonPropertyName("fromAsset")]
         public string FromAsset { get; set; } = string.Empty;
         /// <summary>
         /// To asset
         /// </summary>
-        [JsonProperty("toAsset")]
+        [JsonPropertyName("toAsset")]
         public string ToAsset { get; set; } = string.Empty;
         /// <summary>
         /// Status
         /// </summary>
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
     }
 }

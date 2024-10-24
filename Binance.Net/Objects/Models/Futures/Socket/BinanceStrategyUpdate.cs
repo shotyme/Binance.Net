@@ -1,62 +1,58 @@
-﻿using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
-using System;
-
-namespace Binance.Net.Objects.Models.Futures.Socket
+﻿namespace Binance.Net.Objects.Models.Futures.Socket
 {
     /// <summary>
     /// Strategy update
     /// </summary>
-    public class BinanceStrategyUpdate: BinanceStreamEvent
+    public record BinanceStrategyUpdate: BinanceStreamEvent
     {
         /// <summary>
         /// Update info
         /// </summary>
-        [JsonProperty("su")]
+        [JsonPropertyName("su")]
         public BinanceStrategyInfo StrategyUpdate { get; set; } = null!;
 
         /// <summary>
         /// Transaction time
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime TransactionTime { get; set; }
     }
 
     /// <summary>
     /// Strategy update info
     /// </summary>
-    public class BinanceStrategyInfo
+    public record BinanceStrategyInfo
     {
         /// <summary>
         /// The strategy id
         /// </summary>
-        [JsonProperty("si")]
+        [JsonPropertyName("si")]
         public int StrategyId { get; set; }
         /// <summary>
         /// Strategy type
         /// </summary>
-        [JsonProperty("st")]
+        [JsonPropertyName("st")]
         public string StrategyType { get; set; } = string.Empty;
         /// <summary>
         /// Stategy status
         /// </summary>
-        [JsonProperty("ss")]
+        [JsonPropertyName("ss")]
         public string StrategyStatus { get; set; } = string.Empty;
         /// <summary>
         /// Symbol
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
         /// Update time
         /// </summary>
-        [JsonProperty("ut")]
+        [JsonPropertyName("ut")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime UpdateTime { get; set; }
         /// <summary>
         /// Op code
         /// </summary>
-        [JsonProperty("c")]
+        [JsonPropertyName("c")]
         public int OpCode { get; set; }
     }
 }

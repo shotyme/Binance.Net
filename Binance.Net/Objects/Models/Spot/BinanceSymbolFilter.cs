@@ -1,6 +1,5 @@
 ﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
-using Newtonsoft.Json;
 
 namespace Binance.Net.Objects.Models.Spot
 {
@@ -8,18 +7,19 @@ namespace Binance.Net.Objects.Models.Spot
     /// A filter for order placed on a symbol.
     /// </summary>
     [JsonConverter(typeof(SymbolFilterConverter))]
-    public class BinanceSymbolFilter
+    public record BinanceSymbolFilter
     {
         /// <summary>
         /// The type of this filter
         /// </summary>
+        [JsonPropertyName("filterType")]
         public SymbolFilterType FilterType { get; set; }
     }
 
     /// <summary>
     /// Price filter
     /// </summary>
-    public class BinanceSymbolPriceFilter: BinanceSymbolFilter
+    public record BinanceSymbolPriceFilter: BinanceSymbolFilter
     {
         /// <summary>
         /// The minimal price the order can be for
@@ -38,7 +38,7 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Price percentage filter
     /// </summary>
-    public class BinanceSymbolPercentPriceFilter : BinanceSymbolFilter
+    public record BinanceSymbolPercentPriceFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// The max factor the price can deviate up
@@ -48,16 +48,21 @@ namespace Binance.Net.Objects.Models.Spot
         /// The max factor the price can deviate down
         /// </summary>
         public decimal MultiplierDown { get; set; }
+
         /// <summary>
         /// The amount of minutes the average price of trades is calculated over. 0 means the last price is used
         /// </summary>
-        public int AveragePriceMinutes { get; set; }
+        public int? MultiplierDecimal { get; set; }
+        /// <summary>
+        /// The amount of minutes the average price of trades is calculated over. 0 means the last price is used
+        /// </summary>
+        public int? AveragePriceMinutes { get; set; }
     }
 
     /// <summary>
     /// Price percentage filter
     /// </summary>
-    public class BinanceSymbolPercentPriceBySideFilter : BinanceSymbolFilter
+    public record BinanceSymbolPercentPriceBySideFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// The max factor the price can deviate up for buys
@@ -84,7 +89,7 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Lot size filter
     /// </summary>
-    public class BinanceSymbolLotSizeFilter : BinanceSymbolFilter
+    public record BinanceSymbolLotSizeFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// The minimal quantity of an order
@@ -103,7 +108,7 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Market lot size filter
     /// </summary>
-    public class BinanceSymbolMarketLotSizeFilter : BinanceSymbolFilter
+    public record BinanceSymbolMarketLotSizeFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// The minimal quantity of an order
@@ -122,7 +127,7 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Min notional filter
     /// </summary>
-    public class BinanceSymbolMinNotionalFilter : BinanceSymbolFilter
+    public record BinanceSymbolMinNotionalFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// The minimal total quote quantity of an order. This is calculated by Price * Quantity.
@@ -132,18 +137,18 @@ namespace Binance.Net.Objects.Models.Spot
         /// <summary>
         /// Whether or not this filter is applied to market orders. If so the average trade price is used.
         /// </summary>
-        public bool ApplyToMarketOrders { get; set; }
+        public bool? ApplyToMarketOrders { get; set; }
 
         /// <summary>
         /// The amount of minutes the average price of trades is calculated over for market orders. 0 means the last price is used
         /// </summary>
-        public int AveragePriceMinutes { get; set; }
+        public int? AveragePriceMinutes { get; set; }
     }
 
     /// <summary>
     /// Notional filter
     /// </summary>
-    public class BinanceSymbolNotionalFilter : BinanceSymbolFilter
+    public record BinanceSymbolNotionalFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// The minimal total quote quantity of an order. This is calculated by Price * Quantity.
@@ -174,7 +179,7 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     ///Max orders filter
     /// </summary>
-    public class BinanceSymbolMaxOrdersFilter : BinanceSymbolFilter
+    public record BinanceSymbolMaxOrdersFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// The max number of orders for this symbol
@@ -185,7 +190,7 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Max algo orders filter
     /// </summary>
-    public class BinanceSymbolMaxAlgorithmicOrdersFilter : BinanceSymbolFilter
+    public record BinanceSymbolMaxAlgorithmicOrdersFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// The max number of Algorithmic orders for this symbol
@@ -196,7 +201,7 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Max iceberg parts filter
     /// </summary>
-    public class BinanceSymbolIcebergPartsFilter : BinanceSymbolFilter
+    public record BinanceSymbolIcebergPartsFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// The max parts of an iceberg order for this symbol.
@@ -207,7 +212,7 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Max position filter
     /// </summary>
-    public class BinanceSymbolMaxPositionFilter : BinanceSymbolFilter
+    public record BinanceSymbolMaxPositionFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// The MaxPosition filter defines the allowed maximum position an account can have on the base asset of a symbol.
@@ -218,7 +223,7 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Trailing delta filter
     /// </summary>
-    public class BinanceSymbolTrailingDeltaFilter : BinanceSymbolFilter
+    public record BinanceSymbolTrailingDeltaFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// The MinTrailingAboveDelta filter defines the minimum amount in Basis Point or BIPS above the price to activate the order.
@@ -241,7 +246,7 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Max Iceberg Orders Filter
     /// </summary>
-    public class BinanceMaxNumberOfIcebergOrdersFilter : BinanceSymbolFilter
+    public record BinanceMaxNumberOfIcebergOrdersFilter : BinanceSymbolFilter
     {
         /// <summary>
         /// Maximum number of iceberg orders for this symbol

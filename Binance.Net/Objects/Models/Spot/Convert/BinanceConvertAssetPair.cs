@@ -1,45 +1,39 @@
-﻿using System;
-using Binance.Net.Converters;
-using Binance.Net.Enums;
-using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Spot.Convert
+﻿namespace Binance.Net.Objects.Models.Spot.Convert
 {
     /// <summary>
     /// Convert Pairs
     /// </summary>
-    public class BinanceConvertAssetPair
+    public record BinanceConvertAssetPair
     {
         /// <summary>
         /// Quote asset
         /// </summary>
-        [JsonProperty("fromAsset")]
+        [JsonPropertyName("fromAsset")]
         public string QuoteAsset { get; set; } = string.Empty;
         /// <summary>
         /// Base asset
         /// </summary>
-        [JsonProperty("toAsset")]
+        [JsonPropertyName("toAsset")]
         public string BaseAsset { get; set; } = string.Empty;
         /// <summary>
         /// Quote asset min quantity
         /// </summary>
-        [JsonProperty("fromAssetMinAmount")]
+        [JsonPropertyName("fromAssetMinAmount")]
         public decimal QuoteAssetMinQuantity { get; set; }
         /// <summary>
         /// Quote asset max quantity
         /// </summary>
-        [JsonProperty("fromAssetMaxAmount")]
+        [JsonPropertyName("fromAssetMaxAmount")]
         public decimal QuoteAssetMaxQuantity { get; set; }
         /// <summary>
         /// Base asset min quantity
         /// </summary>
-        [JsonProperty("toAssetMinAmount")]
+        [JsonPropertyName("toAssetMinAmount")]
         public decimal BaseAssetMinQuantity { get; set; }
         /// <summary>
         /// Base asset max quantity
         /// </summary>
-        [JsonProperty("toAssetMaxAmount")]
+        [JsonPropertyName("toAssetMaxAmount")]
         public decimal BaseAssetMaxQuantity { get; set; }
     }
 }

@@ -1,10 +1,7 @@
-﻿using Binance.Net.Objects;
-using Binance.Net.UnitTests.TestImplementations;
-using CryptoExchange.Net;
+﻿using Binance.Net.UnitTests.TestImplementations;
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Requests;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -12,16 +9,14 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using CryptoExchange.Net.Objects;
-using Binance.Net.Enums;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using System.Reflection;
-using System.Diagnostics;
 using Binance.Net.Objects.Models.Spot;
-using CryptoExchange.Net.Sockets;
 using Binance.Net.Clients;
-using Binance.Net.Clients.SpotApi;
 using Binance.Net.Objects.Options;
+using NUnit.Framework.Legacy;
+using CryptoExchange.Net.Clients;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System.Text.Json;
 
 namespace Binance.Net.UnitTests
 {
@@ -35,14 +30,14 @@ namespace Binance.Net.UnitTests
             // arrange
             DateTime expected = new DateTime(1970, 1, 1).AddMilliseconds(milisecondsTime);
             var time = new BinanceCheckTime() { ServerTime = expected };
-            var client = TestHelpers.CreateResponseClient(JsonConvert.SerializeObject(time));
+            var client = TestHelpers.CreateResponseClient(JsonSerializer.Serialize(time));
 
             // act
             var result = await client.SpotApi.ExchangeData.GetServerTimeAsync();
 
             // assert
-            Assert.AreEqual(true, result.Success);
-            Assert.AreEqual(expected, result.Data);
+            Assert.That(result.Success);
+            Assert.That(expected == result.Data);
         }
        
         [TestCase]
@@ -64,8 +59,8 @@ namespace Binance.Net.UnitTests
             var result = await client.SpotApi.Account.StartUserStreamAsync();
 
             // assert
-            Assert.IsTrue(result.Success);
-            Assert.IsTrue(key.ListenKey == result.Data);
+            Assert.That(result.Success);
+            Assert.That(key.ListenKey == result.Data);
         }
 
         [TestCase]
@@ -82,7 +77,7 @@ namespace Binance.Net.UnitTests
             var result = await client.SpotApi.Account.KeepAliveUserStreamAsync("test");
 
             // assert
-            Assert.IsTrue(result.Success);
+            Assert.That(result.Success);
         }
 
         [TestCase]
@@ -95,7 +90,7 @@ namespace Binance.Net.UnitTests
             var result = await client.SpotApi.Account.StopUserStreamAsync("test");
 
             // assert
-            Assert.IsTrue(result.Success);
+            Assert.That(result.Success);
         }
 
         [TestCase()]
@@ -134,10 +129,10 @@ namespace Binance.Net.UnitTests
             var result = await client.SpotApi.ExchangeData.GetServerTimeAsync();
 
             // assert
-            Assert.IsFalse(result.Success);
-            Assert.IsNotNull(result.Error);
-            Assert.IsTrue(result.Error.Code == 123);
-            Assert.IsTrue(result.Error.Message == "Error!");
+            ClassicAssert.IsFalse(result.Success);
+            ClassicAssert.IsNotNull(result.Error);
+            Assert.That(result.Error.Code == 123);
+            Assert.That(result.Error.Message == "Error!");
         }
 
         [Test]
@@ -148,7 +143,7 @@ namespace Binance.Net.UnitTests
             var authProvider = new BinanceAuthenticationProvider(new ApiCredentials("TestKey", "TestSecret"));
 
             // assert
-            Assert.AreEqual(authProvider.GetApiKey(), "TestKey");
+            Assert.That(authProvider.ApiKey == "TestKey");
         }
 
         [Test]
@@ -161,70 +156,90 @@ namespace Binance.Net.UnitTests
 
             // act
             var headers = new Dictionary<string, string>();
-            authProvider.AuthenticateRequest(new BinanceRestApiClient(new TraceLogger(), new BinanceRestOptions(), new BinanceRestOptions().SpotOptions), request.Uri, HttpMethod.Get, new Dictionary<string, object>(), true, ArrayParametersSerialization.MultipleValues,
-                HttpMethodParameterPosition.InUri, out var uriParameters, out var bodyParameters, out headers);
+            IDictionary<string, object> uriParams = null;
+            IDictionary<string, object> bodyParams = null;
+            authProvider.AuthenticateRequest(
+                new BinanceRestApiClient(new TraceLogger(), new BinanceRestOptions(), new BinanceRestOptions().SpotOptions),
+                request.Uri,
+                HttpMethod.Get,
+                ref uriParams,
+                ref bodyParams,
+                ref headers,
+                true, ArrayParametersSerialization.MultipleValues,
+                HttpMethodParameterPosition.InUri,
+                RequestBodyFormat.Json);
 
             // assert
-            Assert.IsTrue(headers.First().Key == "X-MBX-APIKEY" && headers.First().Value == "TestKey");
-        }       
-
-        [TestCase("BTCUSDT", true)]
-        [TestCase("NANOUSDT", true)]
-        [TestCase("NANOAUSDTA", true)]
-        [TestCase("NANOBTC", true)]
-        [TestCase("ETHBTC", true)]
-        [TestCase("BEETC", true)]
-        [TestCase("EETC", false)]
-        [TestCase("KP3RBNB", true)]
-        [TestCase("BTC-USDT", false)]
-        [TestCase("BTC-USD", false)]
-        public void CheckValidBinanceSymbol(string symbol, bool isValid)
-        {
-            if (isValid)
-                Assert.DoesNotThrow(symbol.ValidateBinanceSymbol);
-            else
-                Assert.Throws(typeof(ArgumentException), symbol.ValidateBinanceSymbol);
+            Assert.That(headers.First().Key == "X-MBX-APIKEY" && headers.First().Value == "TestKey");
         }
 
         [Test]
-        public void CheckRestInterfaces()
+        public void CheckSignatureExample1()
         {
-            var assembly = Assembly.GetAssembly(typeof(BinanceRestClient));
-            var ignore = new string[] { "IBinanceClientUsdFuturesApi", "IBinanceClientCoinFuturesApi", "IBinanceClientSpotApi" };
-            var clientInterfaces = assembly.GetTypes().Where(t => t.Name.StartsWith("IBinanceClient") && !ignore.Contains(t.Name));
-            
-            foreach(var clientInterface in clientInterfaces)
-            {
-                var implementation = assembly.GetTypes().Single(t => t.IsAssignableTo(clientInterface) && t != clientInterface);
-                int methods = 0;
-                foreach (var method in implementation.GetMethods().Where(m => m.ReturnType.IsAssignableTo(typeof(Task))))
+            var authProvider = new BinanceAuthenticationProvider(new ApiCredentials("vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A", "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"));
+            var client = (RestApiClient)new BinanceRestClient().SpotApi;
+
+            CryptoExchange.Net.Testing.TestHelpers.CheckSignature(
+                client,
+                authProvider,
+                HttpMethod.Post,
+                "/api/v3/order",
+                (uriParams, bodyParams, headers) =>
                 {
-                    var interfaceMethod = clientInterface.GetMethod(method.Name, method.GetParameters().Select(p => p.ParameterType).ToArray());
-                    Assert.NotNull(interfaceMethod, $"Missing interface for method {method.Name} in {implementation.Name} implementing interface {clientInterface.Name}");
-                    methods++;
-                }
-                Debug.WriteLine($"{clientInterface.Name} {methods} methods validated");
-            }
+                    return bodyParams["signature"].ToString();
+                },
+                "c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71",
+                new Dictionary<string, object>
+                {
+                    { "symbol", "LTCBTC" },
+                    { "side", "BUY" },
+                    { "type", "LIMIT" },
+                    { "timeInForce", "GTC" },
+                    { "quantity", "1" },
+                    { "price", "0.1" },
+                    { "recvWindow", "5000" },
+                },
+                DateTimeConverter.ParseFromString("1499827319559"),
+                true,
+                false);
         }
 
         [Test]
-        public void CheckSocketInterfaces()
+        public void CheckSignatureExample2()
         {
-            var assembly = Assembly.GetAssembly(typeof(BinanceSocketClientSpotApi));
-            var clientInterfaces = assembly.GetTypes().Where(t => t.Name.StartsWith("IBinanceSocketClient"));
-
-            foreach (var clientInterface in clientInterfaces)
-            {
-                var implementation = assembly.GetTypes().Single(t => t.IsAssignableTo(clientInterface) && t != clientInterface);
-                int methods = 0;
-                foreach (var method in implementation.GetMethods().Where(m => m.ReturnType.IsAssignableTo(typeof(Task<CallResult<UpdateSubscription>>))))
+            var authProvider = new BinanceAuthenticationProvider(new ApiCredentials("vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A", "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"));
+            var client = (RestApiClient)new BinanceRestClient().SpotApi;
+            client.ParameterPositions[HttpMethod.Post] = HttpMethodParameterPosition.InUri;
+            CryptoExchange.Net.Testing.TestHelpers.CheckSignature(
+                client,
+                authProvider,
+                HttpMethod.Post,
+                "/api/v3/order",
+                (uriParams, bodyParams, headers) =>
                 {
-                    var interfaceMethod = clientInterface.GetMethod(method.Name, method.GetParameters().Select(p => p.ParameterType).ToArray());
-                    Assert.NotNull(interfaceMethod, $"Missing interface for method {method.Name} in {implementation.Name} implementing interface {clientInterface.GetType().Name}");
-                    methods++;
-                }
-                Debug.WriteLine($"{clientInterface.Name} {methods} methods validated");
-            }
+                    return uriParams["signature"].ToString();
+                },
+                "c8db56825ae71d6d79447849e617115f4a920fa2acdcab2b053c4b2838bd6b71",
+                new Dictionary<string, object>
+                {
+                    { "symbol", "LTCBTC" },
+                    { "side", "BUY" },
+                    { "type", "LIMIT" },
+                    { "timeInForce", "GTC" },
+                    { "quantity", "1" },
+                    { "price", "0.1" },
+                    { "recvWindow", "5000" },
+                },
+                DateTimeConverter.ParseFromString("1499827319559"),
+                true,
+                false);
+        }
+
+        [Test]
+        public void CheckInterfaces()
+        {
+            CryptoExchange.Net.Testing.TestHelpers.CheckForMissingRestInterfaces<BinanceRestClient>();
+            CryptoExchange.Net.Testing.TestHelpers.CheckForMissingSocketInterfaces<BinanceSocketClient>();
         }
     }
 }

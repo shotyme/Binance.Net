@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Binance.Net.Enums;
+﻿using Binance.Net.Enums;
 using Binance.Net.Objects.Models;
 using Binance.Net.Objects.Models.Futures.AlgoOrders;
 using Binance.Net.Objects.Models.Spot;
 using Binance.Net.Objects.Models.Spot.Blvt;
-using Binance.Net.Objects.Models.Spot.BSwap;
 using Binance.Net.Objects.Models.Spot.Convert;
 using Binance.Net.Objects.Models.Spot.ConvertTransfer;
 using Binance.Net.Objects.Models.Spot.Margin;
-using Binance.Net.Objects.Models.Spot.Staking;
-using CryptoExchange.Net.Objects;
 
 namespace Binance.Net.Interfaces.Clients.SpotApi
 {
@@ -25,7 +18,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Places a new test order. Test orders are not actually being executed and just test the functionality.
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#test-new-order-trade" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="side">The order side (buy/sell)</param>
         /// <param name="type">The order type (limit/market)</param>
         /// <param name="timeInForce">Lifetime of the order (GoodTillCancel/ImmediateOrCancel)</param>
@@ -40,10 +33,11 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="strategyId">Strategy id</param>
         /// <param name="strategyType">Strategy type</param>
         /// <param name="selfTradePreventionMode">Self trade prevention mode</param>
+        /// <param name="computeFeeRates">Whether fee rates should be calculated or not</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Id's for the placed test order</returns>
-        Task<WebCallResult<BinancePlacedOrder>> PlaceTestOrderAsync(string symbol,
+        /// <returns>Fee info if computeCommissionRates was set to true, else empty</returns>
+        Task<WebCallResult<BinanceTestOrderCommission>> PlaceTestOrderAsync(string symbol,
             OrderSide side,
             SpotOrderType type,
             decimal? quantity = null,
@@ -58,6 +52,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
             int? strategyId = null,
             int? strategyType = null,
             SelfTradePreventionMode? selfTradePreventionMode = null,
+            bool? computeFeeRates = null,
             int? receiveWindow = null,
             CancellationToken ct = default);
 
@@ -65,7 +60,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Places a new order
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#new-order-trade" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="side">The order side (buy/sell)</param>
         /// <param name="type">The order type</param>
         /// <param name="timeInForce">Lifetime of the order (GoodTillCancel/ImmediateOrCancel/FillOrKill)</param>
@@ -105,7 +100,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Cancels a pending order
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#cancel-order-trade" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="orderId">The order id of the order</param>
         /// <param name="origClientOrderId">The client order id of the order</param>
         /// <param name="newClientOrderId">Unique identifier for this cancel</param>
@@ -119,7 +114,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Cancels all open orders on a symbol
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#cancel-all-open-orders-on-a-symbol-trade" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Id's for canceled order</returns>
@@ -128,7 +123,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <summary>
         /// Cancel an existing order and place a new order on the same symbol
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="side">The order side (buy/sell)</param>
         /// <param name="type">The order type</param>
         /// <param name="cancelReplaceMode">Replacement behavior</param>
@@ -176,7 +171,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Retrieves data for a specific order. Either orderId or origClientOrderId should be provided.
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-order-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="orderId">The order id of the order</param>
         /// <param name="origClientOrderId">The client order id of the order</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
@@ -188,7 +183,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Gets a list of open orders
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#current-open-orders-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol to get open orders for</param>
+        /// <param name="symbol">The symbol to get open orders for, for example `ETHUSDT`</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of open orders</returns>
@@ -198,7 +193,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Gets all orders for the provided symbol
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#all-orders-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol to get orders for</param>
+        /// <param name="symbol">The symbol to get orders for, for example `ETHUSDT`</param>
         /// <param name="orderId">If set, only orders with an order id higher than the provided will be returned</param>
         /// <param name="startTime">If set, only orders placed after this time will be returned</param>
         /// <param name="endTime">If set, only orders placed before this time will be returned</param>
@@ -209,10 +204,10 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         Task<WebCallResult<IEnumerable<BinanceOrder>>> GetOrdersAsync(string symbol, long? orderId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Places a new OCO(One cancels other) order
+        /// DEPRECATED, USE PlaceOcoOrderListAsync INSTEAD
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#new-oco-trade" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="side">The order side (buy/sell)</param>
         /// <param name="stopLimitTimeInForce">Lifetime of the stop order (GoodTillCancel/ImmediateOrCancel/FillOrKill)</param>
         /// <param name="quantity">The quantity of the symbol</param>
@@ -255,10 +250,68 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
             CancellationToken ct = default);
 
         /// <summary>
+        /// Place a new OCO order. An OCO has 2 legs called the above leg and below leg. One of the legs must be a LimitMaker order and the other leg must be StopLoss or StopLossLimit order.
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#new-order-list-oco-trade" /></para>
+        /// </summary>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
+        /// <param name="side">The order side (buy/sell)</param>
+        /// <param name="quantity">The quantity of the symbol</param>
+        /// <param name="aboveOrderType">The above leg order type</param>
+        /// <param name="belowOrderType">The below leg order type</param>
+        /// <param name="aboveClientOrderId">Client order id for the above leg</param>
+        /// <param name="aboveIcebergQuantity">Ice berg quantity for the above leg</param>
+        /// <param name="abovePrice">Limit price for the above leg</param>
+        /// <param name="aboveStopPrice">Stop price for the above leg</param>
+        /// <param name="aboveTrailingDelta">Trailing delta for the above leg</param>
+        /// <param name="aboveTimeInForce">Time in force for the above leg</param>
+        /// <param name="aboveStrategyId">Strategy id for the above leg</param>
+        /// <param name="aboveStrategyType">Strategy type for the above leg</param>
+        /// <param name="belowClientOrderId">Client order id for the below leg</param>
+        /// <param name="belowIcebergQuantity">Ice berg quantity for the below leg</param>
+        /// <param name="belowPrice">Limit price for the below leg</param>
+        /// <param name="belowStopPrice">Stop price for the below leg</param>
+        /// <param name="belowTrailingDelta">Trailing delta for the below leg</param>
+        /// <param name="belowTimeInForce">Time in force for the below leg</param>
+        /// <param name="belowStrategyId">Strategy id for the below leg</param>
+        /// <param name="belowStrategyType">Strategy type for the below leg</param>
+        /// <param name="selfTradePreventionMode">Self trade prevention mode</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceOrderOcoList>> PlaceOcoOrderListAsync(
+            string symbol,
+            OrderSide side,
+            decimal quantity,
+            SpotOrderType aboveOrderType,
+            SpotOrderType belowOrderType,
+
+            string? aboveClientOrderId = null,
+            decimal? aboveIcebergQuantity = null,
+            decimal? abovePrice = null,
+            decimal? aboveStopPrice = null,
+            decimal? aboveTrailingDelta = null,
+            TimeInForce? aboveTimeInForce = null,
+            int? aboveStrategyId = null,
+            int? aboveStrategyType = null,
+
+            string? belowClientOrderId = null,
+            decimal? belowIcebergQuantity = null,
+            decimal? belowPrice = null,
+            decimal? belowStopPrice = null,
+            decimal? belowTrailingDelta = null,
+            TimeInForce? belowTimeInForce = null,
+            int? belowStrategyId = null,
+            int? belowStrategyType = null,
+
+            SelfTradePreventionMode? selfTradePreventionMode = null,
+            int? receiveWindow = null,
+            CancellationToken ct = default);
+
+        /// <summary>
         /// Cancels a pending oco order
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#cancel-oco-trade" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="orderListId">The id of the order list to cancel</param>
         /// <param name="listClientOrderId">The client order id of the order list to cancel</param>
         /// <param name="newClientOrderId">The new client order list id for the order list</param>
@@ -301,10 +354,143 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         Task<WebCallResult<IEnumerable<BinanceOrderOcoList>>> GetOpenOcoOrdersAsync(long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
+        /// Place a new OTOCO (One Triggers Other) order
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#new-order-list-oco-trade" /></para>
+        /// </summary>
+        /// <param name="symbol">Symbol, for example `ETHUSDT`</param>
+        /// <param name="workingOrderType">Working order type, either Limit or LimitMaker</param>
+        /// <param name="workingSide">Working order side</param>
+        /// <param name="workingQuantity">Working order quantity</param>
+        /// <param name="workingPrice">Working order price</param>
+        /// <param name="pendingQuantity">Pending order quantity</param>
+        /// <param name="pendingSide">Pending order side</param>
+        /// <param name="pendingOrderType">Pending order type</param>
+        /// <param name="listClientOrderId">Arbitrary unique ID among open order lists. Automatically generated if not sent.</param>
+        /// <param name="selfTradePreventionMode">Self trade prevention mode</param>
+        /// <param name="workingClientOrderId">Working order client order id</param>
+        /// <param name="workingIcebergQuantity">Working order iceberg quantity</param>
+        /// <param name="workingTimeInForce">Working order time in force</param>
+        /// <param name="workingStrategyId">Working order strategy id</param>
+        /// <param name="workingStrategyType">Working order strategy type</param>
+        /// <param name="pendingClientOrderId">Pending order client order id</param>
+        /// <param name="pendingPrice">Pending order price</param>
+        /// <param name="pendingStopPrice">Pending order stop price</param>
+        /// <param name="pendingTrailingDelta">Pending order trailing delta</param>
+        /// <param name="pendingIcebergQuantity">Pending order iceberg quantity</param>
+        /// <param name="pendingTimeInForce">Pending order time in force</param>
+        /// <param name="pendingStrategyId">Pending order strategy id</param>
+        /// <param name="pendingStrategyType">Pending order strategy type</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceOrderOcoList>> PlaceOtoOrderListAsync(
+            string symbol,
+            OrderSide workingSide,
+            SpotOrderType workingOrderType,
+            decimal workingQuantity,
+            decimal workingPrice,
+            decimal pendingQuantity,
+            OrderSide pendingSide,
+            SpotOrderType pendingOrderType,
+            string? listClientOrderId = null,
+            SelfTradePreventionMode? selfTradePreventionMode = null,
+            string? workingClientOrderId = null,
+            decimal? workingIcebergQuantity = null,
+            TimeInForce? workingTimeInForce = null,
+            int? workingStrategyId = null,
+            int? workingStrategyType = null,
+            string? pendingClientOrderId = null,
+            decimal? pendingPrice = null,
+            decimal? pendingStopPrice = null,
+            decimal? pendingTrailingDelta = null,
+            decimal? pendingIcebergQuantity = null,
+            TimeInForce? pendingTimeInForce = null,
+            int? pendingStrategyId = null,
+            int? pendingStrategyType = null,
+            int? receiveWindow = null,
+            CancellationToken ct = default);
+
+        /// <summary>
+        /// Place a new OTOCO (One Triggers One Cancels The Other) order
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#new-order-list-otoco-trade" /></para>
+        /// </summary>
+        /// <param name="symbol">Symbol, for example `ETHUSDT`</param>
+        /// <param name="workingOrderType">Working order type, either Limit or LimitMaker</param>
+        /// <param name="workingSide">Working order side</param>
+        /// <param name="workingQuantity">Working order quantity</param>
+        /// <param name="workingPrice">Working order price</param>
+        /// <param name="pendingQuantity">Pending order quantity</param>
+        /// <param name="pendingSide">Pending order side</param>
+        /// <param name="pendingAboveOrderType">Pending above order type, LimitMaker, StopLoss or StopLossLimit</param>
+        /// <param name="pendingBelowOrderType">Pending below order type, LimitMaker, StopLoss or StopLossLimit</param>
+        /// <param name="listClientOrderId">Arbitrary unique ID among open order lists. Automatically generated if not sent.</param>
+        /// <param name="selfTradePreventionMode">Self trade prevention mode</param>
+        /// <param name="workingClientOrderId">Working order client order id</param>
+        /// <param name="workingIcebergQuantity">Working order iceberg quantity</param>
+        /// <param name="workingTimeInForce">Working order time in force</param>
+        /// <param name="workingStrategyId">Working order strategy id</param>
+        /// <param name="workingStrategyType">Working order strategy type</param>
+        /// <param name="pendingAboveClientOrderId">Pending above order client order id</param>
+        /// <param name="pendingAbovePrice">Pending above order price</param>
+        /// <param name="pendingAboveStopPrice">Pending above order stop price</param>
+        /// <param name="pendingAboveTrailingDelta">Pending above order trailing delta</param>
+        /// <param name="pendingAboveIcebergQuantity">Pending above order iceberg quantity</param>
+        /// <param name="pendingAboveTimeInForce">Pending above order time in force</param>
+        /// <param name="pendingAboveStrategyId">Pending above order strategy id</param>
+        /// <param name="pendingAboveStrategyType">Pending above order strategy type</param>
+        /// <param name="pendingBelowClientOrderId">Pending below order client order id</param>
+        /// <param name="pendingBelowPrice">Pending below order price</param>
+        /// <param name="pendingBelowStopPrice">Pending below order stop price</param>
+        /// <param name="pendingBelowTrailingDelta">Pending below order trailing delta</param>
+        /// <param name="pendingBelowIcebergQuantity">Pending below order iceberg quantity</param>
+        /// <param name="pendingBelowTimeInForce">Pending below order time in force</param>
+        /// <param name="pendingBelowStrategyId">Pending below order strategy id</param>
+        /// <param name="pendingBelowStrategyType">Pending below order strategy type</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceOrderOcoList>> PlaceOtocoOrderListAsync(
+            string symbol,
+
+            OrderSide workingSide,
+            SpotOrderType workingOrderType,
+            decimal workingQuantity,
+            decimal workingPrice,
+            decimal pendingQuantity,
+            OrderSide pendingSide,
+            SpotOrderType pendingAboveOrderType,
+            SpotOrderType pendingBelowOrderType,
+            string? listClientOrderId = null,
+            SelfTradePreventionMode? selfTradePreventionMode = null,
+            string? workingClientOrderId = null,
+            decimal? workingIcebergQuantity = null,
+            TimeInForce? workingTimeInForce = null,
+            int? workingStrategyId = null,
+            int? workingStrategyType = null,
+            string? pendingAboveClientOrderId = null,
+            decimal? pendingAbovePrice = null,
+            decimal? pendingAboveStopPrice = null,
+            decimal? pendingAboveTrailingDelta = null,
+            decimal? pendingAboveIcebergQuantity = null,
+            TimeInForce? pendingAboveTimeInForce = null,
+            int? pendingAboveStrategyId = null,
+            int? pendingAboveStrategyType = null,
+            string? pendingBelowClientOrderId = null,
+            decimal? pendingBelowPrice = null,
+            decimal? pendingBelowStopPrice = null,
+            decimal? pendingBelowTrailingDelta = null,
+            decimal? pendingBelowIcebergQuantity = null,
+            TimeInForce? pendingBelowTimeInForce = null,
+            int? pendingBelowStrategyId = null,
+            int? pendingBelowStrategyType = null,
+            int? receiveWindow = null,
+            CancellationToken ct = default);
+
+        /// <summary>
         /// Gets user trades for provided symbol
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#account-trade-list-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">Symbol to get trades for</param>
+        /// <param name="symbol">Symbol to get trades for, for example `ETHUSDT`</param>
         /// <param name="orderId">Get trades for this order id</param>
         /// <param name="limit">The max number of results</param>
         /// <param name="fromId">TradeId to fetch from. Default gets most recent trades</param>
@@ -319,7 +505,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Margin account new order
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-account-new-order-trade" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="side">The order side (buy/sell)</param>
         /// <param name="type">The order type</param>
         /// <param name="timeInForce">Lifetime of the order (GoodTillCancel/ImmediateOrCancel/FillOrKill)</param>
@@ -359,7 +545,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Cancel an active order for margin account
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-account-cancel-order-trade" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="orderId">The order id of the order</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="origClientOrderId">The client order id of the order</param>
@@ -373,7 +559,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Cancel all active orders for a symbol
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-account-cancel-all-open-orders-on-a-symbol-trade" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the to cancel orders for</param>
+        /// <param name="symbol">The symbol the to cancel orders for, for example `ETHUSDT`</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -384,7 +570,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Retrieves data for a specific margin account order. Either orderId or origClientOrderId should be provided.
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-margin-account-39-s-order-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="orderId">The order id of the order</param>
         /// <param name="origClientOrderId">The client order id of the order</param>
@@ -397,7 +583,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Gets a list of open margin account orders
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-margin-account-39-s-open-orders-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol to get open orders for</param>
+        /// <param name="symbol">The symbol to get open orders for, for example `ETHUSDT`</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -408,7 +594,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Gets all margin account orders for the provided symbol
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-margin-account-39-s-all-orders-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol to get orders for</param>
+        /// <param name="symbol">The symbol to get orders for, for example `ETHUSDT`</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="orderId">If set, only orders with an order id higher than the provided will be returned</param>
         /// <param name="startTime">If set, only orders placed after this time will be returned</param>
@@ -423,7 +609,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Gets all user margin account trades for provided symbol
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-margin-account-39-s-trade-list-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">Symbol to get trades for</param>
+        /// <param name="symbol">Symbol to get trades for, for example `ETHUSDT`</param>
         /// <param name="limit">The max number of results</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="startTime">Orders newer than this date will be retrieved</param>
@@ -438,7 +624,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Places a new margin OCO(One cancels other) order
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-account-new-oco-trade" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="side">The order side (buy/sell)</param>
         /// <param name="stopLimitTimeInForce">Lifetime of the stop order (GoodTillCancel/ImmediateOrCancel/FillOrKill)</param>
         /// <param name="quantity">The quantity of the symbol</param>
@@ -482,7 +668,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Cancels a pending margin oco order
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-account-cancel-oco-trade" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol the order is for</param>
+        /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="orderListId">The id of the order list to cancel</param>
         /// <param name="listClientOrderId">The client order id of the order list to cancel</param>
@@ -496,7 +682,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Retrieves data for a specific margin oco order. Either orderListId or listClientOrderId should be provided.
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-margin-account-39-s-oco-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">Mandatory for isolated margin, not supported for cross margin</param>
+        /// <param name="symbol">Mandatory for isolated margin, not supported for cross margin, for example `ETHUSDT`</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="orderListId">The list order id of the order</param>
         /// <param name="origClientOrderId">Either orderListId or listClientOrderId must be provided</param>
@@ -509,7 +695,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Retrieves a list of margin oco orders matching the parameters
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-margin-account-39-s-all-oco-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">Mandatory for isolated margin, not supported for cross margin</param>
+        /// <param name="symbol">Mandatory for isolated margin, not supported for cross margin, for example `ETHUSDT`</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="fromId">Only return oco orders with id higher than this</param>
         /// <param name="startTime">Only return oco orders placed later than this. Only valid if fromId isn't provided</param>
@@ -524,7 +710,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Retrieves a list of open margin oco orders
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-margin-account-39-s-open-oco-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">Mandatory for isolated margin, not supported for cross margin</param>
+        /// <param name="symbol">Mandatory for isolated margin, not supported for cross margin, for example `ETHUSDT`</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -582,157 +768,6 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         Task<WebCallResult<IEnumerable<BinanceBlvtRedemption>>> GetLeveragedTokensRedemptionRecordsAsync(string? tokenName = null, long? id = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Add liquidity to a pool
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#add-liquidity-trade" /></para>
-        /// </summary>
-        /// <param name="poolId">The pool</param>
-        /// <param name="asset">The asset</param>
-        /// <param name="type">Add type</param>
-        /// <param name="quantity">Quantity to add</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceBSwapOperationResult>> AddToLiquidityPoolAsync(int poolId, string asset, decimal quantity, LiquidityType? type = null, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Remove liquidity from a pool
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#remove-liquidity-trade" /></para>
-        /// </summary>
-        /// <param name="poolId">The pool</param>
-        /// <param name="asset">The asset</param>
-        /// <param name="type">Remove type</param>
-        /// <param name="shareQuantity">Quantity to remove</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceBSwapOperationResult>> RemoveFromLiquidityPoolAsync(int poolId, string asset, LiquidityType type, decimal shareQuantity, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get liquidity operation records
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-liquidity-operation-record-user_data" /></para>
-        /// </summary>
-        /// <param name="operationId">Filter by operationId</param>
-        /// <param name="poolId">Filter by poolId</param>
-        /// <param name="operation">Filter by operation</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceBSwapOperation>>> GetLiquidityPoolOperationRecordsAsync(long? operationId = null, int? poolId = null, BSwapOperation? operation = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Request a quote for swap quote asset (selling asset) for base asset (buying asset), essentially price/exchange rates. quoteQty is quantity of quote asset(to sell).
-        /// Please be noted the quote is for reference only, the actual price will change as the liquidity changes, it's recommended to swap immediate after request a quote for slippage prevention.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#request-quote-user_data" /></para>
-        /// </summary>
-        /// <param name="quoteAsset">Quote asset</param>
-        /// <param name="baseAsset">Base asset</param>
-        /// <param name="quoteQuantity">Quote quantity</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceBSwapQuote>> GetLiquidityPoolSwapQuoteAsync(string quoteAsset, string baseAsset, decimal quoteQuantity, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Swap quote asset for base asset
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#swap-trade" /></para>
-        /// </summary>
-        /// <param name="quoteAsset">Quote asset</param>
-        /// <param name="baseAsset">Base asset</param>
-        /// <param name="quoteQuantity">Quote quantity</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceBSwapResult>> LiquidityPoolSwapAsync(string quoteAsset, string baseAsset, decimal quoteQuantity, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get swap history records
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-swap-history-user_data" /></para>
-        /// </summary>
-        /// <param name="swapId">Filter by swapId</param>
-        /// <param name="status">Filter by status</param>
-        /// <param name="quoteAsset">Filter by quote asset</param>
-        /// <param name="baseAsset">Filter by base asset</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceBSwapRecord>>> GetLiquidityPoolSwapHistoryAsync(long? swapId = null, BSwapStatus? status = null, string? quoteAsset = null, string? baseAsset = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
-
-
-        /// <summary>
-        /// Calculate expected share quantity for adding liquidity in single or dual token.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#add-liquidity-preview-user_data" /></para>
-        /// </summary>
-        /// <param name="poolId">The pool</param>
-        /// <param name="asset">The asset</param>
-        /// <param name="quantity">Quantity to add</param>
-        /// <param name="type">Add type</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceBSwapPreviewResult>> AddToLiquidityPoolPreviewAsync(int poolId, string asset, decimal quantity, LiquidityType type, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Calculate expected share quantity for removing liquidity in single or dual token.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#remove-liquidity-preview-user_data" /></para>
-        /// </summary>
-        /// <param name="poolId">The pool</param>
-        /// <param name="asset">The asset</param>
-        /// <param name="quantity">Quantity to add</param>
-        /// <param name="type">Add type</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceBSwapPreviewResult>> RemoveFromLiquidityPoolPreviewAsync(int poolId, string asset, decimal quantity, LiquidityType type, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get liquidity info for a pool
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-liquidity-information-of-a-pool-user_data" /></para>
-        /// </summary>
-        /// <param name="poolId">Get a specific pool</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceBSwapPoolLiquidity>>> GetLiquidityPoolInfoAsync(int? poolId = null, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get unclaimed rewards 
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-unclaimed-rewards-record-user_data" /></para>
-        /// </summary>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceBSwapUnclaimedRewards>> GetUnclaimedLiquidityPoolsRewardsAsync(int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Claim liquidity pool rewards
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#claim-rewards-trade" /></para>
-        /// </summary>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceBSwapClaimResult>> ClaimLiquidityPoolsRewardsAsync(int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get claimed rewards history
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-claimed-history-user_data" /></para>
-        /// </summary>
-        /// <param name="poolId">Filter by pool id</param>
-        /// <param name="asset">Filter by asset</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="limit">Max number of results</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceBSwapRewardHistory>>> GetLiquidityPoolsClaimHistoryAsync(long? poolId = null, string? asset = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
         /// Get Customer to Customer trade history
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-c2c-trade-history-user_data" /></para>
         /// </summary>
@@ -762,8 +797,8 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Request a quote for convert asset (selling asset) for base asset (buying asset)
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#send-quote-request-user_data" /></para>
         /// </summary>
-        /// <param name="quoteAsset">Quote asset</param>
-        /// <param name="baseAsset">Base asset</param>
+        /// <param name="quoteAsset">Quote asset, for example `ETH`</param>
+        /// <param name="baseAsset">Base asset, for example `ETH`</param>
         /// <param name="quoteQuantity">Quote quantity</param>
         /// <param name="baseQuantity">Quote quantity</param>
         /// <param name="walletType">The wallet type for convert</param>
@@ -778,8 +813,8 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#accept-quote-trade" /></para>
         /// </summary>
         /// <param name="quoteId">The quote id of the order</param>
-        /// <param name="receiveWindow"></param>
-        /// <param name="ct"></param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<BinanceConvertResult>> ConvertAcceptQuoteAsync(string quoteId, long? receiveWindow = null, CancellationToken ct = default);
 
@@ -807,36 +842,10 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         Task<WebCallResult<BinanceListResult<Objects.Models.Spot.Convert.BinanceConvertTrade>>> GetConvertTradeHistoryAsync(DateTime startTime, DateTime endTime, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Convert between BUSD and stablecoins
-        /// </summary>
-        /// <param name="clientTransferId">Transfer id, should be unique value</param>
-        /// <param name="asset">Current asset</param>
-        /// <param name="quantity">Quantity</param>
-        /// <param name="targetAsset">Target asset</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceConvertTransferResult>> ConvertTransferAsync(string clientTransferId, string asset, decimal quantity, string targetAsset, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get convert transfer history
-        /// </summary>
-        /// <param name="transferId">Filter by transfer id</param>
-        /// <param name="asset">Filter by asset</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="page">Page</param>
-        /// <param name="limit">Max results</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceConvertTransferRecord>>> GetConvertTransferHistoryAsync(DateTime startTime, DateTime endTime, long? transferId = null, string? asset = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
         /// Get prevented matches because of self trade prevention
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-prevented-matches-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">Symbol</param>
+        /// <param name="symbol">Symbol, for example `ETHUSDT`</param>
         /// <param name="preventedMatchId">Filter by prevented match id</param>
         /// <param name="orderId">Filter by order id</param>
         /// <param name="fromPreventedMatchId">Filter by min prevented match id</param>
@@ -850,7 +859,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Place a new spot time weighted average price order
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#time-weighted-average-price-twap-new-order-trade-2" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="side">Order side</param>
         /// <param name="quantity">Order quantity</param>
         /// <param name="duration">Duration in seconds. 300 - 86400</param>
@@ -892,7 +901,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Get list of closed algo orders
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-historical-algo-orders-user_data-2" /></para>
         /// </summary>
-        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="symbol">Filter by symbol, for example `ETHUSDT`</param>
         /// <param name="side">Filter by side</param>
         /// <param name="startTime">Fitler by start time</param>
         /// <param name="endTime">Filter by end time</param>

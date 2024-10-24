@@ -1,16 +1,14 @@
-﻿using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Futures
+﻿namespace Binance.Net.Objects.Models.Futures
 {
     /// <summary>
     /// Multi asset mode info
     /// </summary>
-    public class BinanceFuturesMultiAssetMode
+    public record BinanceFuturesMultiAssetMode
     {
         /// <summary>
         /// Is multi assets mode enabled
         /// </summary>
-        [JsonProperty("multiAssetsMargin")]
+        [JsonPropertyName("multiAssetsMargin")]
         public bool MultiAssetMode { get; set; }
     }
 }

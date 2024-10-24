@@ -1,14 +1,12 @@
-﻿using System;
-using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
+﻿using CryptoExchange.Net.Converters;
 
 namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
-    /// Kline for mark or index price
+    /// Kline for mark or index price or Premium index
     /// </summary>
     [JsonConverter(typeof(ArrayConverter))]
-    public class BinanceMarkIndexKline
+    public record BinanceMarkIndexKline
     {
         /// <summary>
         /// The time this candlestick opened

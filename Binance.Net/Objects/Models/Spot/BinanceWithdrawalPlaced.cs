@@ -3,11 +3,12 @@
     /// <summary>
     /// Result of placing a withdrawal
     /// </summary>
-    public class BinanceWithdrawalPlaced
+    public record BinanceWithdrawalPlaced
     {
         /// <summary>
         /// The id
         /// </summary>
-        public string? Id { get; set; }
+        [JsonPropertyName("id")]
+        public string Id { get; set; } = string.Empty;
     }
 }

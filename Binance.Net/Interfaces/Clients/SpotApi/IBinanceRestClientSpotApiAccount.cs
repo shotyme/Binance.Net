@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Binance.Net.Enums;
+﻿using Binance.Net.Enums;
 using Binance.Net.Objects.Models;
 using Binance.Net.Objects.Models.Spot;
 using Binance.Net.Objects.Models.Spot.Blvt;
 using Binance.Net.Objects.Models.Spot.IsolatedMargin;
 using Binance.Net.Objects.Models.Spot.Margin;
 using Binance.Net.Objects.Models.Spot.PortfolioMargin;
-using Binance.Net.Objects.Models.Spot.Staking;
-using CryptoExchange.Net.Objects;
 
 namespace Binance.Net.Interfaces.Clients.SpotApi
 {
@@ -23,10 +17,11 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Gets account information, including balances
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#account-information-user_data" /></para>
         /// </summary>
+        /// <param name="omitZeroBalances">When true only return non-zero balances in the account</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The account information</returns>
-        Task<WebCallResult<BinanceAccountInfo>> GetAccountInfoAsync(long? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<BinanceAccountInfo>> GetAccountInfoAsync(bool? omitZeroBalances = null, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get a daily account snapshot (balances)
@@ -83,7 +78,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Get funding wallet assets
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#funding-wallet-user_data" /></para>
         /// </summary>
-        /// <param name="asset">Filter by asset</param>
+        /// <param name="asset">Filter by asset, for example `ETH`</param>
         /// <param name="needBtcValuation">Return BTC valuation</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -112,18 +107,27 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Retrieve balance info
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#user-asset-user_data" /></para>
         /// </summary>
-        /// <param name="asset">Return for this asset</param>
+        /// <param name="asset">Return for this asset, for example `ETH`</param>
         /// <param name="needBtcValuation">Whether the response should include the BtcValuation. If false (default) BtcValuation will be 0.</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<IEnumerable<BinanceUserBalance>>> GetBalancesAsync(string? asset = null, bool? needBtcValuation = null, int? receiveWindow = null, CancellationToken ct = default);
-        
+
+        /// <summary>
+        /// Receive balances of the different user wallets
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-user-wallet-balance-user_data" /></para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<IEnumerable<BinanceWalletBalance>>> GetWalletBalancesAsync(int? receiveWindow = null, CancellationToken ct = default);
+
         /// <summary>
         /// Get asset dividend records
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#asset-dividend-record-user_data" /></para>
         /// </summary>
-        /// <param name="asset">Filter by asset</param>
+        /// <param name="asset">Filter by asset, for example `ETH`</param>
         /// <param name="startTime">Filter by start time from</param>
         /// <param name="endTime">Filter by end time till</param>
         /// <param name="limit">Page size</param>
@@ -140,7 +144,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<object>> DisableFastWithdrawSwitchAsync(int? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult> DisableFastWithdrawSwitchAsync(int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// This request will enable fastwithdraw switch under your account.
@@ -153,7 +157,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<object>> EnableFastWithdrawSwitchAsync(int? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult> EnableFastWithdrawSwitchAsync(int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the history of dust conversions
@@ -161,28 +165,32 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// </summary>
         /// <param name="startTime">The start time</param>
         /// <param name="endTime">The end time</param>
+        /// <param name="accountType">Spot or Margin account</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The history of dust conversions</returns>
-        Task<WebCallResult<BinanceDustLogList>> GetDustLogAsync(DateTime? startTime = null, DateTime? endTime = null, int? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<BinanceDustLogList>> GetDustLogAsync(DateTime? startTime = null, DateTime? endTime = null, AccountType? accountType = null, int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get assets that can be converted to BNB
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-assets-that-can-be-converted-into-bnb-user_data" /></para>
         /// </summary>
+        /// <param name="accountType">Spot or Margin account</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<BinanceElligableDusts>> GetAssetsForDustTransferAsync(int? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<BinanceElligableDusts>> GetAssetsForDustTransferAsync(AccountType? accountType = null, int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Converts dust (small amounts of) assets to BNB 
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#dust-transfer-user_data" /></para>
         /// </summary>
-        /// <param name="assets">The assets to convert to BNB</param>
+        /// <param name="assets">The assets to convert to BNB, for example `ETH`</param>
+        /// <param name="accountType">Spot or Margin account</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Dust transfer result</returns>
-        Task<WebCallResult<BinanceDustTransferResult>> DustTransferAsync(IEnumerable<string> assets, int? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<BinanceDustTransferResult>> DustTransferAsync(IEnumerable<string> assets, AccountType? accountType = null, int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the status of the BNB burn switch for spot trading and margin interest
@@ -209,7 +217,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#user-universal-transfer-user_data" /></para>
         /// </summary>
         /// <param name="type">The type of transfer</param>
-        /// <param name="asset">The asset to transfer</param>
+        /// <param name="asset">The asset to transfer, for example `ETH`</param>
         /// <param name="quantity">The quantity to transfer</param>
         /// <param name="fromSymbol">From symbol when transfering from/to isolated margin</param>
         /// <param name="toSymbol">To symbol when transfering from/to isolated margin</param>
@@ -275,7 +283,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="listenKey">The listen key to keep alive</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<object>> KeepAliveUserStreamAsync(string listenKey, CancellationToken ct = default);
+        Task<WebCallResult> KeepAliveUserStreamAsync(string listenKey, CancellationToken ct = default);
 
         /// <summary>
         /// Stops the current user stream
@@ -284,13 +292,13 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="listenKey">The listen key to keep alive</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<object>> StopUserStreamAsync(string listenKey, CancellationToken ct = default);
+        Task<WebCallResult> StopUserStreamAsync(string listenKey, CancellationToken ct = default);
 
         /// <summary>
         /// Withdraw assets from Binance to an address
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#withdraw-user_data" /></para>
         /// </summary>
-        /// <param name="asset">The asset to withdraw</param>
+        /// <param name="asset">The asset to withdraw, for example `ETH`</param>
         /// <param name="address">The address to send the funds to</param>
         /// <param name="addressTag">Secondary address identifier for assets like XRP,XMR etc.</param>
         /// <param name="withdrawOrderId">Custom client order id</param>
@@ -308,7 +316,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Gets the withdrawal history
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#withdraw-history-supporting-network-user_data" /></para>
         /// </summary>
-        /// <param name="asset">Filter by asset</param>
+        /// <param name="asset">Filter by asset, for example `ETH`</param>
         /// <param name="withdrawOrderId">Filter by withdraw order id</param>
         /// <param name="status">Filter by status</param>
         /// <param name="startTime">Filter start time from</param>
@@ -321,25 +329,35 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         Task<WebCallResult<IEnumerable<BinanceWithdrawal>>> GetWithdrawalHistoryAsync(string? asset = null, string? withdrawOrderId = null, WithdrawalStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, int? receiveWindow = null, int? limit = null, int? offset = null, CancellationToken ct = default);
 
         /// <summary>
+        /// Get list of withdrawal addresses
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#fetch-withdraw-address-list-user_data" /></para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<IEnumerable<BinanceWithdrawalAddress>>> GetWithdrawalAddressesAsync(int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
         /// Gets the deposit history
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#deposit-history-supporting-network-user_data" /></para>
         /// </summary>
-        /// <param name="asset">Filter by asset</param>
+        /// <param name="asset">Filter by asset, for example `ETH`</param>
         /// <param name="status">Filter by status</param>
         /// <param name="limit">Amount of results</param>
         /// <param name="offset">Offset the results</param>
         /// <param name="startTime">Filter start time from</param>
         /// <param name="endTime">Filter end time till</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="includeSource">Include source address to response</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of deposits</returns>
-        Task<WebCallResult<IEnumerable<BinanceDeposit>>> GetDepositHistoryAsync(string? asset = null, DepositStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, int? offset = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BinanceDeposit>>> GetDepositHistoryAsync(string? asset = null, DepositStatus? status = null, DateTime? startTime = null, DateTime? endTime = null, int? offset = null, int? limit = null, int? receiveWindow = null, bool includeSource = false, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the deposit address for an asset
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#deposit-address-supporting-network-user_data" /></para>
         /// </summary>
-        /// <param name="asset">Asset to get address for</param>
+        /// <param name="asset">Asset to get address for, for example `ETH`</param>
         /// <param name="network">Network</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -350,29 +368,16 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Get personal margin level information for your account
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-summary-of-margin-account-user_data" /></para>
         /// </summary>
-        /// <param name="email">account email</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Margin Level Information</returns>
-        Task<WebCallResult<BinanceMarginLevel>> GetMarginLevelInformationAsync(string email, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Execute transfer between spot account and cross margin account.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-account-trade" /></para>
-        /// </summary>
-        /// <param name="asset">The asset being transferred, e.g., BTC</param>
-        /// <param name="quantity">The quantity to be transferred</param>
-        /// <param name="type">TransferDirection (MainToMargin/MarginToMain)</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>Transaction Id</returns>
-        Task<WebCallResult<BinanceTransaction>> CrossMarginTransferAsync(string asset, decimal quantity, TransferDirectionType type, int? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<BinanceMarginLevel>> GetMarginLevelInformationAsync(int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Borrow. Apply for a loan. 
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-account-borrow-margin" /></para>
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-account-borrow-repay-margin" /></para>
         /// </summary>
-        /// <param name="asset">The asset being borrow, e.g., BTC</param>
+        /// <param name="asset">The asset being borrow, for example `ETH`</param>
         /// <param name="quantity">The quantity to be borrow</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="symbol">The isolated symbol</param>
@@ -383,9 +388,9 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Repay loan for margin account.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-account-repay-margin" /></para>
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-account-borrow-repay-margin" /></para>
         /// </summary>
-        /// <param name="asset">The asset being repay, e.g., BTC</param>
+        /// <param name="asset">The asset being repay, for example `ETH`</param>
         /// <param name="quantity">The quantity to be borrow</param>
         /// <param name="isIsolated">For isolated margin or not</param>
         /// <param name="symbol">The isolated symbol</param>
@@ -395,35 +400,25 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         Task<WebCallResult<BinanceTransaction>> MarginRepayAsync(string asset, decimal quantity, bool? isIsolated = null, string? symbol = null, int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Gets the history of margin dust conversions
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-dustlog-user_data" /></para>
-        /// </summary>
-        /// <param name="startTime">The start time</param>
-        /// <param name="endTime">The end time</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns>The history of dust conversions</returns>
-        Task<WebCallResult<BinanceDustLogList>> GetMarginDustLogAsync(DateTime? startTime = null, DateTime? endTime = null, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
         /// Get history of transfers
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#margin-account-cancel-all-open-orders-on-a-symbol-trade" /></para>
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-cross-margin-transfer-history-user_data" /></para>
         /// </summary>
         /// <param name="direction">The direction of the the transfers to retrieve</param>
         /// <param name="page">Results page</param>
         /// <param name="startTime">Filter by startTime from</param>
         /// <param name="endTime">Filter by endTime from</param>
         /// <param name="limit">Limit of the amount of results</param>
+        /// <param name="isolatedSymbol">Filter by isolated symbol</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of transfers</returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceTransferHistory>>> GetCrossMarginTransferHistoryAsync(TransferDirection direction, int? page = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<BinanceQueryRecords<BinanceTransferHistory>>> GetMarginTransferHistoryAsync(TransferDirection direction, int? page = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, string? isolatedSymbol = null, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Query loan records
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-loan-record-user_data" /></para>
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-borrow-repay-records-in-margin-account-user_data" /></para>
         /// </summary>
-        /// <param name="asset">The records asset</param>
+        /// <param name="asset">The records asset, for example `ETH`</param>
         /// <param name="transactionId">The id of loan transaction</param>
         /// <param name="startTime">Time to start getting records from</param>
         /// <param name="endTime">Time to stop getting records to</param>
@@ -438,9 +433,9 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Query repay records
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-repay-record-user_data" /></para>
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-borrow-repay-records-in-margin-account-user_data" /></para>
         /// </summary>
-        /// <param name="asset">The records asset</param>
+        /// <param name="asset">The records asset, for example `ETH`</param>
         /// <param name="transactionId">The id of repay transaction</param>
         /// <param name="startTime">Time to start getting records from</param>
         /// <param name="endTime">Time to stop getting records to</param>
@@ -457,7 +452,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Get history of interest
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-interest-history-user_data" /></para>
         /// </summary>
-        /// <param name="asset">Filter by asset</param>
+        /// <param name="asset">Filter by asset, for example `ETH`</param>
         /// <param name="page">Results page</param>
         /// <param name="startTime">Filter by startTime from</param>
         /// <param name="endTime">Filter by endTime from</param>
@@ -473,7 +468,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Get history of interest rate
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-margin-interest-rate-history-user_data" /></para>
         /// </summary>
-        /// <param name="asset">Filter by asset</param>
+        /// <param name="asset">Filter by asset, for example `ETH`</param>
         /// <param name="vipLevel">Vip level</param>
         /// <param name="startTime">Filter by startTime from</param>
         /// <param name="endTime">Filter by endTime from</param>
@@ -487,7 +482,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Get cross margin interest data
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-cross-margin-fee-data-user_data" /></para>
         /// </summary>
-        /// <param name="asset">Filter by asset</param>
+        /// <param name="asset">Filter by asset, for example `ETH`</param>
         /// <param name="vipLevel">Vip level</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -521,7 +516,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Query max borrow quantity
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-max-borrow-user_data" /></para>
         /// </summary>
-        /// <param name="asset">The records asset</param>
+        /// <param name="asset">The records asset, for example `ETH`</param>
         /// <param name="isolatedSymbol">The isolated symbol</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -532,7 +527,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Query max transfer-out quantity 
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-max-transfer-out-amount-user_data" /></para>
         /// </summary>
-        /// <param name="asset">The records asset</param>
+        /// <param name="asset">The records asset, for example `ETH`</param>
         /// <param name="isolatedSymbol">The isolated symbol</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -543,32 +538,12 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Get isolated margin tier data
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-isolated-margin-tier-data-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETH`</param>
         /// <param name="tier">Tier</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<IEnumerable<BinanceIsolatedMarginTierData>>> GetIsolatedMarginTierDataAsync(string symbol, int? tier = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get history of transfer to and from the isolated margin account
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-isolated-margin-transfer-history-user_data" /></para>
-        /// </summary>
-        /// <param name="symbol">The symbol</param>
-        /// <param name="asset">Filter by asset</param>
-        /// <param name="from">Filter by direction</param>
-        /// <param name="to">Filter by direction</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="current">Current page</param>
-        /// <param name="limit">Page size</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceIsolatedMarginTransfer>>> GetIsolatedMarginAccountTransferHistoryAsync(string symbol, string? asset = null,
-                IsolatedMarginTransferDirection? from = null, IsolatedMarginTransferDirection? to = null,
-                DateTime? startTime = null, DateTime? endTime = null, int? current = 1, int? limit = 10,
-                int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Isolated margin account info
@@ -594,7 +569,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Enable an isolated margin account
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#enable-isolated-margin-account-trade" /></para>
         /// </summary>
-        /// <param name="symbol">Symbol to enable isoldated margin account for</param>
+        /// <param name="symbol">Symbol to enable isoldated margin account for, for example `ETHUSDT`</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -604,7 +579,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Disabled an isolated margin account info
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#disable-isolated-margin-account-trade" /></para>
         /// </summary>
-        /// <param name="symbol">Symbol to enable isoldated margin account for</param>
+        /// <param name="symbol">Symbol to enable isoldated margin account for, for example `ETHUSDT`</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -612,23 +587,8 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
             int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Transfer from or to isolated margin account
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#isolated-margin-account-transfer-margin" /></para>
-        /// </summary>
-        /// <param name="asset">The asset</param>
-        /// <param name="symbol">Isolated symbol</param>
-        /// <param name="from">From</param>
-        /// <param name="to">To</param>
-        /// <param name="quantity">Quantity to transfer</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceTransaction>> IsolatedMarginAccountTransferAsync(string asset,
-            string symbol, IsolatedMarginTransferDirection from, IsolatedMarginTransferDirection to, decimal quantity,
-            int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
         /// Get isolated margin order rate limits
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-current-margin-order-count-usage-trade" /></para>
         /// </summary>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -636,7 +596,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         Task<WebCallResult<IEnumerable<BinanceCurrentRateLimit>>> GetMarginOrderRateLimitStatusAsync(int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Starts a user stream by requesting a listen key. This listen key can be used in subsequent requests to BinanceSocketClient.Futures.SubscribeToUserDataUpdates. The stream will close after 60 minutes unless a keep alive is send.
+        /// Starts a user stream by requesting a listen key. This listen key can be used in subsequent requests to BinanceSocketClient.SpotApi.Account..SubscribeToUserDataUpdates. The stream will close after 60 minutes unless a keep alive is send.
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#listen-key-margin" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
@@ -650,7 +610,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="listenKey">The listen key to keep alive</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<object>> KeepAliveMarginUserStreamAsync(string listenKey, CancellationToken ct = default);
+        Task<WebCallResult> KeepAliveMarginUserStreamAsync(string listenKey, CancellationToken ct = default);
 
         /// <summary>
         /// Stops the current user stream
@@ -659,15 +619,15 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="listenKey">The listen key to keep alive</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<object>> StopMarginUserStreamAsync(string listenKey, CancellationToken ct = default);
+        Task<WebCallResult> StopMarginUserStreamAsync(string listenKey, CancellationToken ct = default);
 
         /// <summary>
         /// Starts a user stream  for margin account by requesting a listen key. 
-        /// This listen key can be used in subsequent requests to  BinanceSocketClient.Spot.SubscribeToUserDataUpdates  
+        /// This listen key can be used in subsequent requests to  BinanceSocketClient.SpotApi.Account.SubscribeToUserDataUpdates  
         /// The stream will close after 60 minutes unless a keep alive is send.
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#listen-key-isolated-margin" /></para>
         /// </summary>
-        /// <param name="symbol">The isolated symbol</param>
+        /// <param name="symbol">The isolated symbol, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Listen key</returns>
         Task<WebCallResult<string>> StartIsolatedMarginUserStreamAsync(string symbol, CancellationToken ct = default);
@@ -677,21 +637,21 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Stream auto closes after 60 minutes if no keep alive is send. 30 minute interval for keep alive is recommended.
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#listen-key-isolated-margin" /></para>
         /// </summary>
-        /// <param name="symbol">The isolated symbol</param>
+        /// <param name="symbol">The isolated symbol, for example `ETHUSDT`</param>
         /// <param name="listenKey">The listen key to keep alive</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<object>> KeepAliveIsolatedMarginUserStreamAsync(string symbol, string listenKey, CancellationToken ct = default);
+        Task<WebCallResult> KeepAliveIsolatedMarginUserStreamAsync(string symbol, string listenKey, CancellationToken ct = default);
 
         /// <summary>
         /// Close the user stream for margin account
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#listen-key-isolated-margin" /></para>
         /// </summary>
-        /// <param name="symbol">The isolated symbol</param>
+        /// <param name="symbol">The isolated symbol, for example `ETHUSDT`</param>
         /// <param name="listenKey">The listen key to keep alive</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<object>> CloseIsolatedMarginUserStreamAsync(string symbol, string listenKey, CancellationToken ct = default);
+        Task<WebCallResult> CloseIsolatedMarginUserStreamAsync(string symbol, string listenKey, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the trading status for the current account
@@ -734,7 +694,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Portfolio margin account info
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-portfolio-margin-account-info-user_data" /></para>
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-classic-portfolio-margin-account-info-user_data" /></para>
         /// </summary>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -743,7 +703,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Get portfolio margin account collateral rates
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#portfolio-margin-collateral-rate-market_data" /></para>
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#classic-portfolio-margin-collateral-rate-market_data" /></para>
         /// </summary>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -752,7 +712,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Get portfolio margin bankrupty loan amount
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-portfolio-margin-bankruptcy-loan-amount-user_data" /></para>
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-classic-portfolio-margin-bankruptcy-loan-amount-user_data" /></para>
         /// </summary>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -761,7 +721,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
 
         /// <summary>
         /// Repay portfolio margin bankruptcy loan
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#portfolio-margin-bankruptcy-loan-repay" /></para>
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#classic-portfolio-margin-bankruptcy-loan-repay" /></para>
         /// </summary>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -793,7 +753,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#busd-convert-trade" /></para>
         /// </summary>
         /// <param name="clientTransferId">The unique user-defined transaction id, min length 20</param>
-        /// <param name="asset">The current asset</param>
+        /// <param name="asset">The current asset, for example `ETH`</param>
         /// <param name="quantity">Quantity</param>
         /// <param name="targetAsset">	Target asset you want to convert</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
@@ -807,7 +767,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// </summary>
         /// <param name="transferId">Filter by transferId</param>
         /// <param name="clientTransferId">Filter by clientTransferId</param>
-        /// <param name="asset">Filter by asset</param>
+        /// <param name="asset">Filter by asset, for example `ETH`</param>
         /// <param name="startTime">Filter by start time</param>
         /// <param name="endTime">Filter by end time</param>
         /// <param name="page">Page</param>
@@ -815,7 +775,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceBusdHistory>>> GetBusdConvertHistoryAsync(long? transferId = null, string? clientTransferId = null, string? asset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? pageSize = null, long? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<BinanceQueryRecords<BinanceBusdHistory>>> GetBusdConvertHistoryAsync(DateTime startTime, DateTime endTime, long? transferId = null, string? clientTransferId = null, string? asset = null, int? page = null, int? pageSize = null, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get the query of Cloud-Mining payment and refund history
@@ -823,7 +783,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// </summary>
         /// <param name="transferId">Filter by transferId</param>
         /// <param name="clientTransferId">Filter by clientTransferId</param>
-        /// <param name="asset">Filter by asset</param>
+        /// <param name="asset">Filter by asset, for example `ETH`</param>
         /// <param name="startTime">Filter by start time</param>
         /// <param name="endTime">Filter by end time</param>
         /// <param name="page">Page</param>
@@ -831,7 +791,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceCloudMiningHistory>>> GetCloudMiningHistoryAsync(long? transferId = null, string? clientTransferId = null, string? asset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? pageSize = null, long? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<BinanceQueryRecords<BinanceCloudMiningHistory>>> GetCloudMiningHistoryAsync(DateTime startTime, DateTime endTime, long? transferId = null, string? clientTransferId = null, string? asset = null, int? page = null, int? pageSize = null, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Adjust cross margin max leverage
@@ -847,31 +807,12 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Get isolated margin fee data collection with any vip level or user's current specific data as https://www.binance.com/en/margin-fee
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-isolated-margin-fee-data-user_data" /></para>
         /// </summary>
-        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="symbol">Filter by symbol, for example `ETHUSDT`</param>
         /// <param name="vipLevel">User's current specific margin data will be returned if vipLevel is omitted</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<IEnumerable<BinanceIsolatedMarginFeeData>>> GetIsolatedMarginFeeDataAsync(string? symbol = null, int? vipLevel = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get assets that can be converted into BNB.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-assets-that-can-be-converted-into-bnb-user_data-2" /></para>
-        /// </summary>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceMarginDustAsset>> GetMarginAssetsBnbConvertableAsync(long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Convert dust assets to BNB.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#dust-transfer-trade" /></para>
-        /// </summary>
-        /// <param name="assets">The assets being converted</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceMarginDustTransfer>> MarginDustTransferAsync(IEnumerable<string> assets, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Query the coins which can be small liability exchange
@@ -886,7 +827,7 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// Cross Margin Small Liability Exchange
         /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#small-liability-exchange-margin" /></para>
         /// </summary>
-        /// <param name="assets">Assets</param>
+        /// <param name="assets">Assets, for example `ETH`</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
@@ -904,5 +845,34 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
         Task<WebCallResult<BinanceQueryRecords<BinanceSmallLiabilityHistory>>> GetCrossMarginSmallLiabilityExchangeHistoryAsync(DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets the trade fee for a symbol
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#trade-fee-user_data" /></para>
+        /// </summary>
+        /// <param name="symbol">Symbol to get withdrawal fee for, for example `ETHUSDT`</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Trade fees</returns>
+        Task<WebCallResult<IEnumerable<BinanceTradeFee>>> GetTradeFeeAsync(string? symbol = null, int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get account VIP level and margin/futures enabled status
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#account-info-user_data" /></para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceVipLevelAndStatus>> GetAccountVipLevelAndStatusAsync(int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get current account commission rates.
+        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-commission-rates-user_data" /></para>
+        /// </summary>
+        /// <param name="symbol">Symbol, for example `ETHUSDT`</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<WebCallResult<BinanceCommissions>> GetCommissionRatesAsync(string symbol, int? receiveWindow = null, CancellationToken ct = default);
     }
 }

@@ -1,36 +1,35 @@
-﻿using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Spot.Mining
+﻿namespace Binance.Net.Objects.Models.Spot.Mining
 {
     /// <summary>
     /// Mining coin info
     /// </summary>
-    public class BinanceMiningCoin
+    public record BinanceMiningCoin
     {
         /// <summary>
         /// The name of the coin
         /// </summary>
-        [JsonProperty("coinName")]
+        [JsonPropertyName("coinName")]
         public string CoinName { get; set; } = string.Empty;
         /// <summary>
         /// The id of the coin
         /// </summary>
-        [JsonProperty("coinId")]
+        [JsonPropertyName("coinId")]
         public string CoinId { get; set; } = string.Empty;
         /// <summary>
         /// The pool index
         /// </summary>
+        [JsonPropertyName("poolIndex")]
         public int PoolIndex { get; set; }
 
         /// <summary>
         /// Algorithm id
         /// </summary>
-        [JsonProperty("algoId")]
+        [JsonPropertyName("algoId")]
         public string AlgorithmId { get; set; } = string.Empty;
         /// <summary>
         /// Algorithm name
         /// </summary>
-        [JsonProperty("algoName")]
+        [JsonPropertyName("algoName")]
         public string AlgorithmName { get; set; } = string.Empty;
     }
 }

@@ -1,43 +1,43 @@
-﻿using System;
-using Binance.Net.Converters;
+﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
-using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
 
 namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Transfer info
     /// </summary>
-    public class BinanceTransfer
+    public record BinanceTransfer
     {
         /// <summary>
         /// The asset which was transfered
         /// </summary>
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// Quantity transfered
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
         /// Transfer type
         /// </summary>
-        [JsonConverter(typeof(UniversalTransferTypeConverter))]
+        [JsonPropertyName("type")]
         public UniversalTransferType Type { get; set; }
         /// <summary>
         /// Status
         /// </summary>
+        [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
         /// <summary>
         /// Id
         /// </summary>
-        [JsonProperty("tranId")]
+        [JsonPropertyName("tranId")]
         public long Id { get; set; }
         /// <summary>
         /// Timestamp
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("timestamp")]
         public DateTime Timestamp { get; set; }
     }
 }

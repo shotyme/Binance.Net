@@ -1,16 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Binance.Net.Clients;
+﻿using Binance.Net.Clients;
 using Binance.Net.Interfaces;
 using Binance.Net.Interfaces.Clients;
-using Binance.Net.Objects;
 using Binance.Net.Objects.Options;
-using CryptoExchange.Net.Objects;
+using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.OrderBook;
-using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Binance.Net.SymbolOrderBooks
 {
@@ -50,9 +44,9 @@ namespace Binance.Net.SymbolOrderBooks
         public BinanceFuturesUsdtSymbolOrderBook(
             string symbol,
             Action<BinanceOrderBookOptions>? optionsDelegate,
-            ILogger<BinanceFuturesUsdtSymbolOrderBook>? logger,
+            ILoggerFactory? logger,
             IBinanceRestClient? restClient,
-            IBinanceSocketClient? socketClient) : base(logger, "Binance", symbol)
+            IBinanceSocketClient? socketClient) : base(logger, "Binance", "UsdFutures", symbol)
         {
             var options = BinanceOrderBookOptions.Default.Copy();
             if (optionsDelegate != null)
@@ -76,9 +70,9 @@ namespace Binance.Net.SymbolOrderBooks
         {
             CallResult<UpdateSubscription> subResult;
             if (_limit == null)
-                subResult = await _socketClient.UsdFuturesApi.SubscribeToOrderBookUpdatesAsync(Symbol, _updateInterval, HandleUpdate).ConfigureAwait(false);
+                subResult = await _socketClient.UsdFuturesApi.ExchangeData.SubscribeToOrderBookUpdatesAsync(Symbol, _updateInterval, HandleUpdate).ConfigureAwait(false);
             else
-                subResult = await _socketClient.UsdFuturesApi.SubscribeToPartialOrderBookUpdatesAsync(Symbol, _limit.Value, _updateInterval, HandleUpdate).ConfigureAwait(false);
+                subResult = await _socketClient.UsdFuturesApi.ExchangeData.SubscribeToPartialOrderBookUpdatesAsync(Symbol, _limit.Value, _updateInterval, HandleUpdate).ConfigureAwait(false);
 
             if (!subResult)
                 return new CallResult<UpdateSubscription>(subResult.Error!);

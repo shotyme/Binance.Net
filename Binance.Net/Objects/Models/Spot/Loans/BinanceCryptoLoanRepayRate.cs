@@ -1,34 +1,29 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Binance.Net.Objects.Models.Spot.Loans
+﻿namespace Binance.Net.Objects.Models.Spot.Loans
 {
     /// <summary>
     /// Repay rate info
     /// </summary>
-    public class BinanceCryptoLoanRepayRate
+    public record BinanceCryptoLoanRepayRate
     {
         /// <summary>
         /// Loan asset
         /// </summary>
-        [JsonProperty("loanCoin")]
+        [JsonPropertyName("loanCoin")]
         public string LoanAsset { get; set; } = string.Empty;
         /// <summary>
         /// Collateral asset
         /// </summary>
-        [JsonProperty("collateralCoin")]
+        [JsonPropertyName("collateralCoin")]
         public string CollateralAsset { get; set; } = string.Empty;
         /// <summary>
         /// Repay quantity
         /// </summary>
-        [JsonProperty("repayAmount")]
+        [JsonPropertyName("repayAmount")]
         public decimal RepayQuantity { get; set; }
         /// <summary>
         /// Rate
         /// </summary>
-        [JsonProperty("rate")]
+        [JsonPropertyName("rate")]
         public decimal Rate { get; set; }
     }
 }

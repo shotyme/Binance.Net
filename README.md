@@ -1,35 +1,363 @@
-# Binance.Net
-[![.NET](https://github.com/JKorf/Binance.Net/actions/workflows/dotnet.yml/badge.svg)](https://github.com/JKorf/Binance.Net/actions/workflows/dotnet.yml) [![Nuget version](https://img.shields.io/nuget/v/binance.net.svg)](https://www.nuget.org/packages/Binance.Net)  [![Nuget downloads](https://img.shields.io/nuget/dt/Binance.Net.svg)](https://www.nuget.org/packages/Binance.Net)
+# ![.Binance.Net](https://raw.githubusercontent.com/JKorf/Binance.Net/master/Binance.Net/Icon/icon.png) Binance.Net  
 
-Binance.Net is a wrapper around the Binance API as described on [Binance](https://binance-docs.github.io/apidocs/spot/en/#change-log), including all features the API provides using clear and readable objects. The library support the spot, (isolated) margin and futures API's, both the REST and websocket API's.
+[![.NET](https://img.shields.io/github/actions/workflow/status/JKorf/Binance.Net/dotnet.yml?style=for-the-badge)](https://github.com/JKorf/Binance.Net/actions/workflows/dotnet.yml) ![License](https://img.shields.io/github/license/JKorf/Binance.Net?style=for-the-badge)
 
-**If you think something is broken, something is missing or have any questions, please open an [Issue](https://github.com/JKorf/Binance.Net/issues)**
+Binance.Net is a strongly typed client library for accessing the [Binance REST and Websocket API](https://binance-docs.github.io/apidocs/#change-log). 
+## Features
+* Response data is mapped to descriptive models
+* Input parameters and response values are mapped to discriptive enum values where possible
+* Automatic websocket (re)connection management 
+* Client side rate limiting 
+* Client side order book implementation
+* Extensive logging
+* Support for different environments (binance.com, binance.us, testnet)
+* Easy integration with other exchange client based on the CryptoExchange.Net base library
 
-[Documentation](https://jkorf.github.io/Binance.Net/)
+## Supported Frameworks
+The library is targeting both `.NET Standard 2.0` and `.NET Standard 2.1` for optimal compatibility
 
-## Installation
-`dotnet add package Binance.Net`
+|.NET implementation|Version Support|
+|--|--|
+|.NET Core|`2.0` and higher|
+|.NET Framework|`4.6.1` and higher|
+|Mono|`5.4` and higher|
+|Xamarin.iOS|`10.14` and higher|
+|Xamarin.Android|`8.0` and higher|
+|UWP|`10.0.16299` and higher|
+|Unity|`2018.1` and higher|
+
+## Install the library
+
+### NuGet 
+[![NuGet version](https://img.shields.io/nuget/v/binance.net.svg?style=for-the-badge)](https://www.nuget.org/packages/Binance.Net)  [![Nuget downloads](https://img.shields.io/nuget/dt/Binance.Net.svg?style=for-the-badge)](https://www.nuget.org/packages/Binance.Net)
+
+	dotnet add package Binance.Net
+	
+### GitHub packages
+Binance.Net is available on [GitHub packages](https://github.com/JKorf/Binance.Net/pkgs/nuget/Binance.Net). You'll need to add `https://nuget.pkg.github.com/JKorf/index.json` as a NuGet package source.
+
+### Download release
+[![GitHub Release](https://img.shields.io/github/v/release/JKorf/Binance.Net?style=for-the-badge&label=GitHub)](https://github.com/JKorf/Binance.Net/releases)
+
+The NuGet package files are added along side the source with the latest GitHub release which can found [here](https://github.com/JKorf/Binance.Net/releases).
+
+	
+## How to use
+*REST Endpoints*  
+
+```csharp
+// Get the ETH/USDT ticker via rest request
+var restClient = new BinanceRestClient();
+var tickerResult = await restClient.SpotApi.ExchangeData.GetTickerAsync("ETHUSDT");
+var lastPrice = tickerResult.Data.LastPrice;
+```
+
+*Websocket streams*  
+
+```csharp
+// Subscribe to ETH/USDT ticker updates via the websocket API
+var socketClient = new BinanceSocketClient();
+var tickerSubscriptionResult = socketClient.SpotApi.ExchangeData.SubscribeToTickerUpdatesAsync("ETHUSDT", (update) => 
+{
+  var lastPrice = update.Data.LastPrice;
+});
+```
+
+*Get started and request the last price of a symbol in 40 seconds*  
+
+<img src="https://github.com/JKorf/Binance.Net/blob/f74f262151f21b123deecd9b39a717458a18f6ff/docs/Binance.gif" width="600" />
+
+For information on the clients, dependency injection, response processing and more see the [Binance.Net documentation](https://jkorf.github.io/Binance.Net), [CryptoExchange.Net documentation](https://jkorf.github.io/CryptoExchange.Net), or have a look at the examples [here](https://github.com/JKorf/Binance.Net/tree/master/Examples) or [here](https://github.com/JKorf/CryptoExchange.Net/tree/master/Examples).
+
+## CryptoExchange.Net
+Binance.Net is based on the [CryptoExchange.Net](https://github.com/JKorf/CryptoExchange.Net) base library. Other exchange API implementations based on the CryptoExchange.Net base library are available and follow the same logic.
+
+CryptoExchange.Net also allows for [easy access to different exchange API's](https://jkorf.github.io/CryptoExchange.Net#idocs_shared).
+
+|Exchange|Repository|Nuget|
+|--|--|--|
+|BingX|[JKorf/BingX.Net](https://github.com/JKorf/BingX.Net)|[![Nuget version](https://img.shields.io/nuget/v/JK.BingX.net.svg?style=flat-square)](https://www.nuget.org/packages/JK.BingX.Net)|
+|Bitfinex|[JKorf/Bitfinex.Net](https://github.com/JKorf/Bitfinex.Net)|[![Nuget version](https://img.shields.io/nuget/v/Bitfinex.net.svg?style=flat-square)](https://www.nuget.org/packages/Bitfinex.Net)|
+|Bitget|[JKorf/Bitget.Net](https://github.com/JKorf/Bitget.Net)|[![Nuget version](https://img.shields.io/nuget/v/JK.Bitget.net.svg?style=flat-square)](https://www.nuget.org/packages/JK.Bitget.Net)|
+|BitMart|[JKorf/BitMart.Net](https://github.com/JKorf/BitMart.Net)|[![Nuget version](https://img.shields.io/nuget/v/BitMart.net.svg?style=flat-square)](https://www.nuget.org/packages/BitMart.Net)|
+|Bybit|[JKorf/Bybit.Net](https://github.com/JKorf/Bybit.Net)|[![Nuget version](https://img.shields.io/nuget/v/Bybit.net.svg?style=flat-square)](https://www.nuget.org/packages/Bybit.Net)|
+|Coinbase|[JKorf/Coinbase.Net](https://github.com/JKorf/Coinbase.Net)|[![Nuget version](https://img.shields.io/nuget/v/JKorf.Coinbase.Net.svg?style=flat-square)](https://www.nuget.org/packages/JKorf.Coinbase.Net)|
+|CoinEx|[JKorf/CoinEx.Net](https://github.com/JKorf/CoinEx.Net)|[![Nuget version](https://img.shields.io/nuget/v/CoinEx.net.svg?style=flat-square)](https://www.nuget.org/packages/CoinEx.Net)|
+|CoinGecko|[JKorf/CoinGecko.Net](https://github.com/JKorf/CoinGecko.Net)|[![Nuget version](https://img.shields.io/nuget/v/CoinGecko.net.svg?style=flat-square)](https://www.nuget.org/packages/CoinGecko.Net)|
+|Gate.io|[JKorf/GateIo.Net](https://github.com/JKorf/GateIo.Net)|[![Nuget version](https://img.shields.io/nuget/v/GateIo.net.svg?style=flat-square)](https://www.nuget.org/packages/GateIo.Net)|
+|HTX|[JKorf/HTX.Net](https://github.com/JKorf/HTX.Net)|[![Nuget version](https://img.shields.io/nuget/v/JKorf.HTX.Net.svg?style=flat-square)](https://www.nuget.org/packages/JKorf.HTX.Net)|
+|Kraken|[JKorf/Kraken.Net](https://github.com/JKorf/Kraken.Net)|[![Nuget version](https://img.shields.io/nuget/v/KrakenExchange.net.svg?style=flat-square)](https://www.nuget.org/packages/KrakenExchange.Net)|
+|Kucoin|[JKorf/Kucoin.Net](https://github.com/JKorf/Kucoin.Net)|[![Nuget version](https://img.shields.io/nuget/v/Kucoin.net.svg?style=flat-square)](https://www.nuget.org/packages/Kucoin.Net)|
+|Mexc|[JKorf/Mexc.Net](https://github.com/JKorf/Mexc.Net)|[![Nuget version](https://img.shields.io/nuget/v/JK.Mexc.net.svg?style=flat-square)](https://www.nuget.org/packages/JK.Mexc.Net)|
+|OKX|[JKorf/OKX.Net](https://github.com/JKorf/OKX.Net)|[![Nuget version](https://img.shields.io/nuget/v/JK.OKX.net.svg?style=flat-square)](https://www.nuget.org/packages/JK.OKX.Net)|
+
+## Discord
+[![Nuget version](https://img.shields.io/discord/847020490588422145?style=for-the-badge)](https://discord.gg/MSpeEtSY8t)  
+A Discord server is available [here](https://discord.gg/MSpeEtSY8t). For discussion and/or questions around the CryptoExchange.Net and implementation libraries, feel free to join.
+
+## Supported functionality
+
+### Spot/Margin/Savings/Mining REST
+|API|Supported|Location|
+|--|--:|--|
+|Wallet endpoints|✓|`restClient.SpotApi.Account`|
+|SubAccount endpoints|✓|`restClient.GeneralApi.SubAccount`|
+|Market data endpoints|✓|`restClient.SpotApi.ExchangeData`|
+|Websocket Market Streams|✓|`socketClient.SpotApi.ExchangeData`|
+|Spot Trading Endpoints|✓|`restClient.SpotApi.Trading`|
+|Spot Account Endpoints|✓|`restClient.SpotApi.Account`|
+|Margin Account/Trade|Partial|`restClient.SpotApi.Account` / `restClient.SpotApi.Trading`|
+|User Data Streams|✓|`socketClient.SpotApi.Account`|
+|Margin User Data Streams|X||
+|Simple Earn Endpoints|✓|`restClient.GeneralApi.SimpleEarn`|
+|Auto-Invest Endpoints|✓|`restClient.GeneralApi.AutoInvest`|
+|Staking Endpoints|✓|`restClient.GeneralApi.Staking`|
+|Mining Endpoints|✓|`restClient.GeneralApi.Mining`|
+|Futures|✓|`restClient.GeneralApi.Futures`|
+|Futures Algo Endpoints|✓|`restClient.UsdFuturesApi.Trading`|
+|Spot Algo Endpoints|✓|`restClient.SpotApi.Trading`|
+|Classic Portfolio Margin Endpoints|Partial|`restClient.SpotApi.Account`|
+|BLVT Endpoints|Partial|`restClient.SpotApi.Account` / `restClient.SpotApi.ExchangeData` / `restClient.SpotApi.Trading`|
+|Fiat Endpoints|✓|`restClient.SpotApi.Account`|
+|C2C Endpoints|✓|`restClient.SpotApi.Trading`|
+|VIP Loans Endpoints|X||
+|Crypto Loans Endpoints|Partial|`restClient.GeneralApi.Loans`|
+|Pay Endpoints|✓|`restClient.SpotApi.Trading`|
+|Convert Endpoints|✓|`restClient.SpotApi.ExchangeData` / `restClient.SpotApi.Trading`|
+|Rebate Endpoints|✓|`restClient.SpotApi.Account`|
+|NFT Endpoints|X||
+|Binance Gift Card Endpoints|X||
+
+### USD-M Futures REST
+|API|Supported|Location|
+|--|--:|--|
+|Market Data|✓|`restClient.UsdFuturesApi.ExchangeData`|
+|Trade|✓|`restClient.UsdFuturesApi.Account` / `restClient.UsdFuturesApi.Trading`|
+|Websocket Market Streams|✓|`socketClient.UsdFuturesApi`|
+|User Data Streams|✓|`socketClient.UsdFuturesApi`|
+|Account|✓|`restClient.UsdFuturesApi.Account` / `restClient.UsdFuturesApi.Trading`|
+|Convert|✓|`restClient.UsdFuturesApi.ExchangeData` / `restClient.UsdFuturesApi.Trading`|
+|Classic Portfolio Margin Endpoints|X||
+
+### COIN-M Futures REST
+|API|Supported|Location|
+|--|--:|--|
+|Market Data|✓|`restClient.CoinFuturesApi.ExchangeData`|
+|Websocket Market Streams|✓|`socketClient.CoinFuturesApi`|
+|Trade|✓|`restClient.CoinFuturesApi.Account` / `restClient.CoinFuturesApi.Trading`|
+|User Data Streams|✓|`socketClient.CoinFuturesApi`|
+|Account|✓|`restClient.CoinFuturesApi.Account` / `restClient.CoinFuturesApi.Trading`|
+|Classic Portfolio Margin Endpoints|X||
+
+### Spot Websocket API
+|API|Supported|Location|
+|--|--:|--|
+|Market data requests|✓|`socketClient.SpotApi.ExchangeData`|
+|Trading requests|✓|`socketClient.SpotApi.Trading`|
+|Account requests|✓|`socketClient.SpotApi.Account`|
+
+### USD-M Futures Websocket API
+|API|Supported|Location|
+|--|--:|--|
+|*|✓|`socketClient.UsdFuturesApi.Account` / `socketClient.UsdFuturesApi.ExchangeData` / `socketClient.UsdFuturesApi.Trading`|
+
+### European Options
+|API|Supported|Location|
+|--|--:|--|
+|*|X||
+
+### Portfolio Margin
+|API|Supported|Location|
+|--|--:|--|
+|*|X||
 
 ## Support the project
-I develop and maintain this package on my own for free in my spare time, any support is greatly appreciated.
-
-### Referral link
-Sign up using the following referral link to pay a small percentage of the trading fees you pay to support the project instead of paying them straight to Binance. This doesn't cost you a thing!
-[Link](https://accounts.binance.com/en/register?ref=10153680)
+Any support is greatly appreciated.
 
 ### Donate
 Make a one time donation in a crypto currency of your choice. If you prefer to donate a currency not listed here please contact me.
 
-**Btc**:  bc1qz0jv0my7fc60rxeupr23e75x95qmlq6489n8gh  
-**Eth**:  0x8E21C4d955975cB645589745ac0c46ECA8FAE504  
+**Btc**:  bc1q277a5n54s2l2mzlu778ef7lpkwhjhyvghuv8qf  
+**Eth**:  0xcb1b63aCF9fef2755eBf4a0506250074496Ad5b7   
+**USDT (TRX)**  TKigKeJPXZYyMVDgMyXxMf17MWYia92Rjd
 
 ### Sponsor
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
-## Discord
-A Discord server is available [here](https://discord.gg/MSpeEtSY8t). For discussion and/or questions around the CryptoExchange.Net and implementation libraries, feel free to join.
-
 ## Release notes
+* Version 10.6.0 - 09 Oct 2024
+    * Updated CryptoExchange.Net to version 8.0.2, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/8.0.2
+    * Added USD-M Futures web socket order API
+    * Fixed pagination for shared closed orders USD futures
+
+* Version 10.5.0 - 27 Sep 2024
+    * Updated CryptoExchange.Net to version 8.0.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/8.0.0
+    * Added Shared client interfaces implementation for Spot, USD-M Futures, Coin-M Futures Rest and Socket clients
+    * Updated Id property from `string?` to `string` on BinanceWithdrawalPlaced model
+    * Updated Sourcelink package version
+    * Marked ISpotClient and IFuturesClient references as deprecated
+
+* Version 10.4.0 - 11 Sep 2024
+    * Added onTradeUpdate callback for UsdFuturesApi.SubscribeToUserDataUpdatesAsync
+    * Changed CrossUnrealizedPnl field in futures balances to support testnet response
+    * Fix for UsdFuturesApi.Trading.EditMultipleOrdersAsync order id serialization
+    * Fix for GeneralApi.AutoInvest.GetPlansAsync deserialization
+    * Fixed incorrect api docs reference for CoinFuturesApi.ExchangeData.GetFundingRatesAsync
+
+* Version 10.3.0 - 28 Aug 2024
+    * Updated CryptoExchange.Net to version 7.11.2, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/7.11.2
+    * Added GeneralApi.AutoInvest endpoints
+    * Added UsdFuturesApi convert endpoints
+    * Fixed SubAccountId property deserialization in deposit history
+    * Updated some request weights for ratelimiting
+
+* Version 10.2.1 - 18 Aug 2024
+    * Fixed walletType serialization on SpotApi.Trading.ConvertQuoteRequestAsync endpoint
+
+* Version 10.2.0 - 13 Aug 2024
+    * Re-added the UsdFuturesApi.Account.GetAccountInfoV2Async endpoint as the V3 endpoint is missing data
+    * Renamend UsdFuturesApi.Account.GetAccountInfoAsync to GetAccountInfoV3Async
+    * Fixed SpotApi.ExchangeData.GetProductsAsync deserialization
+	* Fixed GeneralApi.SimpleEarn.GetLockedRewardRecordsAsync deserialization
+
+* Version 10.1.1 - 08 Aug 2024
+    * Fix UnrealizedPnl deserialization in CoinFuturesApi.Account.GetPositionInformationAsync
+
+* Version 10.1.0 - 07 Aug 2024
+    * Updated CryptoExchange.Net to version 7.11.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/7.11.0
+    * Updated XML code comments
+    * Fixed BinanceFuturesAccountAsset MaintMargin deserialization
+    * Fixed BinancePosition MaintMargin deserialization
+    * Fixed BinancePosition UnrealizedProfit deserialization for Coin-M futures
+
+* Version 10.0.1 - 05 Aug 2024
+    * Fixed deserialization issue UsdtFuturesApi.Account.GetIncomeHistoryAsync
+
+* Version 10.0.0 - 27 Jul 2024
+    * Updated CryptoExchange.Net to version 7.10.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/7.10.0
+    * Switch from Newtonsoft.Json implementation to System.Text.Json for (de)serialization
+    * Refactored from old per type enum converter to EnumConverter usage
+    * Added SpotApi.Account.GetCommissionRatesAsync endpoint
+    * Added UsdFuturesApi.Account.GetSymbolConfigurationAsync endpoint
+    * Added UsdFuturesApi.Account.GetAccountConfigurationAsync endpoint
+    * Added UsdFuturesApi.Trading.GetPositionsAsync endpoint
+    * Added PermissionSets property to SpotApi.ExchangeData.GetExchangeInfoAsync symbol response
+    * Updated UsdFuturesApi.Account.GetBalancesAsync to V3
+    * Updated UsdFuturesApi.Account.GetAccountInfoAsync to V3
+
+* Version 9.12.0 - 16 Jul 2024
+    * Updated CryptoExchange.Net to version 7.9.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/7.9.0
+    * Updated internal classes to internal access modifier
+    * Updated WebSocket rate limit rule to prevent triggering disconnect
+
+* Version 9.11.1 - 02 Jul 2024
+    * Updated CryptoExchange.Net to V7.8.0
+    * Updated ratelimiting for per-endpoint limits
+
+* Version 9.11.0 - 23 Jun 2024
+    * Updated CryptoExchange.Net to version 7.7.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/7.7.0
+    * Added dedicated connection configuration; a websocket connection can now be established before making the first request by calling `binanceSocketClient.SpotApi.PrepareConnectionsAsync();`
+    * Added CancellationToken optional parameter to websocket requests
+    * Updated response models from classes to records
+
+* Version 9.10.0 - 11 Jun 2024
+    * Added new SpotApi.Trading.PlaceOtoOrderListAsync and SpotApi.Trading.PlaceOtocoOrderListAsync endpoints
+    * Fixed GetProductsAsync endpoints by allowing automatic decompression
+    * Updated CryptoExchange.Net to v7.6.0, see https://github.com/JKorf/CryptoExchange.Net?tab=readme-ov-file#release-notes for release notes
+
+* Version 9.9.8 - 02 Jun 2024
+    * Added SpotApi.Account.GetAccountVipLevelAndStatusAsync endpoint
+    * Added UsdFuturesApi.Account.GetBnbBurnStatusAsync and UsdFuturesApi.Account.SetBnbBurnStatusAsync endpoints
+    * Added missing GoodTillDate TimeInForce conversion
+
+* Version 9.9.7 - 07 May 2024
+    * Updated CryptoExchange.Net to v7.5.2, see https://github.com/JKorf/CryptoExchange.Net?tab=readme-ov-file#release-notes for release notes
+
+* Version 9.9.6 - 05 May 2024
+    * Updated various response models
+    * Updated CoinFuturesApi.Account.GetBracketsAsync to V2 endpoint
+    * Updated CoinFuturesApi.Trading.PlaceMultipleOrdersAsync orders parameter from array to IEnumerable
+
+* Version 9.9.5 - 01 May 2024
+    * Updated multiple response models
+    * Fixed multiple bugs after new, more thorough unit testing implementation
+    * Removed duplicate SpotApi.Trading.ConvertTransferAsync and GetConvertTransferHistoryAsync endpoints
+    * Updated CryptoExchange.Net to v7.5.0, see https://github.com/JKorf/CryptoExchange.Net?tab=readme-ov-file#release-notes for release notes
+
+* Version 9.9.4 - 28 Apr 2024
+    * Added SpotApi.Account.GetWithdrawalAddressesAsync endpoint
+    * Added Url and ApiDocsUrl to BinanceExchange static class
+    * Added BinanceOrderBookFactory book creation method
+    * Fixed BinanceOrderBookFactory injection issue
+    * Updated CryptoExchange.Net to v7.4.0, see https://github.com/JKorf/CryptoExchange.Net?tab=readme-ov-file#release-notes for release notes
+
+* Version 9.9.3 - 23 Apr 2024
+    * Added missing UniversalTransferType enum values
+    * Fixed CoinFuturesApi.Account.GetIncomeHistoryAsync endpoint url
+    * Updated CryptoExchange.Net to 7.3.3, see https://github.com/JKorf/CryptoExchange.Net?tab=readme-ov-file#release-notes for release notes
+
+* Version 9.9.2 - 19 Apr 2024
+    * Added CoinFuturesApi.Account.GetDownloadIdForTransactionHistoryAsync endpoint
+    * Added CoinFuturesApi.Account.GetDownloadLinkForTransactionHistoryAsync endpoint
+    * Added SpotApi.ExchangeData.GetTradingDayTickerAsync endpoint
+    * Added SpotApi.ExchangeData.GetTradingDayTickersAsync endpoint
+    * Added computeFeeRates parameter to SpotApi.Trading.PlaceTestOrderAsync
+    * Updated SpotApi.Trading.PlaceTestOrderAsync response
+    * Updated broker reference setting
+    * Updated CryptoExchange.Net to 7.3.2 fixing issue which caused some endpoints with specific rate limits to fail
+
+* Version 9.9.1 - 19 Apr 2024
+    * Fixed Start/KeepAlive/Stop UserStream operations returning error
+
+* Version 9.9.0 - 18 Apr 2024
+    * Updated CryptoExchange.Net to 7.3.1, see https://github.com/JKorf/CryptoExchange.Net?tab=readme-ov-file#release-notes for release notes
+	* Re-implemented client side rate limiting
+    * Added handling of RetryAfter response for both rest and socket API
+    * Added omitZeroBalances parameter to SpotApi.Account.GetAccountInfoAsync
+    * Added new PlaceOcoOrderListAsync as replacement for deprecated PlaceOcoOrderAsync endpoint
+    * Added listenKeyExpired event handler for Spot websocket user data subscription
+    * Added OTOAllowed to SpotApi.ExchangeData.GetExchangeInfoAsync symbol response model
+    * Moved GetTradeFeeAsync from SpotApi.ExchangeData to SpotApi.Account
+    * Changed WebCallResult<object> responses to WebCallResult
+    * Removed deprecated endpoints
+
+* Version 9.8.1 - 03 Apr 2024
+    * Added SpotApi.Account.GetWalletBalancesAsync endpoint
+    * Fixed SpotApi.Account.GetMarginLoansAsync isolatedSymbol parameter not getting send
+    * Removed pre-send symbol validation
+
+* Version 9.8.0 - 01 Apr 2024
+    * Added SpotApi.ExchangeData.GetDelistScheduleAsync endpoint
+    * Added UsdFuturesApi.Account.GetOrderRateLimitAsync endpoint
+    * Added UsdFuturesApi.ExchangeData.GetBasisAsync endpoint
+    * Updated Spot Margin endpoints
+    * Updated UsdFuturesApi.ExchangeData.GetPricesAsync endpoint to V2
+    * Updated UsdFuturesApi.Trading.PlaceOrderAsync parameters
+    * Removed deprecated BSwap endpoints
+
+* Version 9.7.1 - 24 Mar 2024
+	* Updated CryptoExchange.Net to 7.2.0, see https://github.com/JKorf/CryptoExchange.Net?tab=readme-ov-file#release-notes for release notes
+
+* Version 9.7.0 - 16 Mar 2024
+    * Updated CryptoExchange.Net to 7.1.0, see https://github.com/JKorf/CryptoExchange.Net?tab=readme-ov-file#release-notes for release notes
+    * Added websocket max message size to prevent timeouts and weird behavior when sending large requests
+    * Updated WebCallResult<object> return endpoints to WebCallResult return
+    * Added parameter on futures stream trades stream for ignoring non trade updates
+
+* Version 9.6.1 - 29 Feb 2024
+    * Fix for user data websocket streams subscriptions
+
+* Version 9.6.0 - 27 Feb 2024
+    * Added REST endpoints for Simple Earn under client.GeneralApi.SimpleEarn
+    * Fixed futures userdata websocket subscription
+    * Some small fixed in some enum values and models
+
+* Version 9.5.0 - 25 Feb 2024
+    * Updated CryptoExchange.Net and implemented reworked websocket message handling. For release notes for the CryptoExchange.Net base library see: https://github.com/JKorf/CryptoExchange.Net?tab=readme-ov-file#release-notes
+    * Fixed issue in DI registration causing http client to not be correctly injected
+    * Removed redundant BinanceRestClient constructor overload
+    * Updated some namespaces
+
 * Version 9.4.0 - 05 Jan 2024
     * Added futures Trading.GetFundingInfoAsync endpoint
     * Added autoRepayAtCancel and selfTradePreventionMode parameters to SpotApi.Trading.PlaceMarginOCOOrderAsync

@@ -1,16 +1,14 @@
-﻿using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Spot
+﻿namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Account status info
     /// </summary>
-    public class BinanceAccountStatus
+    public record BinanceAccountStatus
     {
         /// <summary>
         /// The result status
         /// </summary>
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public string? Data { get; set; }
     }
 }

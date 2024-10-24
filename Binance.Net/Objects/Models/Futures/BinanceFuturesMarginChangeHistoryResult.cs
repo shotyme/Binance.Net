@@ -1,44 +1,48 @@
-﻿using System;
-using Binance.Net.Converters;
+﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
-using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
 
 namespace Binance.Net.Objects.Models.Futures
 {
     /// <summary>
     /// Result of the margin change history request
     /// </summary>
-    public class BinanceFuturesMarginChangeHistoryResult
+    public record BinanceFuturesMarginChangeHistoryResult
     {
         /// <summary>
         /// Request quantity of margin used
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
         /// Base asset used for margin
         /// </summary>
+        [JsonPropertyName("asset")]
         public string? Asset { get; set; }
         /// <summary>
         /// Symbol margin is placed on
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string? Symbol { get; set; }
+        /// <summary>
+        /// Delta type
+        /// </summary>
+        [JsonPropertyName("deltaType")]
+        public string? DeltaType { get; set; }
         /// <summary>
         /// Time of the margin change request
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }
         /// <summary>
         /// Direction of the margin change request
         /// </summary>
-        [JsonConverter(typeof(FuturesMarginChangeDirectionTypeConverter))]
+        [JsonPropertyName("type")]
         public FuturesMarginChangeDirectionType Type { get; set; }
         /// <summary>
         /// Position side
         /// </summary>
-        [JsonConverter(typeof(PositionSideConverter))]
+        [JsonPropertyName("positionSide")]
         public PositionSide PositionSide { get; set; }
     }
 

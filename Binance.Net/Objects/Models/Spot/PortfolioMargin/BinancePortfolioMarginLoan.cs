@@ -1,21 +1,19 @@
-﻿using Newtonsoft.Json;
-using System;
-
-namespace Binance.Net.Objects.Models.Spot.PortfolioMargin
+﻿namespace Binance.Net.Objects.Models.Spot.PortfolioMargin
 {
     /// <summary>
     /// Bankruptcy loan info
     /// </summary>
-    public class BinancePortfolioMarginLoan
+    public record BinancePortfolioMarginLoan
     {
         /// <summary>
         /// Asset
         /// </summary>
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
         /// Loan amount
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
     }
 }

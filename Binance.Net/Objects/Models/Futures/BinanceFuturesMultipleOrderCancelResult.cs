@@ -1,26 +1,26 @@
-﻿using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Futures
+﻿namespace Binance.Net.Objects.Models.Futures
 {
     /// <summary>
     /// Extension to be able to deserialize an error response as well
     /// </summary>
-    internal class BinanceFuturesMultipleOrderCancelResult : BinanceFuturesOrder
+    internal record BinanceFuturesMultipleOrderCancelResult : BinanceFuturesOrder
     {
+        [JsonPropertyName("code")]
         public int Code { get; set; }
 
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string Message { get; set; } = string.Empty;
     }
 
     /// <summary>
     /// Extension to be able to deserialize an error response as well
     /// </summary>
-    internal class BinanceUsdFuturesMultipleOrderCancelResult : BinanceUsdFuturesOrder
+    internal record BinanceUsdFuturesMultipleOrderCancelResult : BinanceUsdFuturesOrder
     {
+        [JsonPropertyName("code")]
         public int Code { get; set; }
 
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string Message { get; set; } = string.Empty;
     }
 }

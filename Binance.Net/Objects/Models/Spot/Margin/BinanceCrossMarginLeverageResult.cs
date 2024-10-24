@@ -3,11 +3,12 @@
     /// <summary>
     /// Result
     /// </summary>
-    public class BinanceCrossMarginLeverageResult
+    public record BinanceCrossMarginLeverageResult
     {
         /// <summary>
         /// Success
         /// </summary>
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
     }
 }

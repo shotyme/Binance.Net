@@ -1,37 +1,34 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Binance.Net.Objects.Models.Spot.Loans
+﻿namespace Binance.Net.Objects.Models.Spot.Loans
 {
     /// <summary>
     /// Adjust info
     /// </summary>
-    public class BinanceCryptoLoanLtvAdjust
+    public record BinanceCryptoLoanLtvAdjust
     {
         /// <summary>
         /// The loaning asset
         /// </summary>
-        [JsonProperty("loanCoin")]
+        [JsonPropertyName("loanCoin")]
         public string LoanAsset { get; set; } = string.Empty;
         /// <summary>
         /// The collateral asset
         /// </summary>
-        [JsonProperty("collateralCoin")]
+        [JsonPropertyName("collateralCoin")]
         public string CollateralAsset { get; set; } = string.Empty;
         /// <summary>
         /// Direction
         /// </summary>
+        [JsonPropertyName("direction")]
         public string Direction { get; set; } = string.Empty;
         /// <summary>
         /// Amount
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
         /// Current ltv
         /// </summary>
+        [JsonPropertyName("currentLTV")]
         public decimal CurrentLtv { get; set; }
     }
 }

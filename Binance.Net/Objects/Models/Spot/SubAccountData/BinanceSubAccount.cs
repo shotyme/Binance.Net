@@ -1,32 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using CryptoExchange.Net.Converters;
-using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Spot.SubAccountData
+﻿namespace Binance.Net.Objects.Models.Spot.SubAccountData
 {
-    internal class BinanceSubAccountWrapper
+    internal record BinanceSubAccountWrapper
     {
+        [JsonPropertyName("subAccounts")]
         public IEnumerable<BinanceSubAccount>? SubAccounts { get; set; }
     }
 
     /// <summary>
     /// Sub account details
     /// </summary>
-    public class BinanceSubAccount
+    public record BinanceSubAccount
     {
         /// <summary>
         /// The email associated with the sub account
         /// </summary>
+        [JsonPropertyName("email")]
         public string Email { get; set; } = string.Empty;
         /// <summary>
         /// Is account frozen
         /// </summary>
+        [JsonPropertyName("isFreeze")]
         public bool IsFreeze { get; set; } = false;
         /// <summary>
         /// The time the sub account was created
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("createTime")]
         public DateTime CreateTime { get; set; }
     }
 }

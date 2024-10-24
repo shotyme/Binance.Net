@@ -1,20 +1,19 @@
-﻿using Newtonsoft.Json;
-
-namespace Binance.Net.Objects.Models.Spot.SubAccountData
+﻿namespace Binance.Net.Objects.Models.Spot.SubAccountData
 {
     /// <summary>
     /// Sub account transfer result
     /// </summary>
-    public class BinanceSubAccountTransferResult
+    public record BinanceSubAccountTransferResult
     {
         /// <summary>
         /// Whether the transfer was successful
         /// </summary>
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
         /// <summary>
         /// The transaction id of the transfer
         /// </summary>
-        [JsonProperty("txnId")]
+        [JsonPropertyName("txnId")]
         public string? TransactionId { get; set; }
     }
 }
