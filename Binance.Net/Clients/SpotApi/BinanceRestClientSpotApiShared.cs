@@ -81,7 +81,7 @@ namespace Binance.Net.Clients.SpotApi
             if (validationError != null)
                 return new ExchangeWebResult<IEnumerable<SharedSpotSymbol>>(Exchange, validationError);
 
-            var result = await ExchangeData.GetExchangeInfoAsync(ct).ConfigureAwait(false);
+            var result = await ExchangeData.GetExchangeInfoAsync(false, SymbolStatus.Trading, ct: ct).ConfigureAwait(false);
             if (!result)
                 return result.AsExchangeResult<IEnumerable<SharedSpotSymbol>>(Exchange, null, default);
 
@@ -147,7 +147,10 @@ namespace Binance.Net.Clients.SpotApi
                 return result.AsExchangeResult<IEnumerable<SharedTrade>>(Exchange, null, default);
 
             // Return
-            return result.AsExchangeResult<IEnumerable<SharedTrade>>(Exchange, TradingMode.Spot, result.Data.Select(x => new SharedTrade(x.BaseQuantity, x.Price, x.TradeTime)).ToArray());
+            return result.AsExchangeResult<IEnumerable<SharedTrade>>(Exchange, TradingMode.Spot, result.Data.Select(x => new SharedTrade(x.BaseQuantity, x.Price, x.TradeTime) 
+            {
+                Side = x.BuyerIsMaker ? SharedOrderSide.Buy : SharedOrderSide.Sell
+            }).ToArray());
         }
         #endregion
 
@@ -177,10 +180,13 @@ namespace Binance.Net.Clients.SpotApi
 
             FromIdToken? nextToken = null;
             if (result.Data.Any() && result.Data.Last().TradeTime < request.EndTime)
-                nextToken = new FromIdToken(result.Data.Max(x => x.Id).ToString());
+                nextToken = new FromIdToken((result.Data.Max(x => x.Id) + 1).ToString());
 
             // Return
-            return result.AsExchangeResult<IEnumerable<SharedTrade>>(Exchange, TradingMode.Spot, result.Data.Where(x => x.TradeTime < request.EndTime).Select(x => new SharedTrade(x.Quantity, x.Price, x.TradeTime)).ToArray(), nextToken);
+            return result.AsExchangeResult<IEnumerable<SharedTrade>>(Exchange, TradingMode.Spot, result.Data.Where(x => x.TradeTime < request.EndTime).Select(x => new SharedTrade(x.Quantity, x.Price, x.TradeTime)
+            {
+                Side = x.BuyerIsMaker ? SharedOrderSide.Buy : SharedOrderSide.Sell
+            }).ToArray(), nextToken);
         }
         #endregion
 

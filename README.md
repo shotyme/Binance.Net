@@ -84,12 +84,14 @@ CryptoExchange.Net also allows for [easy access to different exchange API's](htt
 |Coinbase|[JKorf/Coinbase.Net](https://github.com/JKorf/Coinbase.Net)|[![Nuget version](https://img.shields.io/nuget/v/JKorf.Coinbase.Net.svg?style=flat-square)](https://www.nuget.org/packages/JKorf.Coinbase.Net)|
 |CoinEx|[JKorf/CoinEx.Net](https://github.com/JKorf/CoinEx.Net)|[![Nuget version](https://img.shields.io/nuget/v/CoinEx.net.svg?style=flat-square)](https://www.nuget.org/packages/CoinEx.Net)|
 |CoinGecko|[JKorf/CoinGecko.Net](https://github.com/JKorf/CoinGecko.Net)|[![Nuget version](https://img.shields.io/nuget/v/CoinGecko.net.svg?style=flat-square)](https://www.nuget.org/packages/CoinGecko.Net)|
+|Crypto.com|[JKorf/CryptoCom.Net](https://github.com/JKorf/CryptoCom.Net)|[![Nuget version](https://img.shields.io/nuget/v/CryptoCom.net.svg?style=flat-square)](https://www.nuget.org/packages/CryptoCom.Net)|
 |Gate.io|[JKorf/GateIo.Net](https://github.com/JKorf/GateIo.Net)|[![Nuget version](https://img.shields.io/nuget/v/GateIo.net.svg?style=flat-square)](https://www.nuget.org/packages/GateIo.Net)|
 |HTX|[JKorf/HTX.Net](https://github.com/JKorf/HTX.Net)|[![Nuget version](https://img.shields.io/nuget/v/JKorf.HTX.Net.svg?style=flat-square)](https://www.nuget.org/packages/JKorf.HTX.Net)|
 |Kraken|[JKorf/Kraken.Net](https://github.com/JKorf/Kraken.Net)|[![Nuget version](https://img.shields.io/nuget/v/KrakenExchange.net.svg?style=flat-square)](https://www.nuget.org/packages/KrakenExchange.Net)|
 |Kucoin|[JKorf/Kucoin.Net](https://github.com/JKorf/Kucoin.Net)|[![Nuget version](https://img.shields.io/nuget/v/Kucoin.net.svg?style=flat-square)](https://www.nuget.org/packages/Kucoin.Net)|
 |Mexc|[JKorf/Mexc.Net](https://github.com/JKorf/Mexc.Net)|[![Nuget version](https://img.shields.io/nuget/v/JK.Mexc.net.svg?style=flat-square)](https://www.nuget.org/packages/JK.Mexc.Net)|
 |OKX|[JKorf/OKX.Net](https://github.com/JKorf/OKX.Net)|[![Nuget version](https://img.shields.io/nuget/v/JK.OKX.net.svg?style=flat-square)](https://www.nuget.org/packages/JK.OKX.Net)|
+|WhiteBit|[JKorf/WhiteBit.Net](https://github.com/JKorf/WhiteBit.Net)|[![Nuget version](https://img.shields.io/nuget/v/WhiteBit.net.svg?style=flat-square)](https://www.nuget.org/packages/WhiteBit.Net)|
 
 ## Discord
 [![Nuget version](https://img.shields.io/discord/847020490588422145?style=for-the-badge)](https://discord.gg/MSpeEtSY8t)  
@@ -185,6 +187,34 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 10.9.0 - 06 Nov 2024
+    * Updated CryptoExchange.Net to version 8.2.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/8.2.0
+
+* Version 10.8.1 - 01 Nov 2024
+    * Added restClient.CoinFuturesApi.Account.GetDownloadIdForOrderHistoryAsync endpoint
+    * Added restClient.CoinFuturesApi.Account.GetDownloadLinkForOrderHistoryAsync endpoint
+    * Added restClient.CoinFuturesApi.Account.GetDownloadIdForTradeHistoryAsync endpoint
+    * Added restClient.CoinFuturesApi.Account.GetDownloadLinkForTradeHistoryAsync endpoint
+
+* Version 10.8.0 - 28 Oct 2024
+    * Updated CryptoExchange.Net to version 8.1.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/8.1.0
+    * Moved FormatSymbol to BinanceExchange class
+    * Added support Side setting on SharedTrade model
+    * Added BinanceTrackerFactory for creating trackers
+    * Added overload to Create method on BinanceOrderBookFactory support SharedSymbol parameter
+    * Fixed Shared rest GetTradeHistoryAsync pagination
+    * Added catch around HttpClientHandler.AutomaticDecompression setting as it's not support on Blazor WASM
+
+* Version 10.7.0 - 21 Oct 2024
+    * Added SelfTradePreventionMode and PriceMatch parameters and responses for Coin-M Futures API
+    * Added returnPermissionSets and symbolStatus parameters to restClient.SpotApi.ExchangeData.GetExchangeInfoAsync endpoint
+    * Fixed issues with restClient.GeneralApi.AutoInvest.GetSubscriptionTransactionHistoryAsync
+    * Fixed deserialization issue subaccount transfer
+
+* Version 10.6.1 - 14 Oct 2024
+    * Updated CryptoExchange.Net to version 8.0.3, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/8.0.3
+    * Fixed TypeLoadException during initialization
+
 * Version 10.6.0 - 09 Oct 2024
     * Updated CryptoExchange.Net to version 8.0.2, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/8.0.2
     * Added USD-M Futures web socket order API

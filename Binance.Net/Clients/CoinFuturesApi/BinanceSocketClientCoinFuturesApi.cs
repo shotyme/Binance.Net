@@ -71,9 +71,7 @@ namespace Binance.Net.Clients.CoinFuturesApi
 
         /// <inheritdoc />
         public override string FormatSymbol(string baseAsset, string quoteAsset, TradingMode tradingMode, DateTime? deliverTime = null)
-        {
-            return baseAsset.ToUpperInvariant() + quoteAsset.ToUpperInvariant() + (deliverTime == null ? "_PERP" : "_" + deliverTime.Value.ToString("yyMMdd"));
-        }
+                => BinanceExchange.FormatSymbol(baseAsset, quoteAsset, tradingMode, deliverTime);
 
         #region methods
 
@@ -457,6 +455,6 @@ namespace Binance.Net.Clients.CoinFuturesApi
         }
 
         /// <inheritdoc />
-        protected override Query? GetAuthenticationRequest(SocketConnection connection) => null;
+        protected override Task<Query?> GetAuthenticationRequestAsync(SocketConnection connection) => Task.FromResult<Query?>(null);
     }
 }

@@ -94,6 +94,16 @@
             Urls to the API documentation
             </summary>
         </member>
+        <member name="M:Binance.Net.BinanceExchange.FormatSymbol(System.String,System.String,CryptoExchange.Net.SharedApis.TradingMode,System.Nullable{System.DateTime})">
+            <summary>
+            Format a base and quote asset to a Binance recognized symbol 
+            </summary>
+            <param name="baseAsset">Base asset</param>
+            <param name="quoteAsset">Quote asset</param>
+            <param name="tradingMode">Trading mode</param>
+            <param name="deliverTime">Delivery time for delivery futures</param>
+            <returns></returns>
+        </member>
         <member name="P:Binance.Net.BinanceExchange.RateLimiter">
             <summary>
             Rate limiter configuration for the Binance API
@@ -164,6 +174,26 @@
             </summary>
             <param name="number"></param>
             <returns></returns>
+        </member>
+        <member name="T:Binance.Net.BinanceTrackerFactory">
+            <inheritdoc />
+        </member>
+        <member name="M:Binance.Net.BinanceTrackerFactory.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="M:Binance.Net.BinanceTrackerFactory.#ctor(System.IServiceProvider)">
+            <summary>
+            ctor
+            </summary>
+            <param name="serviceProvider">Service provider for resolving logging and clients</param>
+        </member>
+        <member name="M:Binance.Net.BinanceTrackerFactory.CreateKlineTracker(CryptoExchange.Net.SharedApis.SharedSymbol,CryptoExchange.Net.SharedApis.SharedKlineInterval,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
+            <inheritdoc />
+        </member>
+        <member name="M:Binance.Net.BinanceTrackerFactory.CreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
+            <inheritdoc />
         </member>
         <member name="T:Binance.Net.Clients.BinanceRestClient">
             <inheritdoc cref="T:Binance.Net.Interfaces.Clients.IBinanceRestClient" />
@@ -365,6 +395,18 @@
         <member name="M:Binance.Net.Clients.CoinFuturesApi.BinanceRestClientCoinFuturesApiAccount.GetDownloadLinkForTransactionHistoryAsync(System.String,System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
+        <member name="M:Binance.Net.Clients.CoinFuturesApi.BinanceRestClientCoinFuturesApiAccount.GetDownloadIdForOrderHistoryAsync(System.DateTime,System.DateTime,System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Binance.Net.Clients.CoinFuturesApi.BinanceRestClientCoinFuturesApiAccount.GetDownloadLinkForOrderHistoryAsync(System.String,System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Binance.Net.Clients.CoinFuturesApi.BinanceRestClientCoinFuturesApiAccount.GetDownloadIdForTradeHistoryAsync(System.DateTime,System.DateTime,System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Binance.Net.Clients.CoinFuturesApi.BinanceRestClientCoinFuturesApiAccount.GetDownloadLinkForTradeHistoryAsync(System.String,System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
         <member name="T:Binance.Net.Clients.CoinFuturesApi.BinanceRestClientCoinFuturesApiExchangeData">
             <inheritdoc />
         </member>
@@ -446,7 +488,7 @@
         <member name="T:Binance.Net.Clients.CoinFuturesApi.BinanceRestClientCoinFuturesApiTrading">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.CoinFuturesApi.BinanceRestClientCoinFuturesApiTrading.PlaceOrderAsync(System.String,Binance.Net.Enums.OrderSide,Binance.Net.Enums.FuturesOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.PositionSide},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.WorkingType},System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.OrderResponseType},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Clients.CoinFuturesApi.BinanceRestClientCoinFuturesApiTrading.PlaceOrderAsync(System.String,Binance.Net.Enums.OrderSide,Binance.Net.Enums.FuturesOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.PositionSide},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.WorkingType},System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.OrderResponseType},System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.PriceMatch},System.Nullable{Binance.Net.Enums.SelfTradePreventionMode},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Binance.Net.Clients.CoinFuturesApi.BinanceRestClientCoinFuturesApiTrading.PlaceMultipleOrdersAsync(System.Collections.Generic.IEnumerable{Binance.Net.Objects.Models.Futures.BinanceFuturesBatchOrder},System.Nullable{System.Int32},System.Threading.CancellationToken)">
@@ -605,7 +647,7 @@
         <member name="M:Binance.Net.Clients.CoinFuturesApi.BinanceSocketClientCoinFuturesApi.SubscribeToUserDataUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Binance.Net.Objects.Models.Futures.Socket.BinanceFuturesStreamConfigUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Binance.Net.Objects.Models.Futures.Socket.BinanceFuturesStreamMarginUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Binance.Net.Objects.Models.Futures.Socket.BinanceFuturesStreamAccountUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Binance.Net.Objects.Models.Futures.Socket.BinanceFuturesStreamOrderUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Binance.Net.Objects.Models.BinanceStreamEvent}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Binance.Net.Objects.Models.Futures.Socket.BinanceStrategyUpdate}},System.Action{CryptoExchange.Net.Objects.Sockets.DataEvent{Binance.Net.Objects.Models.Futures.Socket.BinanceGridUpdate}},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.CoinFuturesApi.BinanceSocketClientCoinFuturesApi.GetAuthenticationRequest(CryptoExchange.Net.Sockets.SocketConnection)">
+        <member name="M:Binance.Net.Clients.CoinFuturesApi.BinanceSocketClientCoinFuturesApi.GetAuthenticationRequestAsync(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="T:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApi">
@@ -698,7 +740,7 @@
         <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiAutoInvest.RedeemIndexLinkedPlanAsync(System.String,System.String,System.Int32,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiAutoInvest.GetSubscriptionTransactionHistoryAsync(System.Int64,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.String,System.Nullable{Binance.Net.Enums.AutoInvestPlanType},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiAutoInvest.GetSubscriptionTransactionHistoryAsync(System.Nullable{System.Int64},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.String,System.Nullable{Binance.Net.Enums.AutoInvestPlanType},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiAutoInvest.GetOneTimeTransactionStatusAsync(System.Int64,System.String,System.Threading.CancellationToken)">
@@ -1425,19 +1467,19 @@
         <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetServerTimeAsync(System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.SymbolStatus},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(Binance.Net.Enums.AccountType,System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(Binance.Net.Enums.AccountType,System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.SymbolStatus},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(Binance.Net.Enums.AccountType[],System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(Binance.Net.Enums.AccountType[],System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.SymbolStatus},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.Collections.Generic.IEnumerable{System.String},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.SymbolStatus},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiExchangeData.GetSystemStatusAsync(System.Threading.CancellationToken)">
@@ -1710,7 +1752,7 @@
         <member name="M:Binance.Net.Clients.SpotApi.BinanceSocketClientSpotApi.GetListenerIdentifier(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.SpotApi.BinanceSocketClientSpotApi.GetAuthenticationRequest(CryptoExchange.Net.Sockets.SocketConnection)">
+        <member name="M:Binance.Net.Clients.SpotApi.BinanceSocketClientSpotApi.GetAuthenticationRequestAsync(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="T:Binance.Net.Clients.SpotApi.BinanceSocketClientSpotApiAccount">
@@ -2273,7 +2315,7 @@
         <member name="M:Binance.Net.Clients.UsdFuturesApi.BinanceSocketClientUsdFuturesApi.GetListenerIdentifier(CryptoExchange.Net.Interfaces.IMessageAccessor)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.UsdFuturesApi.BinanceSocketClientUsdFuturesApi.GetAuthenticationRequest(CryptoExchange.Net.Sockets.SocketConnection)">
+        <member name="M:Binance.Net.Clients.UsdFuturesApi.BinanceSocketClientUsdFuturesApi.GetAuthenticationRequestAsync(CryptoExchange.Net.Sockets.SocketConnection)">
             <inheritdoc />
         </member>
         <member name="M:Binance.Net.Clients.UsdFuturesApi.BinanceSocketClientUsdFuturesApiAccount.GetBalancesAsync(System.Nullable{System.Int64},System.Threading.CancellationToken)">
@@ -5774,6 +5816,48 @@
             <param name="ct">Cancellation token</param>
             <returns></returns>
         </member>
+        <member name="M:Binance.Net.Interfaces.Clients.CoinFuturesApi.IBinanceRestClientCoinFuturesApiAccount.GetDownloadIdForOrderHistoryAsync(System.DateTime,System.DateTime,System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <summary>
+            Get download id for downloading order history
+            <para><a href="https://developers.binance.com/docs/derivatives/coin-margined-futures/account/Get-Download-Id-For-Futures-Order-History" /></para>
+            </summary>
+            <param name="startTime">Start time of the data to download</param>
+            <param name="endTime">End time of the data to download</param>
+            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Binance.Net.Interfaces.Clients.CoinFuturesApi.IBinanceRestClientCoinFuturesApiAccount.GetDownloadLinkForOrderHistoryAsync(System.String,System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <summary>
+            Get the download link for order history by download id
+            <para><a href="https://developers.binance.com/docs/derivatives/coin-margined-futures/account/Get-Futures-Order-History-Download-Link-by-Id" /></para>
+            </summary>
+            <param name="downloadId">The download id as requested by <see cref="M:Binance.Net.Interfaces.Clients.CoinFuturesApi.IBinanceRestClientCoinFuturesApiAccount.GetDownloadIdForOrderHistoryAsync(System.DateTime,System.DateTime,System.Nullable{System.Int64},System.Threading.CancellationToken)" /></param>
+            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Binance.Net.Interfaces.Clients.CoinFuturesApi.IBinanceRestClientCoinFuturesApiAccount.GetDownloadIdForTradeHistoryAsync(System.DateTime,System.DateTime,System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <summary>
+            Get download id for downloading trade history
+            <para><a href="https://developers.binance.com/docs/derivatives/coin-margined-futures/account/Get-Download-Id-For-Futures-Trade-History" /></para>
+            </summary>
+            <param name="startTime">Start time of the data to download</param>
+            <param name="endTime">End time of the data to download</param>
+            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
+        <member name="M:Binance.Net.Interfaces.Clients.CoinFuturesApi.IBinanceRestClientCoinFuturesApiAccount.GetDownloadLinkForTradeHistoryAsync(System.String,System.Nullable{System.Int64},System.Threading.CancellationToken)">
+            <summary>
+            Get the download link for order history by download id
+            <para><a href="https://developers.binance.com/docs/derivatives/coin-margined-futures/account/Get-Futures-Trade-Download-Link-by-Id" /></para>
+            </summary>
+            <param name="downloadId">The download id as requested by <see cref="M:Binance.Net.Interfaces.Clients.CoinFuturesApi.IBinanceRestClientCoinFuturesApiAccount.GetDownloadIdForTradeHistoryAsync(System.DateTime,System.DateTime,System.Nullable{System.Int64},System.Threading.CancellationToken)" /></param>
+            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+            <param name="ct">Cancellation token</param>
+            <returns></returns>
+        </member>
         <member name="T:Binance.Net.Interfaces.Clients.CoinFuturesApi.IBinanceRestClientCoinFuturesApiExchangeData">
             <summary>
             Binance COIN-M futures exchange data endpoints. Exchange data includes market data (tickers, order books, etc) and system status.
@@ -6074,7 +6158,7 @@
             Binance COIN-M futures trading endpoints, placing and mananging orders.
             </summary>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.CoinFuturesApi.IBinanceRestClientCoinFuturesApiTrading.PlaceOrderAsync(System.String,Binance.Net.Enums.OrderSide,Binance.Net.Enums.FuturesOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.PositionSide},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.WorkingType},System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.OrderResponseType},System.Nullable{System.Boolean},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.CoinFuturesApi.IBinanceRestClientCoinFuturesApiTrading.PlaceOrderAsync(System.String,Binance.Net.Enums.OrderSide,Binance.Net.Enums.FuturesOrderType,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.PositionSide},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Boolean},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.WorkingType},System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.OrderResponseType},System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.PriceMatch},System.Nullable{Binance.Net.Enums.SelfTradePreventionMode},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Places a new order
             <para><a href="https://binance-docs.github.io/apidocs/delivery/en/#new-order-trade" /></para>
@@ -6095,6 +6179,8 @@
             <param name="closePosition">Close-All，used with STOP_MARKET or TAKE_PROFIT_MARKET.</param>
             <param name="orderResponseType">The response type. Default Acknowledge</param>
             <param name="priceProtect">If true when price reaches stopPrice, difference between "MARK_PRICE" and "CONTRACT_PRICE" cannot be larger than "triggerProtect" of the symbol.</param>
+            <param name="priceMatch">Only avaliable for Limit/Stop/TakeProfit order</param>
+            <param name="selfTradePreventionMode">Self trade prevention mode</param>
             <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
             <param name="ct">Cancellation token</param>
             <returns>Id's for the placed order</returns>
@@ -6795,7 +6881,7 @@
             <param name="redemptionPercentage">Redemption percentage</param>
             <param name="ct">Cancellation token</param>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceRestClientGeneralApiAutoInvest.GetSubscriptionTransactionHistoryAsync(System.Int64,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.String,System.Nullable{Binance.Net.Enums.AutoInvestPlanType},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceRestClientGeneralApiAutoInvest.GetSubscriptionTransactionHistoryAsync(System.Nullable{System.Int64},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.String,System.Nullable{Binance.Net.Enums.AutoInvestPlanType},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>
             Get subscription transaction history
             <para><a href="https://developers.binance.com/docs/auto_invest/trade/Query-subscription-transaction-history" /></para>
@@ -9515,47 +9601,56 @@
             <param name="ct">Cancellation token</param>
             <returns>Server time</returns>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.SymbolStatus},System.Threading.CancellationToken)">
             <summary>
             Gets information about the exchange including rate limits and symbol list
             <para><a href="https://binance-docs.github.io/apidocs/spot/en/#exchange-information" /></para>
             </summary>
+            <param name="returnPermissionSets">Whether or not permission sets should be returned</param>
+            <param name="symbolStatus">Filter by symbol status, Trading, Halt or Break</param>
             <param name="ct">Cancellation token</param>
             <returns>Exchange info</returns>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.String,System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.String,System.Nullable{System.Boolean},System.Threading.CancellationToken)">
             <summary>
             Get's information about the exchange including rate limits and information on the provided symbol
             <para><a href="https://binance-docs.github.io/apidocs/spot/en/#exchange-information" /></para>
             </summary>
             <param name="symbol">Symbol to get data for, for example `ETHUSDT`</param>
+            <param name="returnPermissionSets">Whether or not permission sets should be returned</param>
             <param name="ct">Cancellation token</param>
             <returns>Exchange info</returns>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.Collections.Generic.IEnumerable{System.String},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(System.Collections.Generic.IEnumerable{System.String},System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.SymbolStatus},System.Threading.CancellationToken)">
             <summary>
             Get's information about the exchange including rate limits and information on the provided symbols
             <para><a href="https://binance-docs.github.io/apidocs/spot/en/#exchange-information" /></para>
             </summary>
             <param name="symbols">Symbols to get data for, for example `ETHUSDT`</param>
+            <param name="returnPermissionSets">Whether or not permission sets should be returned</param>
+            <param name="symbolStatus">Filter by symbol status, Trading, Halt or Break</param>
             <param name="ct">Cancellation token</param>
             <returns>Exchange info</returns>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(Binance.Net.Enums.AccountType,System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(Binance.Net.Enums.AccountType,System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.SymbolStatus},System.Threading.CancellationToken)">
             <summary>
             Get's information about the exchange including rate limits and information on the provided symbol based on an account permission
             <para><a href="https://binance-docs.github.io/apidocs/spot/en/#exchange-information" /></para>
             </summary>
             <param name="permission">account type</param>
+            <param name="returnPermissionSets">Whether or not permission sets should be returned</param>
+            <param name="symbolStatus">Filter by symbol status, Trading, Halt or Break</param>
             <param name="ct">Cancellation token</param>
             <returns>Exchange info</returns>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(Binance.Net.Enums.AccountType[],System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiExchangeData.GetExchangeInfoAsync(Binance.Net.Enums.AccountType[],System.Nullable{System.Boolean},System.Nullable{Binance.Net.Enums.SymbolStatus},System.Threading.CancellationToken)">
             <summary>
             Get's information about the exchange including rate limits and information on the provided symbols based on account permissions
             <para><a href="https://binance-docs.github.io/apidocs/spot/en/#exchange-information" /></para>
             </summary>
             <param name="permissions">account type</param>
+            <param name="returnPermissionSets">Whether or not permission sets should be returned</param>
+            <param name="symbolStatus">Filter by symbol status, Trading, Halt or Break</param>
             <param name="ct">Cancellation token</param>
             <returns>Exchange info</returns>
         </member>
@@ -13317,6 +13412,14 @@
             Coin Futures order book factory methods
             </summary>
         </member>
+        <member name="M:Binance.Net.Interfaces.IBinanceOrderBookFactory.Create(CryptoExchange.Net.SharedApis.SharedSymbol,System.Action{Binance.Net.Objects.Options.BinanceOrderBookOptions})">
+            <summary>
+            Create a SymbolOrderBook for the symbol
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="options">Book options</param>
+            <returns></returns>
+        </member>
         <member name="M:Binance.Net.Interfaces.IBinanceOrderBookFactory.CreateSpot(System.String,System.Action{Binance.Net.Objects.Options.BinanceOrderBookOptions})">
             <summary>
             Create a Spot SymbolOrderBook
@@ -13450,6 +13553,30 @@
             <summary>
             The quantity of the best ask price in the order book
             </summary>
+        </member>
+        <member name="T:Binance.Net.Interfaces.IBinanceTrackerFactory">
+            <summary>
+            Tracker factory
+            </summary>
+        </member>
+        <member name="M:Binance.Net.Interfaces.IBinanceTrackerFactory.CreateKlineTracker(CryptoExchange.Net.SharedApis.SharedSymbol,CryptoExchange.Net.SharedApis.SharedKlineInterval,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
+            <summary>
+            Create a new kline tracker
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="interval">Kline interval</param>
+            <param name="limit">The max amount of klines to retain</param>
+            <param name="period">The max period the data should be retained</param>
+            <returns></returns>
+        </member>
+        <member name="M:Binance.Net.Interfaces.IBinanceTrackerFactory.CreateTradeTracker(CryptoExchange.Net.SharedApis.SharedSymbol,System.Nullable{System.Int32},System.Nullable{System.TimeSpan})">
+            <summary>
+            Create a new trade tracker for a symbol
+            </summary>
+            <param name="symbol">The symbol</param>
+            <param name="limit">The max amount of klines to retain</param>
+            <param name="period">The max period the data should be retained</param>
+            <returns></returns>
         </member>
         <member name="T:Binance.Net.Interfaces.IBinanceTrade">
             <summary>
@@ -15474,6 +15601,21 @@
         <member name="P:Binance.Net.Objects.Models.Spot.AutoInvest.BinanceAutoInvestPlanHoldingDetails.AssetValueInUsd">
             <summary>
             Asset value in USD
+            </summary>
+        </member>
+        <member name="T:Binance.Net.Objects.Models.Spot.AutoInvest.BinanceAutoInvestPlanTransactions">
+            <summary>
+            Transactions
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.AutoInvest.BinanceAutoInvestPlanTransactions.Total">
+            <summary>
+            Total
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.AutoInvest.BinanceAutoInvestPlanTransactions.List">
+            <summary>
+            Results
             </summary>
         </member>
         <member name="T:Binance.Net.Objects.Models.Spot.AutoInvest.BinanceAutoInvestPlanTransaction">
@@ -26078,6 +26220,16 @@
             Used with Stop/StopMarket or TakeProfit/TakeProfitMarket orders.
             </summary>
         </member>
+        <member name="P:Binance.Net.Objects.Models.Futures.BinanceFuturesBatchOrder.PriceMatch">
+            <summary>
+            Price match
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Futures.BinanceFuturesBatchOrder.SelfTradePreventionMode">
+            <summary>
+            Self trade prevention mode
+            </summary>
+        </member>
         <member name="T:Binance.Net.Objects.Models.Futures.BinanceFuturesBookPrice">
             <summary>
             Book price
@@ -27047,19 +27199,19 @@
             Price protect
             </summary>
         </member>
+        <member name="P:Binance.Net.Objects.Models.Futures.BinanceFuturesOrder.PriceMatch">
+            <summary>
+            Price match type
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Futures.BinanceFuturesOrder.SelfTradePreventionMode">
+            <summary>
+            Self trade prevention mode
+            </summary>
+        </member>
         <member name="T:Binance.Net.Objects.Models.Futures.BinanceUsdFuturesOrder">
             <summary>
             Usdt futures order
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Futures.BinanceUsdFuturesOrder.PriceMatch">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Futures.BinanceUsdFuturesOrder.SelfTradePreventionMode">
-            <summary>
-            Self trade prevention mode
             </summary>
         </member>
         <member name="P:Binance.Net.Objects.Models.Futures.BinanceUsdFuturesOrder.GoodTillDate">
@@ -29611,6 +29763,9 @@
             <inheritdoc />
         </member>
         <member name="P:Binance.Net.SymbolOrderBooks.BinanceOrderBookFactory.CoinFutures">
+            <inheritdoc />
+        </member>
+        <member name="M:Binance.Net.SymbolOrderBooks.BinanceOrderBookFactory.Create(CryptoExchange.Net.SharedApis.SharedSymbol,System.Action{Binance.Net.Objects.Options.BinanceOrderBookOptions})">
             <inheritdoc />
         </member>
         <member name="M:Binance.Net.SymbolOrderBooks.BinanceOrderBookFactory.CreateSpot(System.String,System.Action{Binance.Net.Objects.Options.BinanceOrderBookOptions})">

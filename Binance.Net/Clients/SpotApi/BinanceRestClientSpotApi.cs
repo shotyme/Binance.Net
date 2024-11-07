@@ -77,7 +77,8 @@ namespace Binance.Net.Clients.SpotApi
         protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer();
 
         /// <inheritdoc />
-        public override string FormatSymbol(string baseAsset, string quoteAsset, TradingMode tradingMode, DateTime? deliverTime) => baseAsset.ToUpperInvariant() + quoteAsset.ToUpperInvariant();
+        public override string FormatSymbol(string baseAsset, string quoteAsset, TradingMode tradingMode, DateTime? deliverTime = null)
+                => BinanceExchange.FormatSymbol(baseAsset, quoteAsset, tradingMode, deliverTime);
 
         #region helpers
 
@@ -170,7 +171,7 @@ namespace Binance.Net.Clients.SpotApi
                 return BinanceTradeRuleResult.CreatePassed(quantity, quoteQuantity, price, stopPrice);
 
             if (_exchangeInfo == null || _lastExchangeInfoUpdate == null || (DateTime.UtcNow - _lastExchangeInfoUpdate.Value).TotalMinutes > ApiOptions.TradeRulesUpdateInterval.TotalMinutes)
-                await ExchangeData.GetExchangeInfoAsync(ct).ConfigureAwait(false);
+                await ExchangeData.GetExchangeInfoAsync(ct: ct).ConfigureAwait(false);
 
             if (_exchangeInfo == null)
                 return BinanceTradeRuleResult.CreateFailed("Unable to retrieve trading rules, validation failed");
