@@ -1,6 +1,8 @@
 ﻿using Binance.Net.Clients;
+using Binance.Net.Objects.Options;
 using CryptoExchange.Net.Testing;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NUnit.Framework;
 using System;
 using System.Diagnostics;
@@ -25,12 +27,12 @@ namespace Binance.Net.UnitTests
             var sec = Environment.GetEnvironmentVariable("APISECRET");
 
             Authenticated = key != null && sec != null;
-            return new BinanceRestClient(null, loggerFactory, opts =>
+            return new BinanceRestClient(null, loggerFactory, Options.Create(new BinanceRestOptions
             {
-                opts.AutoTimestamp = false;
-                opts.OutputOriginalData = true;
-                opts.ApiCredentials = Authenticated ? new CryptoExchange.Net.Authentication.ApiCredentials(key, sec) : null;
-            });
+                AutoTimestamp = false,
+                OutputOriginalData = true,
+                ApiCredentials = Authenticated ? new CryptoExchange.Net.Authentication.ApiCredentials(key, sec) : null
+            }));
         }
 
         [Test]
@@ -78,7 +80,6 @@ namespace Binance.Net.UnitTests
             await RunAndCheckResult(client => client.SpotApi.Account.GetRebateHistoryAsync(default, default, default, default, default), true);
             await RunAndCheckResult(client => client.SpotApi.Account.GetPortfolioMarginCollateralRateAsync(default, default), true);
             await RunAndCheckResult(client => client.SpotApi.Account.GetPortfolioMarginBankruptcyLoanAsync(default, default), true);
-            await RunAndCheckResult(client => client.SpotApi.Account.GetAutoConvertStableCoinConfigAsync(default, default), true);
             await RunAndCheckResult(client => client.SpotApi.Account.GetBusdConvertHistoryAsync(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow, default, default, default, default, default, default, default), true);
             await RunAndCheckResult(client => client.SpotApi.Account.GetCloudMiningHistoryAsync(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow, default, default, default, default, default, default, default), true);
             await RunAndCheckResult(client => client.SpotApi.Account.GetIsolatedMarginFeeDataAsync(default, default, default, default), true);
@@ -165,7 +166,7 @@ namespace Binance.Net.UnitTests
         {
             await RunAndCheckResult(client => client.UsdFuturesApi.Account.GetPositionModeAsync(default, default), true);
             await RunAndCheckResult(client => client.UsdFuturesApi.Account.GetMarginChangeHistoryAsync("ETHUSDT", default, default, default, default, default, default), true);
-            await RunAndCheckResult(client => client.UsdFuturesApi.Account.GetIncomeHistoryAsync(default, default, default, default, default, default, default), true);
+            await RunAndCheckResult(client => client.UsdFuturesApi.Account.GetIncomeHistoryAsync(default, default, default, default, default, default, default, default), true);
             await RunAndCheckResult(client => client.UsdFuturesApi.Account.GetBracketsAsync(default, default, default), true);
             await RunAndCheckResult(client => client.UsdFuturesApi.Account.GetPositionAdlQuantileEstimationAsync(default, default, default), true);
             await RunAndCheckResult(client => client.UsdFuturesApi.Account.GetAccountInfoV2Async(default, default), true);

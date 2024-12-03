@@ -27,8 +27,6 @@ namespace Binance.Net.Clients.SpotApi
         internal BinanceExchangeInfo? _exchangeInfo;
         internal DateTime? _lastExchangeInfoUpdate;
 
-        internal readonly string _brokerId;
-
         internal static TimeSyncState _timeSyncState = new TimeSyncState("Spot Api");
         #endregion
 
@@ -63,8 +61,6 @@ namespace Binance.Net.Clients.SpotApi
             RequestBodyEmptyContent = "";
             RequestBodyFormat = RequestBodyFormat.FormData;
             ArraySerialization = ArrayParametersSerialization.MultipleValues;
-
-            _brokerId = !string.IsNullOrEmpty(options.SpotOptions.BrokerId) ? options.SpotOptions.BrokerId! : "x-MHU2UUW8";
         }
         #endregion
 
@@ -124,8 +120,7 @@ namespace Binance.Net.Clients.SpotApi
             stopPrice = rulesCheck.StopPrice;
             quoteQuantity = rulesCheck.QuoteQuantity;
 
-            var s = BinanceRestClient.RandomString(15);
-            newClientOrderId = "x-MHU2UUW8-" + s;
+            var clientOrderId = LibraryHelpers.ApplyBrokerId(newClientOrderId, BinanceExchange.ClientOrderIdSpot, 36, ClientOptions.AllowAppendingClientOrderId);
 
             var parameters = new ParameterCollection()
             {

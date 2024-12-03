@@ -187,6 +187,42 @@ Make a one time donation in a crypto currency of your choice. If you prefer to d
 Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf). 
 
 ## Release notes
+* Version 10.13.0 - 03 Dec 2024
+    * Updated client order id logic
+    * Added AllowAppendingClientOrderId option
+    * Added listClientOrderId parameter to restClient.SpotApi.Trading.PlaceOcoOrderListAsync
+    * Removed BrokerId option
+    * Fixed restClient.GeneralApi.SimpleEarn.GetLockedProductPositionsAsync deserialization
+    * Fixed orderbook creation via BinanceOrderBookFactory
+
+* Version 10.12.0 - 28 Nov 2024
+    * Updated CryptoExchange.Net to version 8.4.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/8.4.0
+    * Added GetFeesAsync Shared REST client implementations
+    * Updated BinanceOptions to LibraryOptions implementation
+    * Updated test and analyzer package versions
+
+* Version 10.11.0 - 25 Nov 2024
+    * Added WithdrawInternalMin to restClient.SpotApi.Account.GetUserAssetsAsync response model
+    * Added EnableFixApiTrade and EnableFixReadOnly to restClient.SpotApi.Account.GetAPIKeyPermissionsAsync response model
+    * Added IsOptionsEnabled and IsPortfolioMarginRetailEnabled to restClient.SpotApi.Account.GetAccountVipLevelAndStatusAsync response model
+    * Fixed inverted order side for Shared trades
+    * Removed restClient.SpotApi.Account.GetAutoConvertStableCoinConfigAsync, SetAutoConvertStableCoinConfigAsync and ConvertBusdAsync as theyre deprecated
+
+* Version 10.10.0 - 19 Nov 2024
+    * Updated CryptoExchange.Net to version 8.3.0
+    * Added support for loading client settings from IConfiguration
+    * Added DI registration method for configuring Rest and Socket options at the same time
+    * Added DisplayName and ImageUrl properties to BinanceExchange class
+    * Updated client constructors to accept IOptions from DI
+    * Removed redundant BinanceSocketClient constructor
+    * Fixed ListenKey property not set on spot websocket account data updates
+
+* Version 10.9.2 - 08 Nov 2024
+    * Fixed mixed up page and limit parameter on restClient.UsdFuturesApi.Account.GetIncomeHistoryAsync endpoint
+
+* Version 10.9.1 - 08 Nov 2024
+    * Added page parameter to restClient.UsdFuturesApi.Account.GetIncomeHistoryAsync endpoint
+
 * Version 10.9.0 - 06 Nov 2024
     * Updated CryptoExchange.Net to version 8.2.0, see https://github.com/JKorf/CryptoExchange.Net/releases/tag/8.2.0
 

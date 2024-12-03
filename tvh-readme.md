@@ -11,8 +11,15 @@
 Spot: MHU2UUW8
 Futures: yXxTdxJM
 
+Binance.Net.BinanceExchange to be changed
+internal const string ClientOrderIdSpot = "x-VICEW9VV";
+internal const string ClientOrderIdFutures = "x-d63tKbx3";
+
 BinanceRestClientUsdFuturesApi ctor
 BinanceRestClientSpotApi ctor
 Spot: PlaceOrderInternal() -> newClientOrderId
 USD: PlaceOrderAsync() -> newClientOrderId
 COIN: PlaceOrderAsync() -> newClientOrderId
+
+-- broker commission methods
+Binance.Net.Clients.GeneralApi.GetCommissionRebateStatusAsync

@@ -17,6 +17,16 @@ namespace Binance.Net
         public static string ExchangeName => "Binance";
 
         /// <summary>
+        /// Exchange name
+        /// </summary>
+        public static string DisplayName => "Binance";
+
+        /// <summary>
+        /// Url to exchange image
+        /// </summary>
+        public static string ImageUrl { get; } = "https://raw.githubusercontent.com/JKorf/Binance.Net/master/Binance.Net/Icon/icon.png";
+
+        /// <summary>
         /// Url to the main website
         /// </summary>
         public static string Url { get; } = "https://www.binance.com";
@@ -27,6 +37,11 @@ namespace Binance.Net
         public static string[] ApiDocsUrl { get; } = new[] {
             "https://binance-docs.github.io/apidocs/spot/en/#change-log"
             };
+
+        internal const string ClientOrderIdSpot = "x-MHU2UUW8";
+        internal const string ClientOrderIdFutures = "x-yXxTdxJM";
+        internal const string ClientOrderIdPrefixSpot = ClientOrderIdSpot + LibraryHelpers.ClientOrderIdSeperator;
+        internal const string ClientOrderIdPrefixFutures = ClientOrderIdFutures + LibraryHelpers.ClientOrderIdSeperator;
 
         /// <summary>
         /// Format a base and quote asset to a Binance recognized symbol 

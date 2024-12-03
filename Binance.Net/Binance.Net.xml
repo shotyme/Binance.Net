@@ -54,6 +54,16 @@
             Coin futures Socket address
             </summary>
         </member>
+        <member name="M:Binance.Net.BinanceEnvironment.#ctor">
+            <summary>
+            ctor for DI, use <see cref="M:Binance.Net.BinanceEnvironment.CreateCustom(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)"/> for creating a custom environment
+            </summary>
+        </member>
+        <member name="M:Binance.Net.BinanceEnvironment.GetEnvironmentByName(System.String)">
+            <summary>
+            Get the Binance environment by name
+            </summary>
+        </member>
         <member name="P:Binance.Net.BinanceEnvironment.Live">
             <summary>
             Live environment
@@ -82,6 +92,16 @@
         <member name="P:Binance.Net.BinanceExchange.ExchangeName">
             <summary>
             Exchange name
+            </summary>
+        </member>
+        <member name="P:Binance.Net.BinanceExchange.DisplayName">
+            <summary>
+            Exchange name
+            </summary>
+        </member>
+        <member name="P:Binance.Net.BinanceExchange.ImageUrl">
+            <summary>
+            Url to exchange image
             </summary>
         </member>
         <member name="P:Binance.Net.BinanceExchange.Url">
@@ -216,11 +236,11 @@
             </summary>
             <param name="optionsDelegate">Option configuration delegate</param>
         </member>
-        <member name="M:Binance.Net.Clients.BinanceRestClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILoggerFactory,System.Action{Binance.Net.Objects.Options.BinanceRestOptions})">
+        <member name="M:Binance.Net.Clients.BinanceRestClient.#ctor(System.Net.Http.HttpClient,Microsoft.Extensions.Logging.ILoggerFactory,Microsoft.Extensions.Options.IOptions{Binance.Net.Objects.Options.BinanceRestOptions})">
             <summary>
             Create a new instance of the BinanceRestClient using provided options
             </summary>
-            <param name="optionsDelegate">Option configuration delegate</param>
+            <param name="options">Option configuration</param>
             <param name="loggerFactory">The logger factory</param>
             <param name="httpClient">Http client for this client</param>
         </member>
@@ -252,24 +272,18 @@
         <member name="P:Binance.Net.Clients.BinanceSocketClient.CoinFuturesApi">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.BinanceSocketClient.#ctor(Microsoft.Extensions.Logging.ILoggerFactory)">
-            <summary>
-            Create a new instance of BinanceSocketClient
-            </summary>
-            <param name="loggerFactory">The logger factory</param>
-        </member>
         <member name="M:Binance.Net.Clients.BinanceSocketClient.#ctor(System.Action{Binance.Net.Objects.Options.BinanceSocketOptions})">
             <summary>
-            Create a new instance of BinanceSocketClient
+            Create a new instance of the BinanceRestClient using provided options
             </summary>
             <param name="optionsDelegate">Option configuration delegate</param>
         </member>
-        <member name="M:Binance.Net.Clients.BinanceSocketClient.#ctor(System.Action{Binance.Net.Objects.Options.BinanceSocketOptions},Microsoft.Extensions.Logging.ILoggerFactory)">
+        <member name="M:Binance.Net.Clients.BinanceSocketClient.#ctor(Microsoft.Extensions.Options.IOptions{Binance.Net.Objects.Options.BinanceSocketOptions},Microsoft.Extensions.Logging.ILoggerFactory)">
             <summary>
             Create a new instance of BinanceSocketClient
             </summary>
             <param name="loggerFactory">The logger factory</param>
-            <param name="optionsDelegate">Option configuration delegate</param>
+            <param name="options">Option configuration</param>
         </member>
         <member name="M:Binance.Net.Clients.BinanceSocketClient.SetDefaultOptions(System.Action{Binance.Net.Objects.Options.BinanceSocketOptions})">
             <summary>
@@ -1422,15 +1436,6 @@
         <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiAccount.PortfolioMarginBankruptcyLoanRepayAsync(System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiAccount.GetAutoConvertStableCoinConfigAsync(System.Nullable{System.Int64},System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiAccount.SetAutoConvertStableCoinConfigAsync(System.String,System.Boolean,System.Nullable{System.Int64},System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiAccount.ConvertBusdAsync(System.String,System.String,System.Decimal,System.String,System.Nullable{System.Int64},System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
         <member name="M:Binance.Net.Clients.SpotApi.BinanceRestClientSpotApiAccount.GetBusdConvertHistoryAsync(System.DateTime,System.DateTime,System.Nullable{System.Int64},System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -1923,7 +1928,7 @@
         <member name="M:Binance.Net.Clients.SpotApi.BinanceSocketClientSpotApiTrading.PlaceOcoOrderAsync(System.String,Binance.Net.Enums.OrderSide,System.Decimal,System.Decimal,System.Decimal,System.Nullable{System.Decimal},System.String,System.String,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{Binance.Net.Enums.SelfTradePreventionMode},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.SpotApi.BinanceSocketClientSpotApiTrading.PlaceOcoOrderListAsync(System.String,Binance.Net.Enums.OrderSide,System.Decimal,Binance.Net.Enums.SpotOrderType,Binance.Net.Enums.SpotOrderType,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{Binance.Net.Enums.SelfTradePreventionMode},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Clients.SpotApi.BinanceSocketClientSpotApiTrading.PlaceOcoOrderListAsync(System.String,Binance.Net.Enums.OrderSide,System.Decimal,Binance.Net.Enums.SpotOrderType,Binance.Net.Enums.SpotOrderType,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{Binance.Net.Enums.SelfTradePreventionMode},System.String,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Binance.Net.Clients.SpotApi.BinanceSocketClientSpotApiTrading.GetOcoOrderAsync(System.Nullable{System.Int64},System.String,System.Threading.CancellationToken)">
@@ -2026,7 +2031,7 @@
         <member name="M:Binance.Net.Clients.UsdFuturesApi.BinanceRestClientUsdFuturesApiAccount.GetMarginChangeHistoryAsync(System.String,System.Nullable{Binance.Net.Enums.FuturesMarginChangeDirectionType},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.UsdFuturesApi.BinanceRestClientUsdFuturesApiAccount.GetIncomeHistoryAsync(System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int64},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Clients.UsdFuturesApi.BinanceRestClientUsdFuturesApiAccount.GetIncomeHistoryAsync(System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="M:Binance.Net.Clients.UsdFuturesApi.BinanceRestClientUsdFuturesApiAccount.GetBracketsAsync(System.String,System.Nullable{System.Int64},System.Threading.CancellationToken)">
@@ -9416,39 +9421,6 @@
             <param name="ct">Cancellation token</param>
             <returns></returns>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiAccount.GetAutoConvertStableCoinConfigAsync(System.Nullable{System.Int64},System.Threading.CancellationToken)">
-            <summary>
-            Get auto conversion settings
-            <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-auto-converting-stable-coins-user_data" /></para>
-            </summary>
-            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-            <param name="ct">Cancellation token</param>
-            <returns></returns>
-        </member>
-        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiAccount.SetAutoConvertStableCoinConfigAsync(System.String,System.Boolean,System.Nullable{System.Int64},System.Threading.CancellationToken)">
-            <summary>
-            Set auto conversion configuration
-            <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-auto-converting-stable-coins-user_data" /></para>
-            </summary>
-            <param name="asset">Asset to configure (USDC, USDP or TUSD)</param>
-            <param name="enable">Enable or not</param>
-            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-            <param name="ct">Cancellation token</param>
-            <returns></returns>
-        </member>
-        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiAccount.ConvertBusdAsync(System.String,System.String,System.Decimal,System.String,System.Nullable{System.Int64},System.Threading.CancellationToken)">
-            <summary>
-            Convert transfer, convert between BUSD and stablecoins.
-            <para><a href="https://binance-docs.github.io/apidocs/spot/en/#busd-convert-trade" /></para>
-            </summary>
-            <param name="clientTransferId">The unique user-defined transaction id, min length 20</param>
-            <param name="asset">The current asset, for example `ETH`</param>
-            <param name="quantity">Quantity</param>
-            <param name="targetAsset">	Target asset you want to convert</param>
-            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-            <param name="ct">Cancellation token</param>
-            <returns></returns>
-        </member>
         <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceRestClientSpotApiAccount.GetBusdConvertHistoryAsync(System.DateTime,System.DateTime,System.Nullable{System.Int64},System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <summary>
             Get Busd convert history
@@ -11351,7 +11323,7 @@
             <param name="ct">Cancellation token</param>
             <returns>Order list info</returns>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceSocketClientSpotApiTrading.PlaceOcoOrderListAsync(System.String,Binance.Net.Enums.OrderSide,System.Decimal,Binance.Net.Enums.SpotOrderType,Binance.Net.Enums.SpotOrderType,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{Binance.Net.Enums.SelfTradePreventionMode},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.SpotApi.IBinanceSocketClientSpotApiTrading.PlaceOcoOrderListAsync(System.String,Binance.Net.Enums.OrderSide,System.Decimal,Binance.Net.Enums.SpotOrderType,Binance.Net.Enums.SpotOrderType,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{Binance.Net.Enums.TimeInForce},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{Binance.Net.Enums.SelfTradePreventionMode},System.String,System.Threading.CancellationToken)">
             <summary>
             Place a new OCO order. An OCO has 2 legs called the above leg and below leg. One of the legs must be a LimitMaker order and the other leg must be StopLoss or StopLossLimit order.
             <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#place-new-order-list-oco-trade" /></para>
@@ -11378,6 +11350,7 @@
             <param name="belowStrategyId">Strategy id for the below leg</param>
             <param name="belowStrategyType">Strategy type for the below leg</param>
             <param name="selfTradePreventionMode">Self trade prevention mode</param>
+            <param name="listClientOrderId">List client order id</param>
             <param name="ct">Cancellation token</param>
             <returns></returns>
         </member>
@@ -11564,7 +11537,7 @@
             <param name="ct">Cancellation token</param>
             <returns>List of all margin changes for the symbol</returns>
         </member>
-        <member name="M:Binance.Net.Interfaces.Clients.UsdFuturesApi.IBinanceRestClientUsdFuturesApiAccount.GetIncomeHistoryAsync(System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int64},System.Threading.CancellationToken)">
+        <member name="M:Binance.Net.Interfaces.Clients.UsdFuturesApi.IBinanceRestClientUsdFuturesApiAccount.GetIncomeHistoryAsync(System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int64},System.Threading.CancellationToken)">
             <summary>
             Gets the income history for the futures account
             <para><a href="https://binance-docs.github.io/apidocs/futures/en/#get-income-history-user_data" /></para>
@@ -11574,6 +11547,7 @@
             <param name="startTime">Time to start getting income history from</param>
             <param name="endTime">Time to stop getting income history from</param>
             <param name="limit">Max number of results</param>
+            <param name="page">Page number</param>
             <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
             <param name="ct">Cancellation token</param>
             <returns>The income history for the futures account</returns>
@@ -16229,6 +16203,16 @@
             Expiration time for spot and margin trading permission
             </summary>
         </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.BinanceAPIKeyPermissions.EnableFixApiTrade">
+            <summary>
+            Authorizes FIX api trading
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.BinanceAPIKeyPermissions.EnableFixReadOnly">
+            <summary>
+            Authorizes FIX data reading
+            </summary>
+        </member>
         <member name="T:Binance.Net.Objects.Models.Spot.BinanceAutoConversionSettings">
             <summary>
             User auto conversion settings
@@ -19093,6 +19077,11 @@
             Whether the network is busy
             </summary>
         </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.BinanceNetwork.WithdrawInternalMin">
+            <summary>
+            Min withdraw quantity for internal withdrawals
+            </summary>
+        </member>
         <member name="T:Binance.Net.Objects.Models.Spot.BinanceUserBalance">
             <summary>
             User balance
@@ -19136,6 +19125,16 @@
         <member name="P:Binance.Net.Objects.Models.Spot.BinanceVipLevelAndStatus.IsFuturesEnabled">
             <summary>
             Is futures enabled
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.BinanceVipLevelAndStatus.IsOptionsEnabled">
+            <summary>
+            Is options enabled
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Models.Spot.BinanceVipLevelAndStatus.IsPortfolioMarginRetailEnabled">
+            <summary>
+            Is portfolio margin retail enabled
             </summary>
         </member>
         <member name="T:Binance.Net.Objects.Models.Spot.BinanceWalletBalance">
@@ -29436,6 +29435,21 @@
             Op code
             </summary>
         </member>
+        <member name="T:Binance.Net.Objects.Options.BinanceOptions">
+            <summary>
+            Binance options
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Options.BinanceOptions.AllowAppendingClientOrderId">
+            <summary>
+            Whether to allow the client to adjust the clientOrderId parameter send by the user when placing orders to include a client reference. This reference is used by the exchange to allocate a small percentage of the paid trading fees to developer of this library. Defaults to false.<br />
+            Note that:<br />
+            * It does not impact the amount of fees a user pays in any way<br />
+            * It does not impact functionality. The reference is added just before sending the request and removed again during data deserialization<br />
+            * It does respect client order id field limitations. For example if the user provided client order id parameter is too long to fit the reference it will not be added<br />
+            * Toggling this option might fail operations using a clientOrderId parameter for pre-existing orders which were placed before the toggle. Operations on orders placed after the toggle will work as expected. It's adviced to toggle when there are no open orders
+            </summary>
+        </member>
         <member name="T:Binance.Net.Objects.Options.BinanceOrderBookOptions">
             <summary>
             Options for the Binance SymbolOrderBook
@@ -29481,11 +29495,6 @@
             How often the trade rules should be updated. Only used when TradeRulesBehaviour is not None
             </summary>
         </member>
-        <member name="P:Binance.Net.Objects.Options.BinanceRestApiOptions.BrokerId">
-            <summary>
-            The broker reference id to use
-            </summary>
-        </member>
         <member name="T:Binance.Net.Objects.Options.BinanceRestOptions">
             <summary>
             Options for the BinanceRestClient
@@ -29496,9 +29505,24 @@
             Default options for new clients
             </summary>
         </member>
+        <member name="M:Binance.Net.Objects.Options.BinanceRestOptions.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
         <member name="P:Binance.Net.Objects.Options.BinanceRestOptions.ReceiveWindow">
             <summary>
             The default receive window for requests
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Options.BinanceRestOptions.AllowAppendingClientOrderId">
+            <summary>
+            Whether to allow the client to adjust the clientOrderId parameter send by the user when placing orders to include a client reference. This reference is used by the exchange to allocate a small percentage of the paid trading fees to developer of this library. Defaults to false.<br />
+            Note that:<br />
+            * It does not impact the amount of fees a user pays in any way<br />
+            * It does not impact functionality. The reference is added just before sending the request and removed again during data deserialization<br />
+            * It does respect client order id field limitations. For example if the user provided client order id parameter is too long to fit the reference it will not be added<br />
+            * Toggling this option might fail operations using a clientOrderId parameter for pre-existing orders which were placed before the toggle. Operations on orders placed after the toggle will work as expected. It's adviced to toggle when there are no open orders
             </summary>
         </member>
         <member name="P:Binance.Net.Objects.Options.BinanceRestOptions.SpotOptions">
@@ -29531,11 +29555,6 @@
             How often the trade rules should be updated. Only used when TradeRulesBehaviour is not None
             </summary>
         </member>
-        <member name="P:Binance.Net.Objects.Options.BinanceSocketApiOptions.BrokerId">
-            <summary>
-            The broker reference id to use
-            </summary>
-        </member>
         <member name="T:Binance.Net.Objects.Options.BinanceSocketOptions">
             <summary>
             Options for the BinanceSocketClient
@@ -29544,6 +29563,21 @@
         <member name="P:Binance.Net.Objects.Options.BinanceSocketOptions.Default">
             <summary>
             Default options for new clients
+            </summary>
+        </member>
+        <member name="M:Binance.Net.Objects.Options.BinanceSocketOptions.#ctor">
+            <summary>
+            ctor
+            </summary>
+        </member>
+        <member name="P:Binance.Net.Objects.Options.BinanceSocketOptions.AllowAppendingClientOrderId">
+            <summary>
+            Whether to allow the client to adjust the clientOrderId parameter send by the user when placing orders to include a client reference. This reference is used by the exchange to allocate a small percentage of the paid trading fees to developer of this library. Defaults to false.<br />
+            Note that:<br />
+            * It does not impact the amount of fees a user pays in any way<br />
+            * It does not impact functionality. The reference is added just before sending the request and removed again during data deserialization<br />
+            * It does respect client order id field limitations. For example if the user provided client order id parameter is too long to fit the reference it will not be added<br />
+            * Toggling this option might fail operations using a clientOrderId parameter for pre-existing orders which were placed before the toggle. Operations on orders placed after the toggle will work as expected. It's adviced to toggle when there are no open orders
             </summary>
         </member>
         <member name="P:Binance.Net.Objects.Options.BinanceSocketOptions.SpotOptions">
@@ -29836,15 +29870,26 @@
             Extensions for DI
             </summary>
         </member>
-        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddBinance(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Binance.Net.Objects.Options.BinanceRestOptions},System.Action{Binance.Net.Objects.Options.BinanceSocketOptions},System.Nullable{Microsoft.Extensions.DependencyInjection.ServiceLifetime})">
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddBinance(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
-            Add the IBinanceClient and IBinanceSocketClient to the sevice collection so they can be injected
+            Add services such as the IBinanceRestClient and IBinanceSocketClient. Configures the services based on the provided configuration.
             </summary>
             <param name="services">The service collection</param>
-            <param name="defaultRestOptionsDelegate">Set default options for the rest client</param>
-            <param name="defaultSocketOptionsDelegate">Set default options for the socket client</param>
-            <param name="socketClientLifeTime">The lifetime of the IBinanceSocketClient for the service collection. Defaults to Singleton.</param>
+            <param name="configuration">The configuration(section) containing the options</param>
             <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddBinance(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Binance.Net.Objects.Options.BinanceOptions})">
+            <summary>
+            Add services such as the IBinanceRestClient and IBinanceSocketClient. Services will be configured based on the provided options.
+            </summary>
+            <param name="services">The service collection</param>
+            <param name="optionsDelegate">Set options for the Binance services</param>
+            <returns></returns>
+        </member>
+        <member name="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddBinance(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Binance.Net.Objects.Options.BinanceRestOptions},System.Action{Binance.Net.Objects.Options.BinanceSocketOptions},System.Nullable{Microsoft.Extensions.DependencyInjection.ServiceLifetime})">
+            <summary>
+            DEPRECATED; use <see cref="M:Microsoft.Extensions.DependencyInjection.ServiceCollectionExtensions.AddBinance(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{Binance.Net.Objects.Options.BinanceOptions})" /> instead
+            </summary>
         </member>
     </members>
 </doc>

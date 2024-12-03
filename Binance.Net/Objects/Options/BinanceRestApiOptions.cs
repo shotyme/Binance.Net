@@ -22,18 +22,13 @@ namespace Binance.Net.Objects.Options
         /// </summary>
         public TimeSpan TradeRulesUpdateInterval { get; set; } = TimeSpan.FromMinutes(60);
 
-        /// <summary>
-        /// The broker reference id to use
-        /// </summary>
-        public string? BrokerId { get; set; }
-
-        internal BinanceRestApiOptions Copy()
+        internal BinanceRestApiOptions Set(BinanceRestApiOptions targetOptions)
         {
-            var result = base.Copy<BinanceRestApiOptions>();
-            result.TimestampOffset = TimestampOffset;
-            result.TradeRulesBehaviour = TradeRulesBehaviour;
-            result.TradeRulesUpdateInterval = TradeRulesUpdateInterval;
-            return result;
+            targetOptions = base.Set<BinanceRestApiOptions>(targetOptions);
+            targetOptions.TimestampOffset = TimestampOffset;
+            targetOptions.TradeRulesBehaviour = TradeRulesBehaviour;
+            targetOptions.TradeRulesUpdateInterval = TradeRulesUpdateInterval;
+            return targetOptions;
         }
     }
 }

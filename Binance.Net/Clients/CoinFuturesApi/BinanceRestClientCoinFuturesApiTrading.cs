@@ -69,8 +69,7 @@ namespace Binance.Net.Clients.CoinFuturesApi
             price = rulesCheck.Price;
             stopPrice = rulesCheck.StopPrice;
 
-            var s = BinanceRestClient.RandomString(15);
-            newClientOrderId = "x-yXxTdxJM-" + s;
+            var clientOrderId = LibraryHelpers.ApplyBrokerId(newClientOrderId, BinanceExchange.ClientOrderIdFutures, 36, _baseClient.ClientOptions.AllowAppendingClientOrderId);
 
             var parameters = new ParameterCollection()
             {
@@ -151,6 +150,7 @@ namespace Binance.Net.Clients.CoinFuturesApi
 
                 orderParameters.AddEnum("side", order.Side);
                 orderParameters.AddEnum("type", order.Type);
+                var clientOrderId = LibraryHelpers.ApplyBrokerId(order.NewClientOrderId, BinanceExchange.ClientOrderIdFutures, 36, _baseClient.ClientOptions.AllowAppendingClientOrderId);
                 orderParameters.AddOptionalParameter("quantity", order.Quantity?.ToString(CultureInfo.InvariantCulture));
                 orderParameters.AddOptionalParameter("newClientOrderId", newClientOrderId);
                 orderParameters.AddOptionalParameter("price", order.Price?.ToString(CultureInfo.InvariantCulture));
@@ -197,6 +197,9 @@ namespace Binance.Net.Clients.CoinFuturesApi
             if (orderId == null && origClientOrderId == null)
                 throw new ArgumentException("Either orderId or origClientOrderId must be sent");
 
+            if (origClientOrderId != null)
+                origClientOrderId = LibraryHelpers.ApplyBrokerId(origClientOrderId, BinanceExchange.ClientOrderIdFutures, 36, _baseClient.ClientOptions.AllowAppendingClientOrderId);
+
             var parameters = new ParameterCollection
             {
                 { "symbol", symbol }
@@ -219,6 +222,9 @@ namespace Binance.Net.Clients.CoinFuturesApi
         {
             if (!orderId.HasValue && string.IsNullOrEmpty(origClientOrderId))
                 throw new ArgumentException("Either orderId or origClientOrderId must be sent");
+
+            if (origClientOrderId != null)
+                origClientOrderId = LibraryHelpers.ApplyBrokerId(origClientOrderId, BinanceExchange.ClientOrderIdFutures, 36, _baseClient.ClientOptions.AllowAppendingClientOrderId);
 
             var parameters = new ParameterCollection
             {
@@ -286,6 +292,8 @@ namespace Binance.Net.Clients.CoinFuturesApi
             if (origClientOrderIdList?.Count() > 10)
                 throw new ArgumentException("origClientOrderIdList cannot contain more than 10 items");
 
+            var convertClientOrderIdList = origClientOrderIdList?.Select(x => LibraryHelpers.ApplyBrokerId(x, BinanceExchange.ClientOrderIdFutures, 36, _baseClient.ClientOptions.AllowAppendingClientOrderId));
+
             var parameters = new ParameterCollection
             {
                 { "symbol", symbol }
@@ -325,6 +333,9 @@ namespace Binance.Net.Clients.CoinFuturesApi
         {
             if (orderId == null && origClientOrderId == null)
                 throw new ArgumentException("Either orderId or origClientOrderId must be sent");
+
+            if (origClientOrderId != null)
+                origClientOrderId = LibraryHelpers.ApplyBrokerId(origClientOrderId, BinanceExchange.ClientOrderIdFutures, 36, _baseClient.ClientOptions.AllowAppendingClientOrderId);
 
             var parameters = new ParameterCollection
             {
