@@ -1,5 +1,4 @@
-﻿using Binance.Net.Converters;
-using Binance.Net.Enums;
+﻿using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.SubAccountData
 {
@@ -47,7 +46,7 @@ namespace Binance.Net.Objects.Models.Spot.SubAccountData
         /// <summary>
         /// Transaction id
         /// </summary>
-        [JsonPropertyName("tranId")]
+        [JsonPropertyName("tranId"), JsonConverter(typeof(NumberStringConverter))]
         public string TransactionId { get; set; } = string.Empty;
         /// <summary>
         /// Quantity

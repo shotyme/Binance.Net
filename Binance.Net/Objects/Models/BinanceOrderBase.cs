@@ -1,5 +1,4 @@
-﻿using Binance.Net.Converters;
-using Binance.Net.Enums;
+﻿using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models
 {
@@ -29,7 +28,7 @@ namespace Binance.Net.Objects.Models
         /// Original order id
         /// </summary>
         [JsonPropertyName("origClientOrderId")]
-        [JsonConverterCtor<ReplaceConverter>(
+        [JsonConverterCtor(typeof(ReplaceConverter),
             $"{BinanceExchange.ClientOrderIdPrefixSpot}->",
             $"{BinanceExchange.ClientOrderIdPrefixFutures}->")]
         public string OriginalClientOrderId { get; set; } = string.Empty;
@@ -38,7 +37,7 @@ namespace Binance.Net.Objects.Models
         /// The order id as assigned by the client
         /// </summary>
         [JsonPropertyName("clientOrderId")]
-        [JsonConverterCtor<ReplaceConverter>(
+        [JsonConverterCtor(typeof(ReplaceConverter),
             $"{BinanceExchange.ClientOrderIdPrefixSpot}->",
             $"{BinanceExchange.ClientOrderIdPrefixFutures}->")]
         public string ClientOrderId { get; set; } = string.Empty;

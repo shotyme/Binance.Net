@@ -1,5 +1,4 @@
-﻿using Binance.Net.Converters;
-using Binance.Net.Enums;
+﻿using Binance.Net.Enums;
 using Binance.Net.Objects;
 using Binance.Net.Objects.Internal;
 using Binance.Net.Objects.Models.Spot;
@@ -17,6 +16,8 @@ namespace Binance.Net.Clients.SpotApi
     /// <inheritdoc cref="IBinanceRestClientSpotApi" />
     internal partial class BinanceRestClientSpotApi : RestApiClient, IBinanceRestClientSpotApi, ISpotClient
     {
+        private static readonly RequestDefinitionCache _definitions = new RequestDefinitionCache();
+
         #region fields 
         /// <inheritdoc />
         public new BinanceRestApiOptions ApiOptions => (BinanceRestApiOptions)base.ApiOptions;
@@ -38,6 +39,8 @@ namespace Binance.Net.Clients.SpotApi
         /// <inheritdoc />
         public IBinanceRestClientSpotApiTrading Trading { get; }
         /// <inheritdoc />
+        public IBinanceRestClientSpotApiAgent Agent { get; }
+        /// <inheritdoc />
         public string ExchangeName => "Binance";
         #endregion
 
@@ -57,6 +60,7 @@ namespace Binance.Net.Clients.SpotApi
             Account = new BinanceRestClientSpotApiAccount(this);
             ExchangeData = new BinanceRestClientSpotApiExchangeData(logger, this);
             Trading = new BinanceRestClientSpotApiTrading(logger, this);
+            Agent = new BinanceRestClientSpotApiAgent(this);
 
             RequestBodyEmptyContent = "";
             RequestBodyFormat = RequestBodyFormat.FormData;
@@ -78,7 +82,8 @@ namespace Binance.Net.Clients.SpotApi
 
         #region helpers
 
-        internal async Task<WebCallResult<BinancePlacedOrder>> PlaceOrderInternal(Uri uri,
+        internal async Task<WebCallResult<BinancePlacedOrder>> PlaceOrderInternal(string path,
+            IRateLimitGate gate,
             string symbol,
             Enums.OrderSide side,
             SpotOrderType type,
@@ -99,7 +104,6 @@ namespace Binance.Net.Clients.SpotApi
             bool? autoRepayAtCancel = null,
             int? receiveWindow = null,
             int weight = 1,
-            IRateLimitGate? gate = null,
             CancellationToken ct = default)
         {
             if (quoteQuantity != null && type != SpotOrderType.Market)
@@ -145,19 +149,8 @@ namespace Binance.Net.Clients.SpotApi
             parameters.AddOptionalParameter("autoRepayAtCancel", autoRepayAtCancel);
             parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
 
-            return await SendRequestInternal<BinancePlacedOrder>(uri, HttpMethod.Post, ct, parameters, true, weight: weight, gate: gate).ConfigureAwait(false);
-        }
-
-        internal Uri GetUri(string path) => new Uri(BaseAddress.AppendPath(path));
-
-        internal Uri GetUrl(string endpoint, string api, string? version = null)
-        {
-            var result = BaseAddress.AppendPath(api);
-
-            if (!string.IsNullOrEmpty(version))
-                result = result.AppendPath($"v{version}");
-
-            return new Uri(result.AppendPath(endpoint));
+            var request = _definitions.GetOrCreate(HttpMethod.Post, path, gate, 1, true);
+            return await SendAsync<BinancePlacedOrder>(request, parameters, ct, weight: weight).ConfigureAwait(false);
         }
 
         internal async Task<BinanceTradeRuleResult> CheckTradeRules(string symbol, decimal? quantity, decimal? quoteQuantity, decimal? price, decimal? stopPrice, SpotOrderType? type, CancellationToken ct)
@@ -172,19 +165,6 @@ namespace Binance.Net.Clients.SpotApi
                 return BinanceTradeRuleResult.CreateFailed("Unable to retrieve trading rules, validation failed");
 
             return BinanceHelpers.ValidateTradeRules(_logger, ApiOptions.TradeRulesBehaviour, _exchangeInfo, symbol, quantity, quoteQuantity, price, stopPrice, type);
-        }
-
-        internal async Task<WebCallResult<T>> SendRequestInternal<T>(Uri uri, HttpMethod method, CancellationToken cancellationToken,
-            Dictionary<string, object>? parameters = null, bool signed = false, HttpMethodParameterPosition? postPosition = null,
-            ArrayParametersSerialization? arraySerialization = null, int weight = 1, IRateLimitGate? gate = null) where T : class
-        {
-            var result = await SendRequestAsync<T>(uri, method, cancellationToken, parameters, signed, null, postPosition, arraySerialization, weight, gate: gate).ConfigureAwait(false);
-            if (!result && result.Error!.Code == -1021 && (ApiOptions.AutoTimestamp ?? ClientOptions.AutoTimestamp))
-            {
-                _logger.Log(LogLevel.Debug, "Received Invalid Timestamp error, triggering new time sync");
-                _timeSyncState.LastSyncTime = DateTime.MinValue;
-            }
-            return result;                    
         }
 
         internal async Task<WebCallResult> SendAsync(RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null)

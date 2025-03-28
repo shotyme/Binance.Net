@@ -1,6 +1,4 @@
-﻿using Binance.Net.Converters;
-using Binance.Net.Enums;
-using CryptoExchange.Net.Attributes;
+﻿using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures.AlgoOrders
 {
@@ -57,7 +55,7 @@ namespace Binance.Net.Objects.Models.Futures.AlgoOrders
         [JsonPropertyName("executedQty")]
         public decimal ExecutedQuantity { get; set; }
         /// <summary>
-        /// exceuted amount
+        /// Executed amount
         /// </summary>
         [JsonPropertyName("executedAmt")]
         public decimal ExecutedAmount { get; set; }
@@ -70,7 +68,7 @@ namespace Binance.Net.Objects.Models.Futures.AlgoOrders
         /// Client algo id
         /// </summary>
         [JsonPropertyName("clientAlgoId")]
-        [JsonConverterCtor<ReplaceConverter>(
+        [JsonConverterCtor(typeof(ReplaceConverter), 
             $"{BinanceExchange.ClientOrderIdPrefixSpot}->",
             $"{BinanceExchange.ClientOrderIdPrefixFutures}->")]
         public string ClientAlgoId { get; set; } = string.Empty;

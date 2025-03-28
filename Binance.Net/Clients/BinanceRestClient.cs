@@ -10,7 +10,7 @@ using Binance.Net.Clients.CoinFuturesApi;
 using Binance.Net.Objects.Options;
 using CryptoExchange.Net.Clients;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
+using CryptoExchange.Net.Objects.Options;
 
 namespace Binance.Net.Clients
 {
@@ -60,6 +60,15 @@ namespace Binance.Net.Clients
         }
 
         #endregion
+
+        /// <inheritdoc />
+        public void SetOptions(UpdateOptions options)
+        {
+            GeneralApi.SetOptions(options);
+            SpotApi.SetOptions(options);
+            UsdFuturesApi.SetOptions(options);
+            CoinFuturesApi.SetOptions(options);
+        }
 
         /// <summary>
         /// Set the default options to be used when creating new clients

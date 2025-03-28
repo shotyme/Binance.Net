@@ -3,7 +3,7 @@
     /// <summary>
     /// Staking history
     /// </summary>
-    public record BinanceEthStakingHistory
+    public record BinanceStakingHistory
     {
         /// <summary>
         /// Asset
@@ -26,5 +26,22 @@
         [JsonPropertyName("time")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
+        /// <summary>
+        /// Distribute asset
+        /// </summary>
+        [JsonPropertyName("distributeAsset")]
+        public string DistributedAsset { get; set; } = string.Empty;
+        /// <summary>
+        /// Quantity distributed
+        /// </summary>
+        [JsonPropertyName("distributeAmount")]
+        public decimal DistributeQuantity { get; set; }
+        /// <summary>
+        /// Conversion ratio
+        /// </summary>
+        [JsonPropertyName("conversionRatio")]
+        public decimal ConversionRatio { get; set; }
+        [JsonInclude, JsonPropertyName("exchangeRate")]
+        internal decimal ConversionRatioInt { get => ConversionRatio; set => ConversionRatio = value; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Binance.Net.Converters;
-using Binance.Net.Enums;
+﻿using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.Margin
 {
@@ -9,7 +8,7 @@ namespace Binance.Net.Objects.Models.Spot.Margin
     public record BinanceTransferHistory
     {
         /// <summary>
-        /// Quanity of the transfer
+        /// Quantity of the transfer
         /// </summary>
         [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }

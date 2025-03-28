@@ -8,7 +8,6 @@ using CryptoExchange.Net.Interfaces.CommonClients;
 using Binance.Net.Objects.Options;
 using CryptoExchange.Net.Converters.MessageParsing;
 using CryptoExchange.Net.Clients;
-using CryptoExchange.Net.RateLimiting.Interfaces;
 using CryptoExchange.Net.SharedApis;
 
 namespace Binance.Net.Clients.UsdFuturesApi
@@ -36,6 +35,8 @@ namespace Binance.Net.Clients.UsdFuturesApi
         /// <inheritdoc />
         public IBinanceRestClientUsdFuturesApiTrading Trading { get; }
         /// <inheritdoc />
+        public IBinanceRestClientUsdFuturesApiAgent Agent { get; }
+        /// <inheritdoc />
         public string ExchangeName => "Binance";
         #endregion
 
@@ -59,6 +60,7 @@ namespace Binance.Net.Clients.UsdFuturesApi
             Account = new BinanceRestClientUsdFuturesApiAccount(this);
             ExchangeData = new BinanceRestClientUsdFuturesApiExchangeData(logger, this);
             Trading = new BinanceRestClientUsdFuturesApiTrading(logger, this);
+            Agent = new BinanceRestClientUsdFuturesApiAgent(this);
 
             RequestBodyEmptyContent = "";
             RequestBodyFormat = RequestBodyFormat.FormData;

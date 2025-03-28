@@ -1,5 +1,4 @@
-﻿using Binance.Net.Converters;
-using Binance.Net.Enums;
+﻿using Binance.Net.Enums;
 using Binance.Net.Interfaces.Clients.SpotApi;
 using Binance.Net.Objects.Internal;
 using Binance.Net.Objects.Models;
@@ -100,7 +99,7 @@ namespace Binance.Net.Clients.SpotApi
             parameters.AddOptionalEnum("walletType", walletType);
             parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
 
-            var request = _definitions.GetOrCreate(HttpMethod.Post, "sapi/v1/capital/withdraw/apply", BinanceExchange.RateLimiter.SpotRestUid, 600, true, parameterPosition: HttpMethodParameterPosition.InUri);
+            var request = _definitions.GetOrCreate(HttpMethod.Post, "sapi/v1/capital/withdraw/apply", BinanceExchange.RateLimiter.SpotRestUid, 900, true, parameterPosition: HttpMethodParameterPosition.InUri);
             return await _baseClient.SendAsync<BinanceWithdrawalPlaced>(request, parameters, ct).ConfigureAwait(false);
         }
 
@@ -293,9 +292,10 @@ namespace Binance.Net.Clients.SpotApi
 
         #region Get Wallet Balances
         /// <inheritdoc />
-        public async Task<WebCallResult<IEnumerable<BinanceWalletBalance>>> GetWalletBalancesAsync(int? receiveWindow = null, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<BinanceWalletBalance>>> GetWalletBalancesAsync(string quoteAsset = "BTC", int? receiveWindow = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
+            parameters.AddParameter("quoteAsset", quoteAsset);
             parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
 
             var request = _definitions.GetOrCreate(HttpMethod.Get, "sapi/v1/asset/wallet/balance", BinanceExchange.RateLimiter.SpotRestIp, 60, true);
@@ -385,14 +385,14 @@ namespace Binance.Net.Clients.SpotApi
 
         #region Dust Elligable
         /// <inheritdoc />
-        public async Task<WebCallResult<BinanceElligableDusts>> GetAssetsForDustTransferAsync(AccountType? accountType = null, int? receiveWindow = null, CancellationToken ct = default)
+        public async Task<WebCallResult<BinanceEligibleDusts>> GetAssetsForDustTransferAsync(AccountType? accountType = null, int? receiveWindow = null, CancellationToken ct = default)
         {
             var parameters = new ParameterCollection();
             parameters.AddOptionalEnum("accountType", accountType);
             parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
 
             var request = _definitions.GetOrCreate(HttpMethod.Post, "sapi/v1/asset/dust-btc", BinanceExchange.RateLimiter.SpotRestIp, 1, true);
-            return await _baseClient.SendAsync<BinanceElligableDusts>(request, parameters, ct).ConfigureAwait(false);
+            return await _baseClient.SendAsync<BinanceEligibleDusts>(request, parameters, ct).ConfigureAwait(false);
         }
 
         #endregion
@@ -1257,7 +1257,11 @@ namespace Binance.Net.Clients.SpotApi
             parameters.AddOptionalParameter("symbol", symbol);
             parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
 
-            var request = _definitions.GetOrCreate(HttpMethod.Get, "sapi/v1/asset/tradeFee", BinanceExchange.RateLimiter.SpotRestIp, 1, true);
+            var path = "sapi/v1/asset/tradeFee";
+            if (_baseClient.ClientOptions.Environment == BinanceEnvironment.Us)
+                path = "sapi/v1/asset/query/trading-fee";
+
+            var request = _definitions.GetOrCreate(HttpMethod.Get, path, BinanceExchange.RateLimiter.SpotRestIp, 1, true);
             return await _baseClient.SendAsync<IEnumerable<BinanceTradeFee>>(request, parameters, ct).ConfigureAwait(false);
         }
 

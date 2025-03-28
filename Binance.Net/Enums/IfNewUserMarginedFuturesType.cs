@@ -3,19 +3,19 @@
 namespace Binance.Net.Enums
 {
     /// <summary>
-    /// Transfer direction
+    /// Margined futures type
     /// </summary>
-    public enum TransferDirectionType
+    public enum IfNewUserMarginedFuturesType
     {
         /// <summary>
-        /// From main account to margin account
+        /// Processing
         /// </summary>
         [Map("1")]
-        MainToMargin,
+        UsdtMarginedFutures = 1,
         /// <summary>
-        /// From margin account to main account
+        /// Canceled
         /// </summary>
         [Map("2")]
-        MarginToMain
+        CoinMarginedFutures = 2,
     }
 }

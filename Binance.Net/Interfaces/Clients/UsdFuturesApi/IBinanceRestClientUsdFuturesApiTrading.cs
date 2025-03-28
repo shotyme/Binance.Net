@@ -5,13 +5,13 @@ using Binance.Net.Objects.Models.Futures.AlgoOrders;
 namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 {
     /// <summary>
-    /// Binance USD-M futures trading endpoints, placing and mananging orders.
+    /// Binance USD-M futures trading endpoints, placing and managing orders.
     /// </summary>
     public interface IBinanceRestClientUsdFuturesApiTrading
     {
         /// <summary>
         /// Places a new order
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#new-order-trade" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/convert" /></para>
         /// </summary>
         /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="side">The order side (buy/sell)</param>
@@ -29,7 +29,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
         /// <param name="closePosition">Close-All，used with STOP_MARKET or TAKE_PROFIT_MARKET.</param>
         /// <param name="orderResponseType">The response type. Default Acknowledge</param>
         /// <param name="priceProtect">If true when price reaches stopPrice, difference between "MARK_PRICE" and "CONTRACT_PRICE" cannot be larger than "triggerProtect" of the symbol.</param>
-        /// <param name="priceMatch">Only avaliable for Limit/Stop/TakeProfit order</param>
+        /// <param name="priceMatch">Only available for Limit/Stop/TakeProfit order</param>
         /// <param name="selfTradePreventionMode">Self trade prevention mode</param>
         /// <param name="goodTillDate">Order cancel time for timeInForce GoodTillDate</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
@@ -60,7 +60,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Place multiple orders in one call
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#place-multiple-orders-trade" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Place-Multiple-Orders" /></para>
         /// </summary>
         /// <param name="orders">The orders to place</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
@@ -73,7 +73,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Retrieves data for a specific order. Either orderId or origClientOrderId should be provided.
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#query-order-user_data" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Query-Order" /></para>
         /// </summary>
         /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="orderId">The order id of the order</param>
@@ -85,7 +85,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Cancels a pending order
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#cancel-order-trade" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-Order" /></para>
         /// </summary>
         /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="orderId">The order id of the order</param>
@@ -97,7 +97,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Cancels all open orders
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#cancel-all-open-orders-trade" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-All-Open-Orders" /></para>
         /// </summary>
         /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
@@ -108,7 +108,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
         /// <summary>
         /// Cancel all open orders of the specified symbol at the end of the specified countdown. This rest endpoint means to ensure your open orders are canceled in case of an outage. The endpoint should be called repeatedly as heartbeats
         /// so that the existing countdown time can be canceled and replaced by a new one.
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#auto-cancel-all-open-orders-trade" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Auto-Cancel-All-Open-Orders" /></para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="countDownTime">The time after which all open orders should cancel, or 0 to cancel an existing timer</param>
@@ -118,8 +118,8 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
         Task<WebCallResult<BinanceFuturesCountDownResult>> CancelAllOrdersAfterTimeoutAsync(string symbol, TimeSpan countDownTime, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Cancels muliple orders
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#cancel-multiple-orders-trade" /></para>
+        /// Cancels multiple orders
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Cancel-Multiple-Orders" /></para>
         /// </summary>
         /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="orderIdList">The list of order ids to cancel</param>
@@ -131,22 +131,23 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Edit an existing order
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#modify-order-trade" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Order" /></para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="side">Order side</param>
         /// <param name="quantity">New quantity</param>
         /// <param name="price">New price</param>
+        /// <param name="priceMatch">Only available for Limit/Stop/TakeProfit order</param>
         /// <param name="orderId">Order id of the order to edit</param>
         /// <param name="origClientOrderId">Client order id of the order to edit</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns></returns>
-        Task<WebCallResult<BinanceUsdFuturesOrder>> EditOrderAsync(string symbol, OrderSide side, decimal quantity, decimal price, long? orderId = null, string? origClientOrderId = null, long? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<BinanceUsdFuturesOrder>> EditOrderAsync(string symbol, OrderSide side, decimal quantity, decimal? price, PriceMatch? priceMatch = null, long? orderId = null, string? origClientOrderId = null, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Edit multiple existing orders
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#modify-multiple-orders-trade" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Modify-Multiple-Orders" /></para>
         /// </summary>
         /// <param name="orders">The order info</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
@@ -159,7 +160,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Get order edit history
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#get-order-modify-history-user_data" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Get-Order-Modify-History" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get orders for, for example `ETHUSDT`</param>
         /// <param name="orderId">Filter by order id</param>
@@ -174,7 +175,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Retrieves data for a specific open order. Either orderId or origClientOrderId should be provided.
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#query-current-open-order-user_data" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Query-Current-Open-Order" /></para>
         /// </summary>
         /// <param name="symbol">The symbol the order is for, for example `ETHUSDT`</param>
         /// <param name="orderId">The order id of the order</param>
@@ -186,7 +187,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Gets a list of open orders
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#current-all-open-orders-user_data" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Current-All-Open-Orders" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get open orders for, for example `ETHUSDT`</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
@@ -196,7 +197,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Gets all orders for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#all-orders-user_data" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/All-Orders" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get orders for, for example `ETHUSDT`</param>
         /// <param name="orderId">If set, only orders with an order id higher than the provided will be returned</param>
@@ -206,11 +207,11 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of orders</returns>
-        Task<WebCallResult<IEnumerable<BinanceUsdFuturesOrder>>> GetOrdersAsync(string symbol, long? orderId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
+        Task<WebCallResult<IEnumerable<BinanceUsdFuturesOrder>>> GetOrdersAsync(string? symbol = null, long? orderId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets a list of users forced orders
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#user-39-s-force-orders-user_data" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Users-Force-Orders" /></para>
         /// </summary>
         /// <param name="symbol">The symbol to get forced orders for, for example `ETHUSDT`</param>
         /// <param name="closeType">Filter by reason for close</param>
@@ -225,7 +226,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Gets all user trades for provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#account-trade-list-user_data" /></para>
+        /// <para><a href="https://developers.binance.com/docs/derivatives/usds-margined-futures/trade/rest-api/Account-Trade-List" /></para>
         /// </summary>
         /// <param name="symbol">Symbol to get trades for, for example `ETHUSDT`</param>
         /// <param name="limit">The max number of results</param>
@@ -240,7 +241,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Place a new Volume Participation order
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#volume-participation-vp-new-order-trade" /></para>
+        /// <para><a href="https://developers.binance.com/docs/algo/future-algo" /></para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="side">Order side</param>
@@ -267,7 +268,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Place a new Time Weighted Average Price order
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#time-weighted-average-price-twap-new-order-trade" /></para>
+        /// <para><a href="https://developers.binance.com/docs/algo/future-algo/Time-Weighted-Average-Price-New-Order" /></para>
         /// </summary>
         /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="side">Order side</param>
@@ -294,7 +295,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Cancel an algo order
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#cancel-algo-order-trade" /></para>
+        /// <para><a href="https://developers.binance.com/docs/algo/future-algo/Cancel-Algo-Order" /></para>
         /// </summary>
         /// <param name="algoOrderId">Algo id to cancel</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
@@ -304,7 +305,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Get list of open algo orders
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-current-algo-open-orders-user_data" /></para>
+        /// <para><a href="https://developers.binance.com/docs/algo/future-algo/Query-Current-Algo-Open-Orders" /></para>
         /// </summary>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
@@ -313,11 +314,11 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Get list of closed algo orders
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-historical-algo-orders-user_data" /></para>
+        /// <para><a href="https://developers.binance.com/docs/algo/future-algo/Query-Historical-Algo-Orders" /></para>
         /// </summary>
         /// <param name="symbol">Filter by symbol, for example `ETHUSDT`</param>
         /// <param name="side">Filter by side</param>
-        /// <param name="startTime">Fitler by start time</param>
+        /// <param name="startTime">Filter by start time</param>
         /// <param name="endTime">Filter by end time</param>
         /// <param name="page">Page</param>
         /// <param name="limit">Max results</param>
@@ -328,7 +329,7 @@ namespace Binance.Net.Interfaces.Clients.UsdFuturesApi
 
         /// <summary>
         /// Get algo sub orders overview
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-sub-orders-user_data" /></para>
+        /// <para><a href="https://developers.binance.com/docs/algo/future-algo/Query-Sub-Orders" /></para>
         /// </summary>
         /// <param name="algoId">Algo id</param>
         /// <param name="page">Page</param>

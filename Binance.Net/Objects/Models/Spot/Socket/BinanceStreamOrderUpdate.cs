@@ -1,5 +1,4 @@
-﻿using Binance.Net.Converters;
-using Binance.Net.Enums;
+﻿using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.Socket
 {
@@ -22,7 +21,7 @@ namespace Binance.Net.Objects.Models.Spot.Socket
         /// The new client order id
         /// </summary>
         [JsonPropertyName("c")]
-        [JsonConverterCtor<ReplaceConverter>(
+        [JsonConverterCtor(typeof(ReplaceConverter), 
             $"{BinanceExchange.ClientOrderIdPrefixSpot}->",
             $"{BinanceExchange.ClientOrderIdPrefixFutures}->")]
         public string ClientOrderId { get; set; } = string.Empty;
@@ -75,7 +74,7 @@ namespace Binance.Net.Objects.Models.Spot.Socket
         /// The original client order id
         /// </summary>
         [JsonPropertyName("C")]
-        [JsonConverterCtor<ReplaceConverter>(
+        [JsonConverterCtor(typeof(ReplaceConverter), 
             $"{BinanceExchange.ClientOrderIdPrefixSpot}->",
             $"{BinanceExchange.ClientOrderIdPrefixFutures}->")]
         public string? OriginalClientOrderId { get; set; } = string.Empty;
@@ -110,7 +109,7 @@ namespace Binance.Net.Objects.Models.Spot.Socket
         [JsonPropertyName("L")]
         public decimal LastPriceFilled { get; set; }
         /// <summary>
-        /// The fee payed
+        /// The fee paid
         /// </summary>
         [JsonPropertyName("n")]
         public decimal Fee { get; set; }
@@ -145,7 +144,7 @@ namespace Binance.Net.Objects.Models.Spot.Socket
         [JsonPropertyName("O"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreateTime { get; set; }
         /// <summary>
-        /// Cummulative quantity
+        /// Cumulative quantity
         /// </summary>
         [JsonPropertyName("Z")]
         public decimal QuoteQuantityFilled { get; set; }
@@ -201,7 +200,7 @@ namespace Binance.Net.Objects.Models.Spot.Socket
         [JsonPropertyName("A")]
         public decimal? PreventedQuantity { get; set; }
         /// <summary>
-        /// Last prevented quantiy
+        /// Last prevented quantity
         /// </summary>
         [JsonPropertyName("B")]
         public decimal? LastPreventedQuantity { get; set; }

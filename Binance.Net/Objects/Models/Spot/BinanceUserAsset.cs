@@ -123,6 +123,16 @@
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
         /// <summary>
+        /// Contract address
+        /// </summary>
+        [JsonPropertyName("contractAddress")]
+        public string ContractAddress { get; set; } = string.Empty;
+        /// <summary>
+        /// Contract address URL
+        /// </summary>
+        [JsonPropertyName("contractAddressUrl")]
+        public string ContractAddressUrl { get; set; } = string.Empty;
+        /// <summary>
         /// Network
         /// </summary>
         [JsonPropertyName("network")]
@@ -188,5 +198,10 @@
         /// </summary>
         [JsonPropertyName("withdrawInternalMin")]
         public decimal WithdrawInternalMin { get; set; }
+        /// <summary>
+        /// The denomination of the asset. For example if 100000 it means that 1 of this asset means 100000 of the underlying asset
+        /// </summary>
+        [JsonPropertyName("denomination")]
+        public decimal? Denomination { get; set; }
     }
 }

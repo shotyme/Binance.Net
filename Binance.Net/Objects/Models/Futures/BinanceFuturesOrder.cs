@@ -1,5 +1,4 @@
-﻿using Binance.Net.Converters;
-using Binance.Net.Enums;
+﻿using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures
 {
@@ -29,10 +28,27 @@ namespace Binance.Net.Objects.Models.Futures
         /// The order id as assigned by the client
         /// </summary>
         [JsonPropertyName("clientOrderId")]
-        [JsonConverterCtor<ReplaceConverter>(
+        [JsonConverterCtor(typeof(ReplaceConverter), 
             $"{BinanceExchange.ClientOrderIdPrefixSpot}->",
             $"{BinanceExchange.ClientOrderIdPrefixFutures}->")]
         public string ClientOrderId { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Whether or not this order is a liquidation order
+        /// </summary>
+        [JsonIgnore]
+        public bool IsLiquidationOrder => ClientOrderId?.StartsWith("autoclose-") == true;
+        /// <summary>
+        /// Whether or not this order is an ADL auto close order
+        /// </summary>
+        [JsonIgnore]
+        public bool IsAdlAutoCloseOrder => ClientOrderId?.StartsWith("adl_autoclose-") == true;
+        /// <summary>
+        /// Whether or not this order is a delisting/delivery settlement order
+        /// </summary>
+        [JsonIgnore]
+        public bool IsSettlementOrder => ClientOrderId?.StartsWith("delivery_autoclose-") == true;
+
         /// <summary>
         /// The price of the order
         /// </summary>
@@ -52,7 +68,7 @@ namespace Binance.Net.Objects.Models.Futures
         /// Cumulative quantity
         /// </summary>
         [JsonPropertyName("cumQty")]
-        public decimal? CummulativeQuantity { get; set; }
+        public decimal? CumulativeQuantity { get; set; }
         /// <summary>
         /// Cumulative quantity in quote asset ( for USD futures )
         /// </summary>

@@ -1,5 +1,4 @@
-﻿using Binance.Net.Converters;
-using Binance.Net.Enums;
+﻿using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures
 {
@@ -51,7 +50,7 @@ namespace Binance.Net.Objects.Models.Futures
         public decimal InitialMargin { get; set; }
 
         /// <summary>
-        /// Maint margin
+        /// Maintenance margin
         /// </summary>
         [JsonPropertyName("maintMargin")]
         public decimal MaintMargin { get; set; }

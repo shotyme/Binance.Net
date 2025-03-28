@@ -1,5 +1,4 @@
-﻿using Binance.Net.Converters;
-using Binance.Net.Enums;
+﻿using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures.AlgoOrders
 {
@@ -56,7 +55,7 @@ namespace Binance.Net.Objects.Models.Futures.AlgoOrders
         [JsonPropertyName("executedQty")]
         public decimal ExecutedQuantity { get; set; }
         /// <summary>
-        /// Exceuted amount
+        /// Executed amount
         /// </summary>
         [JsonPropertyName("executedAmt")]
         public decimal ExecutedAmount { get; set; }
