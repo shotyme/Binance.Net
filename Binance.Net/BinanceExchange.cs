@@ -40,18 +40,13 @@ namespace Binance.Net
 
         internal const string ClientOrderIdSpot = "x-MHU2UUW8";
         internal const string ClientOrderIdFutures = "x-yXxTdxJM";
-        internal const string ClientOrderIdPrefixSpot = ClientOrderIdSpot + LibraryHelpers.ClientOrderIdSeperator;
-        internal const string ClientOrderIdPrefixFutures = ClientOrderIdFutures + LibraryHelpers.ClientOrderIdSeperator;
+        internal const string ClientOrderIdPrefixSpot = ClientOrderIdSpot + LibraryHelpers.ClientOrderIdSeparator;
+        internal const string ClientOrderIdPrefixFutures = ClientOrderIdFutures + LibraryHelpers.ClientOrderIdSeparator;
 
         /// <summary>
         /// Type of exchange
         /// </summary>
         public static ExchangeType Type { get; } = ExchangeType.CEX;
-
-        internal const string ClientOrderIdSpot = "x-VICEW9VV";
-        internal const string ClientOrderIdFutures = "x-d63tKbx3";
-        internal const string ClientOrderIdPrefixSpot = ClientOrderIdSpot + LibraryHelpers.ClientOrderIdSeparator;
-        internal const string ClientOrderIdPrefixFutures = ClientOrderIdFutures + LibraryHelpers.ClientOrderIdSeparator;
 
         /// <summary>
         /// Format a base and quote asset to a Binance recognized symbol 

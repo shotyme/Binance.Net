@@ -1,4 +1,5 @@
-﻿using Binance.Net.Enums;
+﻿using Binance.Net.Clients.SpotApi;
+using Binance.Net.Enums;
 using Binance.Net.Interfaces.Clients.GeneralApi;
 using Binance.Net.Objects.Models.Spot.Brokerage;
 using Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData;
@@ -617,7 +618,7 @@ namespace Binance.Net.Clients.GeneralApi
         {
             var parameters = new ParameterCollection();
             parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
-
+        
             var request = _definitions.GetOrCreate(HttpMethod.Get, "/sapi/v1/broker/info", BinanceExchange.RateLimiter.SpotRestIp, 0, true);
             return await _baseClient.SendAsync<BinanceBrokerageAccountInfo>(request, parameters, ct).ConfigureAwait(false);
         }
@@ -666,42 +667,18 @@ namespace Binance.Net.Clients.GeneralApi
 
         #endregion
 
-        /// <inheritdoc />
-        public async Task<WebCallResult<BinanceBrokerageReferralRebateResponse>> GetCommissionRebateStatusForSpotAsync(string brokerId, string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default)
-        {
-            var parameters = new Dictionary<string, object>
-            {
-                {"apiAgentCode", brokerId}
-            };
-
-            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
-            _baseClient.SetApiCredentials(new ApiCredentials(userKey, userSecret));
-
-            var spotUri = _baseClient.GetUrl(commissionRebateEndpoint, "sapi", "1");
-            return await _baseClient.SendRequestInternal<BinanceBrokerageReferralRebateResponse>(spotUri, HttpMethod.Get, ct, parameters, true, null, null, 0).ConfigureAwait(false);
-        }
-
-        /// <inheritdoc />
-        public async Task<WebCallResult<BinanceBrokerageReferralRebateResponse>> GetCommissionRebateStatusForFuturesAsync(string brokerId, string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default)
-        {
-            var parameters = new Dictionary<string, object>
-            {
-                {"brokerId", brokerId}
-            };
-
-            parameters.AddOptionalParameter("recvWindow", receiveWindow?.ToString(CultureInfo.InvariantCulture) ?? _baseClient.ClientOptions.ReceiveWindow.TotalMilliseconds.ToString(CultureInfo.InvariantCulture));
-            _baseClient.SetApiCredentials(new ApiCredentials(userKey, userSecret));
-
-            var futuresUri = new Uri("https://fapi.binance.com/fapi/v1/apiReferral/ifNewUser");
-            return await _baseClient.SendRequestInternal<BinanceBrokerageReferralRebateResponse>(futuresUri, HttpMethod.Get, ct, parameters, true, weight: 100, gate: new RateLimitGate("broker")).ConfigureAwait(false);
-        }
 
         /// <inheritdoc />
         public async Task<BinanceBrokerageReferralRebateStatus> GetCommissionRebateStatusAsync(string brokerSpotId, string brokerFuturesId, string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default)
         {
             var res = new BinanceBrokerageReferralRebateStatus();
+            
+            var client = new BinanceRestClient(options =>
+            {
+                options.ApiCredentials = new ApiCredentials(userKey, userSecret);
+            });
 
-            var spotResult = await GetCommissionRebateStatusForSpotAsync(brokerSpotId, userKey, userSecret, receiveWindow, ct).ConfigureAwait(false);
+            var spotResult = await client.SpotApi.Agent.GetIfNewUserAsync(brokerSpotId, ct: ct).ConfigureAwait(false);
             if (spotResult.Success)
             {
                 res.ReceiveSpotRebate = spotResult.Data.IfNewUser && spotResult.Data.RebateWorking;
@@ -710,8 +687,8 @@ namespace Binance.Net.Clients.GeneralApi
             {
                 res.SpotError = $"{spotResult.Error?.Message} Code: {spotResult.Error?.Code}";
             }
-
-            var futuresResult = await GetCommissionRebateStatusForFuturesAsync(brokerFuturesId, userKey, userSecret, receiveWindow, ct).ConfigureAwait(false);
+            
+            var futuresResult = await client.UsdFuturesApi.Agent.GetIfNewUserAsync(brokerFuturesId, ct: ct).ConfigureAwait(false);
             if (futuresResult.Success)
             {
                 res.ReceiveFuturesRebate = futuresResult.Data.IfNewUser && futuresResult.Data.RebateWorking;

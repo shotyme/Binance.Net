@@ -935,12 +935,6 @@
         <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiBrokerage.GetBrokerFuturesCommissionRebatesHistoryAsync(Binance.Net.Enums.FuturesAccountType,System.DateTime,System.DateTime,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusForSpotAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
-        <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusForFuturesAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
-            <inheritdoc />
-        </member>
         <member name="M:Binance.Net.Clients.GeneralApi.BinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusAsync(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
@@ -7564,28 +7558,6 @@
             <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
             <param name="ct">Cancellation token</param>
             <returns>Asset info</returns>
-        </member>
-        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusForSpotAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
-            <summary>
-            Checks if the broker receives a commission rebate from the current user for spot trading.
-            </summary>
-            <param name="brokerId">The broker spot ID</param>
-            <param name="userKey">The user api key</param>
-            <param name="userSecret">The user api secret</param>
-            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-            <param name="ct">Cancellation token</param>
-            <returns>Commission rebate info</returns>
-        </member>
-        <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusForFuturesAsync(System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
-            <summary>
-            Checks if the broker receives a commission rebate from the current user for futures trading.
-            </summary>
-            <param name="brokerId">The broker futures ID</param>
-            <param name="userKey">The user api key</param>
-            <param name="userSecret">The user api secret</param>
-            <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-            <param name="ct">Cancellation token</param>
-            <returns>Commission rebate info</returns>
         </member>
         <member name="M:Binance.Net.Interfaces.Clients.GeneralApi.IBinanceRestClientGeneralApiBrokerage.GetCommissionRebateStatusAsync(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Threading.CancellationToken)">
             <summary>

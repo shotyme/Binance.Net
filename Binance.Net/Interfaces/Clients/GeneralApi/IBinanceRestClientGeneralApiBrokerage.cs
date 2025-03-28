@@ -495,8 +495,8 @@ namespace Binance.Net.Interfaces.Clients.GeneralApi
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Commission rebate info</returns>
-        Task<WebCallResult<BinanceBrokerageReferralRebateResponse>> GetCommissionRebateStatusForSpotAsync(string brokerId,
-            string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default);
+        // Task<WebCallResult<BinanceBrokerageReferralRebateResponse>> GetCommissionRebateStatusForSpotAsync(string brokerId,
+        //     string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Checks if the broker receives a commission rebate from the current user for futures trading.
@@ -507,8 +507,8 @@ namespace Binance.Net.Interfaces.Clients.GeneralApi
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Commission rebate info</returns>
-        Task<WebCallResult<BinanceBrokerageReferralRebateResponse>> GetCommissionRebateStatusForFuturesAsync(string brokerId,
-            string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default);
+        // Task<WebCallResult<BinanceBrokerageReferralRebateResponse>> GetCommissionRebateStatusForFuturesAsync(string brokerId,
+        //     string userKey, string userSecret, int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get the commission rebate status for spot and futures trading.
