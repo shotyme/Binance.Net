@@ -155,6 +155,11 @@
             Event for when a rate limit is triggered
             </summary>
         </member>
+        <member name="E:Binance.Net.BinanceRateLimiters.RateLimitUpdated">
+            <summary>
+            Event when the rate limit is updated. Note that it's only updated when a request is send, so there are no specific updates when the current usage is decaying.
+            </summary>
+        </member>
         <member name="M:Binance.Net.BinanceFactory.CreateClient(System.Boolean,System.String,System.String)">
             <summary>
             Creates a new instance of BinanceClient using the default or the testnet options
@@ -171,10 +176,6 @@
             <param name="isTestNet">Use testnet endpoints</param>
             <param name="credentials">The API key credentials</param>
             <returns></returns>
-        <member name="E:Binance.Net.BinanceRateLimiters.RateLimitUpdated">
-            <summary>
-            Event when the rate limit is updated. Note that it's only updated when a request is send, so there are no specific updates when the current usage is decaying.
-            </summary>
         </member>
         <member name="T:Binance.Net.BinanceHelpers">
             <summary>
@@ -25861,176 +25862,6 @@
         <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtKline.NavUpdates">
             <summary>
             Number of updates
-            </summary>
-        </member>
-        <member name="T:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedeemResult">
-            <summary>
-            Redeem result
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedeemResult.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedeemResult.Status">
-            <summary>
-            Status
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedeemResult.TokenName">
-            <summary>
-            Name of the token
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedeemResult.Quantity">
-            <summary>
-            Redemption value in usdt
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedeemResult.RedeemQuantity">
-            <summary>
-            Redemption token quantity
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedeemResult.Timestamp">
-            <summary>
-            Timestamp
-            </summary>
-        </member>
-        <member name="T:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedemption">
-            <summary>
-            Redemption info
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedemption.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedemption.TokenName">
-            <summary>
-            Token name
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedemption.Quantity">
-            <summary>
-            Redemption quantity
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedemption.Nav">
-            <summary>
-            NAV price of redemption
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedemption.Fee">
-            <summary>
-            Redemption fee in usdt
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedemption.NetProceed">
-            <summary>
-            Net redemption value in usdt
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtRedemption.Timestamp">
-            <summary>
-            Timestamp
-            </summary>
-        </member>
-        <member name="T:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscribeResult">
-            <summary>
-            Subscribe result
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscribeResult.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscribeResult.Status">
-            <summary>
-            Status
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscribeResult.TokenName">
-            <summary>
-            Name of the token
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscribeResult.Quantity">
-            <summary>
-            Subscribed token quantity
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscribeResult.Cost">
-            <summary>
-            Subscription cost in usdt
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscribeResult.Timestamp">
-            <summary>
-            Timestamp
-            </summary>
-        </member>
-        <member name="T:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscription">
-            <summary>
-            Leveraged token subscription info
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscription.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscription.TokenName">
-            <summary>
-            Token name
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscription.Quantity">
-            <summary>
-            Subscription quantity
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscription.Nav">
-            <summary>
-            NAV price of subscription
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscription.Fee">
-            <summary>
-            Subscription fee in usdt
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscription.TotalCharge">
-            <summary>
-            Subscription cost in usdt
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtSubscription.Timestamp">
-            <summary>
-            Timestamp
-            </summary>
-        </member>
-        <member name="T:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtUserLimit">
-            <summary>
-            Leveraged tokens user limits
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtUserLimit.TokenName">
-            <summary>
-            Token name
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtUserLimit.UserDailyTotalPurchaseLimit">
-            <summary>
-            Daily purchase limit
-            </summary>
-        </member>
-        <member name="P:Binance.Net.Objects.Models.Spot.Blvt.BinanceBlvtUserLimit.UserDailyTotalRedeemLimit">
-            <summary>
-            Daily redeem limit
             </summary>
         </member>
         <member name="P:Binance.Net.Objects.Models.Spot.Brokerage.BinanceBrokerageReferralRebateResponse.BrokerId">

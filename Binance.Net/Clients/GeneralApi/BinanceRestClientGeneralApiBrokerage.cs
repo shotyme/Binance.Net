@@ -8,7 +8,6 @@ using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Converters;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.RateLimiting;
-using Newtonsoft.Json;
 
 namespace Binance.Net.Clients.GeneralApi
 {
