@@ -1,10 +1,13 @@
-﻿using CryptoExchange.Net.Attributes;
+﻿using Binance.Net.Converters;
+using CryptoExchange.Net.Attributes;
 
 namespace Binance.Net.Enums
 {
     /// <summary>
     /// Filter type
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<SymbolFilterType>))]
+    [SerializationModel]
     public enum SymbolFilterType
     {
         /// <summary>
@@ -76,6 +79,11 @@ namespace Binance.Net.Enums
         /// Max Iceberg Orders filter
         /// </summary>
         [Map("EXCHANGE_MAX_NUM_ICEBERG_ORDERS")]
-        IcebergOrders
+        IcebergOrders,
+        /// <summary>
+        /// Position Risk Control Filter
+        /// </summary>
+        [Map("POSITION_RISK_CONTROL")]
+        PositionRiskControl
     }
 }
