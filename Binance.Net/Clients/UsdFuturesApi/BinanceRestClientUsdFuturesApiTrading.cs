@@ -79,7 +79,7 @@ namespace Binance.Net.Clients.UsdFuturesApi
             parameters.AddEnum("side", side);
             parameters.AddEnum("type", type);
             parameters.AddOptionalParameter("quantity", quantity?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("newClientOrderId", newClientOrderId);
+            parameters.AddOptionalParameter("newClientOrderId", clientOrderId);
             parameters.AddOptionalParameter("price", price?.ToString(CultureInfo.InvariantCulture));
             parameters.AddOptionalEnum("timeInForce", timeInForce);
             parameters.AddOptionalEnum("positionSide", positionSide);

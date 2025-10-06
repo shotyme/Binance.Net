@@ -124,7 +124,7 @@ namespace Binance.Net.Clients.SpotApi
             parameters.AddEnum("type", type);
             parameters.AddOptionalParameter("quantity", quantity?.ToString(CultureInfo.InvariantCulture));
             parameters.AddOptionalParameter("quoteOrderQty", quoteQuantity?.ToString(CultureInfo.InvariantCulture));
-            parameters.AddOptionalParameter("newClientOrderId", newClientOrderId);
+            parameters.AddOptionalParameter("newClientOrderId", clientOrderId);
             parameters.AddOptionalParameter("price", price?.ToString(CultureInfo.InvariantCulture));
             parameters.AddOptionalEnum("timeInForce", timeInForce);
             parameters.AddOptionalParameter("stopPrice", stopPrice?.ToString(CultureInfo.InvariantCulture));
