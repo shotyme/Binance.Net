@@ -90,6 +90,11 @@
             Binance.us environment
             </summary>
         </member>
+        <member name="P:Binance.Net.BinanceEnvironment.Demo">
+            <summary>
+            Demo environment
+            </summary>
+        </member>
         <member name="M:Binance.Net.BinanceEnvironment.CreateCustom(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Create a custom environment
@@ -165,6 +170,23 @@
             Creates a new instance of BinanceClient using the default or the testnet options
             </summary>
             <param name="isTestNet">Use testnet endpoints</param>
+            <param name="key">The API key</param>
+            <param name="secret">The API secret</param>
+            <returns></returns>
+        </member>
+        <member name="M:Binance.Net.BinanceFactory.CreateClient(Binance.Net.BinanceEnvironment,System.String,System.String)">
+            <summary>
+            Creates a new instance of BinanceClient using a specific environment
+            </summary>
+            <param name="environment">The environment to use</param>
+            <param name="key">The API key</param>
+            <param name="secret">The API secret</param>
+            <returns></returns>
+        </member>
+        <member name="M:Binance.Net.BinanceFactory.CreateDemoClient(System.String,System.String)">
+            <summary>
+            Creates a new instance of BinanceClient for demo trading
+            </summary>
             <param name="key">The API key</param>
             <param name="secret">The API secret</param>
             <returns></returns>
@@ -19959,6 +19981,11 @@
         <member name="F:Binance.Net.Objects.BinanceApiAddresses.Us">
             <summary>
             The addresses to connect to binance.us. (binance.us futures not are not available)
+            </summary>
+        </member>
+        <member name="F:Binance.Net.Objects.BinanceApiAddresses.Demo">
+            <summary>
+            The addresses to connect to the binance demo environment
             </summary>
         </member>
         <member name="T:Binance.Net.Objects.BinanceRateLimitError">
